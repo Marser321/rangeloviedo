@@ -104,22 +104,34 @@ export default function HouseScrollytelling() {
     setActiveIndex(idx);
   });
 
-  // Build opacity arrays for images — each step fades in/holds/fades out evenly
+  // ─── Transition timing with EXCLUSIVE zones ───
+  // Each step = 0.20 of scroll. Transitions use a 0.03 fade duration
+  // with a 0.01 dead gap between steps where NOTHING is visible.
+  // This guarantees zero text overlap.
+  //
+  // Step 0: visible [0.00 → 0.16], fade-out [0.16 → 0.19], dead [0.19 → 0.21]
+  // Step 1: fade-in [0.21 → 0.24], hold [0.24 → 0.36], fade-out [0.36 → 0.39], dead [0.39 → 0.41]
+  // Step 2: fade-in [0.41 → 0.44], hold [0.44 → 0.56], fade-out [0.56 → 0.59], dead [0.59 → 0.61]
+  // Step 3: fade-in [0.61 → 0.64], hold [0.64 → 0.76], fade-out [0.76 → 0.79], dead [0.79 → 0.81]
+  // Step 4: fade-in [0.81 → 0.84], hold [0.84 → 1.00]
+
+  const FADE = 0.03;  // fade duration in scroll %
+  const GAP  = 0.01;  // dead zone on each side of a boundary
+
+  // Image opacities — crossfade is OK for images (smoother blend)
   const opacities = scrollySteps.map((_, idx) => {
     const { start, end } = getStepRange(idx);
-    const fadeIn = start + (end - start) * 0.08;
-    const fadeOut = end - (end - start) * 0.08;
-
     if (idx === 0) {
-      // First step: start fully visible, fade out at end
-      return useTransform(scrollYProgress, [start, fadeOut, end], [1, 1, 0]);
+      return useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
     }
     if (idx === STEP_COUNT - 1) {
-      // Last step: fade in, stay visible
-      return useTransform(scrollYProgress, [start, fadeIn, end], [0, 1, 1]);
+      return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
     }
-    // Middle steps: fade in, hold, fade out
-    return useTransform(scrollYProgress, [start, fadeIn, fadeOut, end], [0, 1, 1, 0]);
+    return useTransform(
+      scrollYProgress,
+      [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
+      [0, 1, 1, 0]
+    );
   });
 
   // Subtle zoom per step
@@ -128,30 +140,32 @@ export default function HouseScrollytelling() {
     return useTransform(scrollYProgress, [start, end], [1, 1.06]);
   });
 
-  // Text opacity — similar to images but slightly staggered for feel
+  // Text opacities — EXCLUSIVE zones (no overlap allowed)
   const textOpacities = scrollySteps.map((_, idx) => {
     const { start, end } = getStepRange(idx);
-    const fadeIn = start + (end - start) * 0.12;
-    const fadeOut = end - (end - start) * 0.1;
-
     if (idx === 0) {
-      return useTransform(scrollYProgress, [start, fadeOut, end], [1, 1, 0]);
+      // Visible from the start, fade out before boundary
+      return useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
     }
     if (idx === STEP_COUNT - 1) {
-      return useTransform(scrollYProgress, [start, fadeIn, end], [0, 1, 1]);
+      // Fade in after boundary, stay visible
+      return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
     }
-    return useTransform(scrollYProgress, [start, fadeIn, fadeOut, end], [0, 1, 1, 0]);
+    // Middle steps: appear AFTER gap, disappear BEFORE gap
+    return useTransform(
+      scrollYProgress,
+      [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
+      [0, 1, 1, 0]
+    );
   });
 
-  // Text vertical motion
+  // Text vertical motion — enters from below, exits upward
   const textYs = scrollySteps.map((_, idx) => {
     const { start, end } = getStepRange(idx);
-    const fadeIn = start + (end - start) * 0.12;
-
     if (idx === 0) {
-      return useTransform(scrollYProgress, [start, end], [0, -20]);
+      return useTransform(scrollYProgress, [start, end - GAP], [0, -24]);
     }
-    return useTransform(scrollYProgress, [start, fadeIn, end], [24, 0, -20]);
+    return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end - GAP], [30, 0, -24]);
   });
 
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
