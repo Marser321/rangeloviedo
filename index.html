@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ROG Header Scrollytelling Comparison</title>
+    <meta
+      name="description"
+      content="Local prototype comparing two Rangel Oviedo Group scrollytelling hero sequences."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="preload" as="image" href="assets/seq01/desktop/frame_0001.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/seq02/desktop/frame_0001.webp">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <nav class="compare-nav" aria-label="Header comparison">
+      <a href="#seq01">Seq 1</a>
+      <a href="#seq02">Seq 2</a>
+    </nav>
+
+    <main>
+      <section
+        id="seq01"
+        class="scrolly-hero"
+        data-sequence="seq01"
+        data-variant="Variant A"
+        data-frame-count="90"
+        aria-labelledby="seq01-title"
+      >
+        <div class="scrolly-pin">
+          <canvas class="hero-canvas" aria-hidden="true"></canvas>
+          <div class="image-grade" aria-hidden="true"></div>
+          <div class="viewport-vignette" aria-hidden="true"></div>
+
+          <div class="variant-label" aria-hidden="true">
+            <span>Variant A</span>
+            <strong>Secuencia 1</strong>
+          </div>
+
+          <div class="stage-copy">
+            <section class="stage-panel intro-panel" data-stage="0">
+              <p class="eyebrow">Rangel Oviedo Group</p>
+              <h1 id="seq01-title">
+                Where Texas <br class="mobile-break">estates find
+                <br class="mobile-break">their next <br class="mobile-break">chapter.
+              </h1>
+              <p>
+                A bilingual luxury real estate practice trusted to handle the homes
+                most agents never see.
+              </p>
+              <div class="hero-actions" aria-label="Primary hero actions">
+                <a href="#seq02" class="btn btn-primary">Compare next header</a>
+                <a href="#seq01-end" class="btn btn-ghost">Watch the sequence</a>
+              </div>
+            </section>
+
+            <article class="stage-panel floating-card card-top-right" data-stage="1">
+              <span class="card-number">01</span>
+              <h2>Unmatched market access</h2>
+              <p>Off-market listings powered by a decade of trusted relationships across Texas.</p>
+            </article>
+
+            <article class="stage-panel floating-card card-bottom-left" data-stage="2">
+              <span class="card-number">02</span>
+              <h2>Negotiation as a craft</h2>
+              <p>Average closing 4.2% above asking on listings, 6.1% under on buys.</p>
+            </article>
+
+            <article class="stage-panel floating-card card-top-left" data-stage="3">
+              <span class="card-number">03</span>
+              <h2>Global network, local intuition</h2>
+              <p>Bilingual EN/ES bridge between Texas, Mexico and LATAM HNW buyers.</p>
+            </article>
+
+            <article class="stage-panel floating-card card-bottom-right" data-stage="4">
+              <span class="card-number">04</span>
+              <h2>Concierge from listing to keys</h2>
+              <p>Staging, photo/video, legal, mortgage and relocation handled end to end.</p>
+            </article>
+          </div>
+
+          <div class="scroll-meter" aria-hidden="true">
+            <span></span>
+          </div>
+        </div>
+        <div id="seq01-end" class="section-sentinel" aria-hidden="true"></div>
+      </section>
+
+      <div class="comparison-divider" aria-label="Second sequence follows">
+        <p>Same cards. Same timing. Different house movement.</p>
+      </div>
+
+      <section
+        id="seq02"
+        class="scrolly-hero"
+        data-sequence="seq02"
+        data-variant="Variant B"
+        data-frame-count="90"
+        aria-labelledby="seq02-title"
+      >
+        <div class="scrolly-pin">
+          <canvas class="hero-canvas" aria-hidden="true"></canvas>
+          <div class="image-grade" aria-hidden="true"></div>
+          <div class="viewport-vignette" aria-hidden="true"></div>
+
+          <div class="variant-label" aria-hidden="true">
+            <span>Variant B</span>
+            <strong>Secuencia 2</strong>
+          </div>
+
+          <div class="stage-copy">
+            <section class="stage-panel intro-panel" data-stage="0">
+              <p class="eyebrow">Rangel Oviedo Group</p>
+              <h1 id="seq02-title">
+                Where Texas <br class="mobile-break">estates find
+                <br class="mobile-break">their next <br class="mobile-break">chapter.
+              </h1>
+              <p>
+                A bilingual luxury real estate practice trusted to handle the homes
+                most agents never see.
+              </p>
+              <div class="hero-actions" aria-label="Primary hero actions">
+                <a href="#seq01" class="btn btn-primary">Back to first header</a>
+                <a href="#comparison-close" class="btn btn-ghost">Finish pass</a>
+              </div>
+            </section>
+
+            <article class="stage-panel floating-card card-top-right" data-stage="1">
+              <span class="card-number">01</span>
+              <h2>Unmatched market access</h2>
+              <p>Off-market listings powered by a decade of trusted relationships across Texas.</p>
+            </article>
+
+            <article class="stage-panel floating-card card-bottom-left" data-stage="2">
+              <span class="card-number">02</span>
+              <h2>Negotiation as a craft</h2>
+              <p>Average closing 4.2% above asking on listings, 6.1% under on buys.</p>
+            </article>
+
+            <article class="stage-panel floating-card card-top-left" data-stage="3">
+              <span class="card-number">03</span>
+              <h2>Global network, local intuition</h2>
+              <p>Bilingual EN/ES bridge between Texas, Mexico and LATAM HNW buyers.</p>
+            </article>
+
+            <article class="stage-panel floating-card card-bottom-right" data-stage="4">
+              <span class="card-number">04</span>
+              <h2>Concierge from listing to keys</h2>
+              <p>Staging, photo/video, legal, mortgage and relocation handled end to end.</p>
+            </article>
+          </div>
+
+          <div class="scroll-meter" aria-hidden="true">
+            <span></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparison-close" class="comparison-close" aria-labelledby="close-title">
+        <p class="eyebrow">Comparison surface</p>
+        <h2 id="close-title">Two movements, one brand system.</h2>
+      </section>
+    </main>
+
+    <script src="scrollytelling.js"></script>
+  </body>
+</html>
