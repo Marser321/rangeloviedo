@@ -1,35 +1,20 @@
-# Rangel Oviedo Group Header Comparison
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Static Vercel prototype to compare two scrollytelling hero sequences for the Rangel Oviedo Group landing page.
+# Run and deploy your AI Studio app
 
-## Preview
+This contains everything you need to run your app locally.
 
-- `Seq 1`: cinematic interior dolly sequence.
-- `Seq 2`: alternate interior movement.
+View your app in AI Studio: https://ai.studio/apps/601a1b52-1751-488c-a5fe-be767ad8ff53
 
-Both variants use the same copy, cards, timing, and interaction logic so the visual sequence is the only major comparison variable.
+## Run Locally
 
-## Local Run
+**Prerequisites:**  Node.js
 
-```bash
-python -m http.server 4177
-```
 
-Then open:
-
-```text
-http://127.0.0.1:4177
-```
-
-Deep links:
-
-```text
-/#seq01
-/#seq02
-/?jump=seq01:0.45
-/?jump=seq02:0.55
-```
-
-## Deploy
-
-This is a static site. Vercel can deploy it directly from the repository root.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
