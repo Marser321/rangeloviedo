@@ -205,6 +205,17 @@
     return target.offsetTop + scrollable * progress;
   }
 
+  function setScrollPosition(top, behavior = "auto") {
+    if (typeof window.scrollTo === "function") {
+      window.scrollTo({ top, left: 0, behavior });
+    }
+
+    if (behavior === "auto") {
+      document.documentElement.scrollTop = top;
+      document.body.scrollTop = top;
+    }
+  }
+
   function syncAfterNavigation(target, progress = null) {
     const scroller = scrollerFor(target);
     if (scroller && progress !== null) {
@@ -224,7 +235,7 @@
     } = options;
 
     const top = targetTop(target, progress);
-    window.scrollTo({ top, left: 0, behavior });
+    setScrollPosition(top, behavior);
 
     if (updateHash && target.id && window.location.hash !== `#${target.id}`) {
       window.history.pushState(null, "", `#${target.id}`);
