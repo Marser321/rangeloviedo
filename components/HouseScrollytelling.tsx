@@ -16,6 +16,15 @@ function whatsappLink(intent: string) {
     : `https://wa.me/?text=${text}`;
 }
 
+const STEP_COUNT = 5;
+// Each step gets an equal 20% of the scroll range
+// Within each step: first 10% = fade-in transition, middle 70% = hold, last 20% = fade-out
+const getStepRange = (idx: number) => {
+  const start = idx / STEP_COUNT;
+  const end = (idx + 1) / STEP_COUNT;
+  return { start, end };
+};
+
 const scrollySteps = [
   {
     step: '01',
@@ -89,62 +98,72 @@ export default function HouseScrollytelling() {
     offset: ['start start', 'end end'],
   });
 
+  // Update active index based on equal 20% segments
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (latest < 0.18) {
-      setActiveIndex(0);
-    } else if (latest < 0.38) {
-      setActiveIndex(1);
-    } else if (latest < 0.58) {
-      setActiveIndex(2);
-    } else if (latest < 0.78) {
-      setActiveIndex(3);
-    } else {
-      setActiveIndex(4);
-    }
+    const idx = Math.min(STEP_COUNT - 1, Math.floor(latest * STEP_COUNT));
+    setActiveIndex(idx);
   });
 
-  const opacities = [
-    useTransform(scrollYProgress, [0, 0.16, 0.20, 1], [1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.16, 0.20, 0.36, 0.40, 1], [0, 0, 1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.36, 0.40, 0.56, 0.60, 1], [0, 0, 1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.56, 0.60, 0.76, 0.80, 1], [0, 0, 1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.76, 0.80, 0.96, 1], [0, 0, 1, 1, 1]),
-  ];
+  // Build opacity arrays for images — each step fades in/holds/fades out evenly
+  const opacities = scrollySteps.map((_, idx) => {
+    const { start, end } = getStepRange(idx);
+    const fadeIn = start + (end - start) * 0.08;
+    const fadeOut = end - (end - start) * 0.08;
 
-  const scales = [
-    useTransform(scrollYProgress, [0, 0.20], [1, 1.08]),
-    useTransform(scrollYProgress, [0.16, 0.20, 0.40], [0.96, 1, 1.08]),
-    useTransform(scrollYProgress, [0.36, 0.40, 0.60], [0.96, 1, 1.08]),
-    useTransform(scrollYProgress, [0.56, 0.60, 0.80], [0.96, 1, 1.08]),
-    useTransform(scrollYProgress, [0.76, 0.80, 1], [0.96, 1, 1.05]),
-  ];
+    if (idx === 0) {
+      // First step: start fully visible, fade out at end
+      return useTransform(scrollYProgress, [start, fadeOut, end], [1, 1, 0]);
+    }
+    if (idx === STEP_COUNT - 1) {
+      // Last step: fade in, stay visible
+      return useTransform(scrollYProgress, [start, fadeIn, end], [0, 1, 1]);
+    }
+    // Middle steps: fade in, hold, fade out
+    return useTransform(scrollYProgress, [start, fadeIn, fadeOut, end], [0, 1, 1, 0]);
+  });
 
-  const textOpacities = [
-    useTransform(scrollYProgress, [0, 0.14, 0.18, 1], [1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.18, 0.22, 0.34, 0.38, 1], [0, 0, 1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.38, 0.42, 0.54, 0.58, 1], [0, 0, 1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.58, 0.62, 0.74, 0.78, 1], [0, 0, 1, 1, 0, 0]),
-    useTransform(scrollYProgress, [0, 0.78, 0.82, 0.98, 1], [0, 0, 1, 1, 1]),
-  ];
+  // Subtle zoom per step
+  const scales = scrollySteps.map((_, idx) => {
+    const { start, end } = getStepRange(idx);
+    return useTransform(scrollYProgress, [start, end], [1, 1.06]);
+  });
 
-  const textYs = [
-    useTransform(scrollYProgress, [0, 0.18], [0, -30]),
-    useTransform(scrollYProgress, [0.18, 0.22, 0.38], [30, 0, -30]),
-    useTransform(scrollYProgress, [0.38, 0.42, 0.58], [30, 0, -30]),
-    useTransform(scrollYProgress, [0.58, 0.62, 0.78], [30, 0, -30]),
-    useTransform(scrollYProgress, [0.78, 0.82, 1], [30, 0, 0]),
-  ];
+  // Text opacity — similar to images but slightly staggered for feel
+  const textOpacities = scrollySteps.map((_, idx) => {
+    const { start, end } = getStepRange(idx);
+    const fadeIn = start + (end - start) * 0.12;
+    const fadeOut = end - (end - start) * 0.1;
+
+    if (idx === 0) {
+      return useTransform(scrollYProgress, [start, fadeOut, end], [1, 1, 0]);
+    }
+    if (idx === STEP_COUNT - 1) {
+      return useTransform(scrollYProgress, [start, fadeIn, end], [0, 1, 1]);
+    }
+    return useTransform(scrollYProgress, [start, fadeIn, fadeOut, end], [0, 1, 1, 0]);
+  });
+
+  // Text vertical motion
+  const textYs = scrollySteps.map((_, idx) => {
+    const { start, end } = getStepRange(idx);
+    const fadeIn = start + (end - start) * 0.12;
+
+    if (idx === 0) {
+      return useTransform(scrollYProgress, [start, end], [0, -20]);
+    }
+    return useTransform(scrollYProgress, [start, fadeIn, end], [24, 0, -20]);
+  });
 
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   return (
-    <section ref={containerRef} className="relative h-[480vh] bg-ro-dark text-ro-light">
+    <section ref={containerRef} className="relative h-[600vh] bg-ro-dark text-ro-light">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
         
         {/* Scrollytelling Header */}
         <header className="relative z-20 w-full px-6 py-6 md:px-12 flex justify-between items-center border-b border-white/5 bg-gradient-to-b from-ro-dark/80 to-transparent backdrop-blur-sm">
           <div>
-            <span className="text-[9px] uppercase tracking-[0.3em] font-black text-ro-gold flex items-center gap-2">
+            <span className="text-[9px] uppercase tracking-[0.3em] font-black text-[#c9a864] flex items-center gap-2">
               <Sparkles size={12} className="animate-pulse" /> 
               {t('Editorial Walkthrough', 'Recorrido Editorial')}
             </span>
@@ -162,7 +181,7 @@ export default function HouseScrollytelling() {
           </div>
         </header>
 
-        {/* Central area */}
+        {/* Central tablet area */}
         <div className="relative flex-1 flex items-center justify-center p-4 md:p-8">
           <div className="relative w-full max-w-6xl h-[68vh] md:h-[72vh] rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_45px_130px_rgba(0,0,0,0.6)]">
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/55 z-10 pointer-events-none" />
@@ -175,7 +194,7 @@ export default function HouseScrollytelling() {
                   opacity: opacities[idx],
                   scale: scales[idx],
                 }}
-                className="absolute inset-0 w-full h-full pointer-events-none transition-all duration-300"
+                className="absolute inset-0 w-full h-full pointer-events-none"
               >
                 <Image
                   src={step.image}
@@ -188,7 +207,7 @@ export default function HouseScrollytelling() {
               </motion.div>
             ))}
 
-            {/* Text and actions */}
+            {/* Text and actions overlay */}
             <div className="absolute inset-x-0 bottom-0 z-20 p-6 md:p-12 flex flex-col md:flex-row justify-between items-end gap-6 pointer-events-none">
               <div className="max-w-xl w-full relative min-h-[220px] md:min-h-[170px]">
                 {scrollySteps.map((step, idx) => {
@@ -207,7 +226,7 @@ export default function HouseScrollytelling() {
                       }`}
                     >
                       <div className="space-y-4">
-                        <div className="inline-flex items-center gap-3 bg-ro-copper/85 border border-white/20 text-white rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] backdrop-blur-md">
+                        <div className="inline-flex items-center gap-3 bg-[#a26035]/85 border border-white/20 text-white rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] backdrop-blur-md">
                           <Icon size={14} />
                           <span>
                             {t('Step', 'Paso')} {step.step} • {t(step.labelEn, step.labelEs)}
@@ -218,7 +237,7 @@ export default function HouseScrollytelling() {
                           {t(step.titleEn, step.titleEs)}
                         </h3>
                         
-                        <p className="text-xs md:text-sm leading-relaxed text-white/80 font-light max-w-lg border-l-2 border-ro-gold pl-4">
+                        <p className="text-xs md:text-sm leading-relaxed text-white/80 font-light max-w-lg border-l-2 border-[#c9a864] pl-4">
                           {t(step.textEn, step.textEs)}
                         </p>
                       </div>
@@ -261,6 +280,7 @@ export default function HouseScrollytelling() {
             {/* Stepper progress indicator */}
             <div className="absolute top-6 left-6 z-20 flex gap-1.5 md:gap-2">
               {scrollySteps.map((step, idx) => {
+                const { start, end } = getStepRange(idx);
                 const isActive = activeIndex === idx;
                 return (
                   <div 
@@ -274,7 +294,7 @@ export default function HouseScrollytelling() {
                       style={{
                         scaleX: useTransform(
                           scrollYProgress, 
-                          [idx * 0.2, (idx + 1) * 0.2], 
+                          [start, end], 
                           [0, 1]
                         ),
                         transformOrigin: 'left'
