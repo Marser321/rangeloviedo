@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import {
   ArrowRight,
   CalendarDays,
@@ -15,10 +16,26 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import Navigation from './Navigation';
-import HeroScrollytelling from './HeroScrollytelling';
-import MidScrollytelling from './MidScrollytelling';
-import HouseScrollytelling from './HouseScrollytelling';
 import { useLanguage } from './LanguageContext';
+
+const ScrollyPlaceholder = () => (
+  <div className="h-screen w-full bg-[#0b0a08] flex items-center justify-center">
+    <div className="w-6 h-6 border-2 border-[#c9a864] border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
+const HeroScrollytelling = dynamic(() => import('./HeroScrollytelling'), {
+  ssr: false,
+  loading: ScrollyPlaceholder,
+});
+const MidScrollytelling = dynamic(() => import('./MidScrollytelling'), {
+  ssr: false,
+  loading: ScrollyPlaceholder,
+});
+const HouseScrollytelling = dynamic(() => import('./HouseScrollytelling'), {
+  ssr: false,
+  loading: ScrollyPlaceholder,
+});
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_RANGEL_WHATSAPP ?? '';
 const GHL_FORM_URL = process.env.NEXT_PUBLIC_GHL_FORM_URL ?? '';
