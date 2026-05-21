@@ -1,24 +1,27 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
 import { MessageCircle, Sparkles, Home, Eye, Maximize2, Compass, Layers } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_RANGEL_WHATSAPP ?? '';
+const GHL_FORM_URL = process.env.NEXT_PUBLIC_GHL_FORM_URL ?? '';
 const BASE_MESSAGE = 'Hola Rangel, recorrí la casa interactiva en tu web. Quiero conversar sobre propiedades con ese nivel de curaduría en Texas. Mi interés es:';
 
-function whatsappLink(intent: string) {
+function actionLink(intent: string) {
+  if (GHL_FORM_URL) return GHL_FORM_URL;
+  if (!WHATSAPP_NUMBER) return '#contacto';
   const text = encodeURIComponent(`${BASE_MESSAGE} ${intent}.`);
-  return WHATSAPP_NUMBER
-    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`
-    : `https://wa.me/?text=${text}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+}
+
+function externalLinkProps(url: string) {
+  return url.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {};
 }
 
 const STEP_COUNT = 5;
-// Each step gets an equal 20% of the scroll range
-// Within each step: first 10% = fade-in transition, middle 70% = hold, last 20% = fade-out
 const getStepRange = (idx: number) => {
   const start = idx / STEP_COUNT;
   const end = (idx + 1) / STEP_COUNT;
@@ -91,35 +94,41 @@ const scrollySteps = [
 export default function HouseScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { language, t } = useLanguage();
+
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Update active index based on equal 20% segments
+  useEffect(() => {
+    setIsClient(true);
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Update active index based on equal 20% segments (Desktop only)
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (isMobile) return;
     const idx = Math.min(STEP_COUNT - 1, Math.floor(latest * STEP_COUNT));
     setActiveIndex(idx);
   });
 
-  // ─── Transition timing with EXCLUSIVE zones ───
-  // Each step = 0.20 of scroll. Transitions use a 0.03 fade duration
-  // with a 0.01 dead gap between steps where NOTHING is visible.
-  // This guarantees zero text overlap.
-  //
-  // Step 0: visible [0.00 → 0.16], fade-out [0.16 → 0.19], dead [0.19 → 0.21]
-  // Step 1: fade-in [0.21 → 0.24], hold [0.24 → 0.36], fade-out [0.36 → 0.39], dead [0.39 → 0.41]
-  // Step 2: fade-in [0.41 → 0.44], hold [0.44 → 0.56], fade-out [0.56 → 0.59], dead [0.59 → 0.61]
-  // Step 3: fade-in [0.61 → 0.64], hold [0.64 → 0.76], fade-out [0.76 → 0.79], dead [0.79 → 0.81]
-  // Step 4: fade-in [0.81 → 0.84], hold [0.84 → 1.00]
+  const FADE = 0.03;
+  const GAP  = 0.01;
 
-  const FADE = 0.03;  // fade duration in scroll %
-  const GAP  = 0.01;  // dead zone on each side of a boundary
-
-  // Image opacities — crossfade is OK for images (smoother blend)
+  // Image opacities (Desktop only)
   const opacities = scrollySteps.map((_, idx) => {
+    if (isMobile) return 0;
     const { start, end } = getStepRange(idx);
     if (idx === 0) {
       return useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
@@ -134,24 +143,23 @@ export default function HouseScrollytelling() {
     );
   });
 
-  // Subtle zoom per step
+  // Scales (Desktop only)
   const scales = scrollySteps.map((_, idx) => {
+    if (isMobile) return 1;
     const { start, end } = getStepRange(idx);
     return useTransform(scrollYProgress, [start, end], [1, 1.06]);
   });
 
-  // Text opacities — EXCLUSIVE zones (no overlap allowed)
+  // Text opacities (Desktop only)
   const textOpacities = scrollySteps.map((_, idx) => {
+    if (isMobile) return 0;
     const { start, end } = getStepRange(idx);
     if (idx === 0) {
-      // Visible from the start, fade out before boundary
       return useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
     }
     if (idx === STEP_COUNT - 1) {
-      // Fade in after boundary, stay visible
       return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
     }
-    // Middle steps: appear AFTER gap, disappear BEFORE gap
     return useTransform(
       scrollYProgress,
       [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
@@ -159,8 +167,9 @@ export default function HouseScrollytelling() {
     );
   });
 
-  // Text vertical motion — enters from below, exits upward
+  // Text vertical motion (Desktop only)
   const textYs = scrollySteps.map((_, idx) => {
+    if (isMobile) return 0;
     const { start, end } = getStepRange(idx);
     if (idx === 0) {
       return useTransform(scrollYProgress, [start, end - GAP], [0, -24]);
@@ -170,6 +179,144 @@ export default function HouseScrollytelling() {
 
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const swipeThreshold = 50;
+    const diff = touchStartX.current - touchEndX.current;
+    if (diff > swipeThreshold) {
+      if (activeIndex < STEP_COUNT - 1) {
+        setActiveIndex((prev) => prev + 1);
+      }
+    } else if (diff < -swipeThreshold) {
+      if (activeIndex > 0) {
+        setActiveIndex((prev) => prev - 1);
+      }
+    }
+  };
+
+  // Mobile rendering
+  if (isClient && isMobile) {
+    return (
+      <section
+        id="casa-interactiva"
+        className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Mobile Background Frames with hardware-accelerated crossfade */}
+        <div className="absolute inset-0 z-0">
+          {scrollySteps.map((step, idx) => (
+            <div
+              key={step.step}
+              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                activeIndex === idx ? 'opacity-40' : 'opacity-0'
+              }`}
+            >
+              <Image
+                src={step.image}
+                alt={language === 'es' ? step.titleEs : step.titleEn}
+                fill
+                priority={idx === 0}
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile Overlays */}
+        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/50 via-transparent to-[#0b0a08]/85" />
+
+        {/* Mobile Header Label */}
+        <div className="absolute top-20 left-6 z-10 text-white pointer-events-none">
+          <span className="block text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#c9a864]">
+            {t('Editorial Walkthrough', 'Recorrido Editorial')}
+          </span>
+          <span className="block font-display text-base italic text-[#f5f1e8] mt-0.5">
+            {t('How we read a home', 'Cómo leemos una casa')}
+          </span>
+        </div>
+
+        {/* Swipe Card Area */}
+        <div className="absolute inset-x-4 bottom-12 z-10 flex flex-col items-center">
+          
+          <div className="relative w-full min-h-[250px] flex items-center justify-center">
+            
+            {scrollySteps.map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <article
+                  key={step.step}
+                  className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
+                    activeIndex === idx
+                      ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
+                      : activeIndex < idx
+                      ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
+                      : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
+                  }`}
+                >
+                  <div className="inline-flex items-center gap-2 bg-[#a26035]/90 border border-white/10 text-white rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] w-fit mb-3">
+                    <Icon size={12} />
+                    <span>
+                      {t('Step', 'Paso')} {step.step} • {t(step.labelEn, step.labelEs)}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
+                    {t(step.titleEn, step.titleEs)}
+                  </h3>
+
+                  <p className="mt-2 text-xs leading-relaxed text-[#b8b0a0] font-light border-l border-[#c9a864]/50 pl-3">
+                    {t(step.textEn, step.textEs)}
+                  </p>
+
+                  <div className="mt-4 w-full">
+                    <a
+                      href={actionLink(step.intent)}
+                      {...externalLinkProps(actionLink(step.intent))}
+                      className={`btn w-full py-2.5 rounded-full ${
+                        idx === 4 ? 'bg-[#c9a864] text-[#0b0a08]' : 'border border-white/20 text-white bg-white/5'
+                      } text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5`}
+                    >
+                      {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
+                      <MessageCircle size={14} />
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
+
+          </div>
+
+          {/* Dots Indicator */}
+          <div className="mt-5 flex gap-2">
+            {scrollySteps.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIndex(idx)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  activeIndex === idx ? 'w-5 bg-[#c9a864]' : 'w-1.5 bg-white/20'
+                }`}
+                aria-label={`Go to step ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop rendering
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-ro-dark text-ro-light">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
@@ -275,14 +422,13 @@ export default function HouseScrollytelling() {
                       }`}
                     >
                       <a
-                        href={whatsappLink(step.intent)}
-                        target="_blank"
-                        rel="noreferrer"
+                        href={actionLink(step.intent)}
+                        {...externalLinkProps(actionLink(step.intent))}
                         className={`btn w-full md:w-auto ${
                           idx === 4 ? 'btn-copper bg-[#c9a864] text-[#0b0a08]' : 'btn-ghost border-white/25 text-white hover:bg-white/10'
                         } text-[11px] shadow-2xl flex items-center justify-center gap-2`}
                       >
-                        {idx === 4 ? t('Talk to Rangel', 'Conversar con Rangel') : t('Consult this step', 'Consultar este paso')}
+                        {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
                         <MessageCircle size={16} />
                       </a>
                     </motion.div>

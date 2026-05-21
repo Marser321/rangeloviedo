@@ -7,6 +7,13 @@ import { Map } from 'lucide-react';
 
 const FRAME_COUNT = 90;
 
+const MID_MOBILE_FRAMES = [
+  '/assets/seq02/mobile/frame_0001.webp',
+  '/assets/seq02/mobile/frame_0034.webp',
+  '/assets/seq02/mobile/frame_0056.webp',
+  '/assets/seq02/mobile/frame_0079.webp',
+];
+
 export default function MidScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,7 +21,11 @@ export default function MidScrollytelling() {
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
   const [isClient, setIsClient] = useState(false);
-  const { language, t } = useLanguage();
+  const [isMobile, setIsMobile] = useState(false);
+  const { t } = useLanguage();
+
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -23,15 +34,32 @@ export default function MidScrollytelling() {
 
   useEffect(() => {
     setIsClient(true);
+
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    const actualIsMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (actualIsMobile) {
+      // Preload only the 4 mobile keyframes
+      MID_MOBILE_FRAMES.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+      });
+      return () => {
+        window.removeEventListener('resize', checkMobile);
+      };
+    }
+
+    // Desktop initialization
     const initialImages = new Array(FRAME_COUNT).fill(null);
     setImages(initialImages);
 
-    const isMobile = window.matchMedia('(max-width: 760px)').matches;
-    const size = isMobile ? 'mobile' : 'desktop';
-
     const getFrameUrl = (index: number) => {
       const pad = String(index + 1).padStart(4, '0');
-      return `/assets/seq02/${size}/frame_${pad}.webp`;
+      return `/assets/seq02/desktop/frame_${pad}.webp`;
     };
 
     const img0 = new Image();
@@ -80,9 +108,14 @@ export default function MidScrollytelling() {
     };
 
     preload();
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const drawFrame = (index: number) => {
+    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d', { alpha: false });
@@ -139,20 +172,23 @@ export default function MidScrollytelling() {
   };
 
   useEffect(() => {
+    if (isMobile) return;
     const frameIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.floor(progress * FRAME_COUNT)));
     drawFrame(frameIndex);
-  }, [images, progress]);
+  }, [images, progress, isMobile]);
 
   useEffect(() => {
+    if (isMobile) return;
     const handleResize = () => {
       const frameIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.floor(progress * FRAME_COUNT)));
       drawFrame(frameIndex);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [images, progress]);
+  }, [images, progress, isMobile]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (isMobile) return;
     setProgress(latest);
     const frameIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.floor(latest * FRAME_COUNT)));
     drawFrame(frameIndex);
@@ -169,8 +205,9 @@ export default function MidScrollytelling() {
   });
 
   const getCardTransform = (stage: number) => {
-    if (!isClient) return undefined;
-    const isMobile = window.matchMedia('(max-width: 760px)').matches;
+    if (!isClient) {
+      return stage === 0 ? 'translate(-50%, -50%) scale(1)' : 'translate(0, 28px) scale(0.982)';
+    }
 
     let stageMin = 0;
     let stageMax = 1;
@@ -195,22 +232,190 @@ export default function MidScrollytelling() {
       return `translate(-50%, ${y}%) scale(${scale})`;
     }
 
-    if (isMobile) {
-      const activeY = -50 + yShift;
-      const inactiveY = -50 + 26;
-      const y = activeStage === stage ? activeY : inactiveY;
-      const scale = activeStage === stage ? 1 : 0.982;
-      return `translate(-50%, ${y}%) scale(${scale})`;
-    } else {
-      const x = activeStage === stage ? xShift : 0;
-      const y = activeStage === stage ? yShift : 28;
-      const scale = activeStage === stage ? 1 : 0.982;
-      return `translate(${x}px, ${y}px) scale(${scale})`;
+    const x = activeStage === stage ? xShift : 0;
+    const y = activeStage === stage ? yShift : 28;
+    const scale = activeStage === stage ? 1 : 0.982;
+    return `translate(${x}px, ${y}px) scale(${scale})`;
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const swipeThreshold = 50;
+    const diff = touchStartX.current - touchEndX.current;
+    if (diff > swipeThreshold) {
+      if (activeStage < 3) {
+        setActiveStage((prev) => prev + 1);
+      }
+    } else if (diff < -swipeThreshold) {
+      if (activeStage > 0) {
+        setActiveStage((prev) => prev - 1);
+      }
     }
   };
 
+  // Mobile rendering
+  if (isClient && isMobile) {
+    return (
+      <section
+        id="mercado"
+        className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Mobile Background Frames with hardware-accelerated crossfade */}
+        <div className="absolute inset-0 z-0">
+          {MID_MOBILE_FRAMES.map((src, index) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                activeStage === index ? 'opacity-40' : 'opacity-0'
+              }`}
+              style={{ pointerEvents: 'none' }}
+            />
+          ))}
+        </div>
+
+        {/* Mobile Overlays */}
+        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/50 via-transparent to-[#0b0a08]/85" />
+
+        {/* Brand / Context Label */}
+        <div className="absolute top-20 left-6 z-10 text-white pointer-events-none">
+          <span className="block text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#c9a864]">
+            Rangel Oviedo Group
+          </span>
+          <span className="block font-display text-base italic text-[#f5f1e8] mt-0.5">
+            {t('Texas Market Insights', 'Perspectivas del Mercado de Texas')}
+          </span>
+        </div>
+
+        {/* Swipe Card Area */}
+        <div className="absolute inset-x-4 bottom-12 z-10 flex flex-col items-center">
+          
+          <div className="relative w-full min-h-[230px] flex items-center justify-center">
+            
+            {/* Stage 0: Intro */}
+            <div
+              className={`w-full flex flex-col items-center text-center transition-all duration-500 transform ${
+                activeStage === 0
+                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
+                  : activeStage < 0
+                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
+                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
+              }`}
+            >
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a864]/20 bg-[#13110e] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.15em] text-[#c9a864] mb-3">
+                <Map size={11} />
+                {t('Texas Market Intelligence', 'Inteligencia de Mercado en Texas')}
+              </span>
+              <h2 className="font-display text-2xl font-bold leading-tight text-[#f5f1e8] tracking-tight px-1">
+                {t('Texas is not bought by trend. It is studied in layers.', 'Texas no se compra por tendencia. Se estudia por capas.')}
+              </h2>
+              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed max-w-[320px] px-1">
+                {t('Three critical readings before looking at MLS list price or properties.', 'Tres lecturas críticas antes de mirar listados o propiedades.')}
+              </p>
+            </div>
+
+            {/* Stage 1: Houston */}
+            <article
+              className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
+                activeStage === 1
+                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
+                  : activeStage < 1
+                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
+                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
+              }`}
+            >
+              <span className="text-[#c9a864] text-[10px] font-bold font-display tracking-[0.2em]">
+                {t('01 · HOUSTON METRO', '01 · HOUSTON METRO')}
+              </span>
+              <div className="h-[1px] w-8 bg-gradient-to-r from-[#c9a864] to-transparent my-2.5" />
+              <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
+                {t('Industrial Capital & Family Legacy', 'Capital Industrial y Legado Familiar')}
+              </h3>
+              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed">
+                {t('Bilingual residential enclaves, elite school districts (Memorial, The Woodlands), and high-yielding corporate relocation hubs that offer secure exits.', 'Enclaves residenciales bilingües, distritos escolares de élite (Memorial, The Woodlands) y polos de relocalización corporativa de alto rendimiento.')}
+              </p>
+            </article>
+
+            {/* Stage 2: Austin */}
+            <article
+              className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
+                activeStage === 2
+                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
+                  : activeStage < 2
+                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
+                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
+              }`}
+            >
+              <span className="text-[#c9a864] text-[10px] font-bold font-display tracking-[0.2em]">
+                {t('02 · AUSTIN & HILL COUNTRY', '02 · AUSTIN Y HILL COUNTRY')}
+              </span>
+              <div className="h-[1px] w-8 bg-gradient-to-r from-[#c9a864] to-transparent my-2.5" />
+              <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
+                {t('Technology and Scarcity Appreciation', 'Tecnología y Plusvalía por Escasez')}
+              </h3>
+              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed">
+                {t('Rugged topography and strict environmental zoning limit available buildable land, creating locked-in equity premium for modern architectural properties.', 'La topografía y regulaciones estrictas limitan la tierra urbanizable, garantizando plusvalía a largo plazo para propiedades de diseño moderno.')}
+              </p>
+            </article>
+
+            {/* Stage 3: Texas Fiscal */}
+            <article
+              className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
+                activeStage === 3
+                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
+                  : activeStage < 3
+                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
+                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
+              }`}
+            >
+              <span className="text-[#c9a864] text-[10px] font-bold font-display tracking-[0.2em]">
+                {t('03 · TAX EFFICIENCY', '03 · EFICIENCIA TRIBUTARIA')}
+              </span>
+              <div className="h-[1px] w-8 bg-gradient-to-r from-[#c9a864] to-transparent my-2.5" />
+              <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
+                {t('Fiscal Optimization Mechanics', 'Optimización Fiscal y Tributaria')}
+              </h3>
+              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed">
+                {t('High property taxes are offset and amortized by the absolute absence of state income tax for business owners, enabling compound capital growth.', 'El alto predial se ve compensado por la ausencia absoluta de impuesto estatal sobre la renta para dueños de negocios.')}
+              </p>
+            </article>
+
+          </div>
+
+          {/* Dots Indicator */}
+          <div className="mt-5 flex gap-2">
+            {MID_MOBILE_FRAMES.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveStage(idx)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  activeStage === idx ? 'w-5 bg-[#c9a864]' : 'w-1.5 bg-white/20'
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop rendering
   return (
-    <section ref={containerRef} id="mid-scrolly" className="relative h-[400vh] min-h-[2200px] bg-[#0b0a08] select-none">
+    <section ref={containerRef} id="mercado" className="relative h-[400vh] min-h-[2200px] bg-[#0b0a08] select-none">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#0b0a08] z-0">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
         

@@ -1,94 +1,114 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { useLanguage } from './LanguageContext';
 import { Globe } from 'lucide-react';
+import { useLanguage } from './LanguageContext';
 
 export default function Navigation() {
   const { scrollY } = useScroll();
-  const navHeight = useTransform(scrollY, [0, 100], ["120px", "80px"]);
-  const navBg = useTransform(scrollY, [0, 100], ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.82)"]);
-  const navBorder = useTransform(scrollY, [0, 100], ["rgba(45, 36, 33, 0)", "rgba(45, 36, 33, 0.06)"]);
+  const navHeight = useTransform(scrollY, [0, 100], ['112px', '78px']);
+  const navBg = useTransform(scrollY, [0, 100], ['rgba(255, 255, 255, 0.72)', 'rgba(255, 255, 255, 0.9)']);
+  const navBorder = useTransform(scrollY, [0, 100], ['rgba(45, 36, 33, 0.08)', 'rgba(45, 36, 33, 0.07)']);
 
   const { language, setLanguage, t } = useLanguage();
 
   const menuItems = [
-    { labelEn: 'Thesis', labelEs: 'Tesis', href: '#tesis' },
-    { labelEn: 'Method', labelEs: 'Metodología', href: '#metodo' },
-    { labelEn: 'Insights', labelEs: 'Insights', href: '#mercado' },
-    { labelEn: 'Showcase', labelEs: 'Showcase', href: '#perfiles' }
+    { labelEn: 'Method', labelEs: 'Metodo', href: '#metodo' },
+    { labelEn: 'Profiles', labelEs: 'Perfiles', href: '#perfiles' },
+    { labelEn: 'Market', labelEs: 'Mercado', href: '#mercado' },
+    { labelEn: 'Apply', labelEs: 'Aplicar', href: '#contacto' },
   ];
 
   return (
-    <motion.nav 
+    <motion.nav
       style={{ height: navHeight }}
-      className="fixed top-0 w-full z-[100] px-4 md:px-8 flex items-center transition-all duration-500"
+      className="fixed top-0 z-[100] flex w-full items-center px-4 transition-all duration-500 md:px-8"
     >
-      <motion.div 
+      <motion.div
         style={{ backgroundColor: navBg, borderColor: navBorder }}
-        className="max-w-7xl mx-auto w-full flex justify-between items-center backdrop-blur-xl border px-6 md:px-8 py-4 rounded-[2.5rem] shadow-sm"
+        className="mx-auto flex w-[calc(100vw-2.5rem)] max-w-7xl items-center justify-between gap-3 overflow-hidden rounded-[2.5rem] border px-4 py-3 shadow-sm backdrop-blur-xl md:w-full md:gap-4 md:px-8 md:py-4"
       >
-        <div className="flex flex-col group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <span className="text-xl font-display italic font-bold tracking-tight text-ro-dark group-hover:text-ro-accent transition-colors">
-            Rangel Oviedo
+        <button
+          type="button"
+          className="group flex min-w-0 items-center gap-3 text-left"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Rangel Oviedo Group home"
+        >
+          <span className="relative block h-10 w-14 shrink-0 md:h-14 md:w-20">
+            <Image
+              src="/brand/rog-logo-gold.png"
+              alt="Rangel Oviedo Group"
+              fill
+              priority
+              sizes="(max-width: 768px) 64px, 80px"
+              className="object-contain"
+            />
           </span>
-          <span className="text-[9px] uppercase tracking-[0.38em] font-sans opacity-50 group-hover:opacity-100 transition-opacity">
-            {t('Real Estate Group', 'Grupo de Bienes Raíces')}
+          <span className="hidden min-w-0 flex-col sm:flex">
+            <span className="text-sm font-display italic font-bold tracking-tight text-ro-dark transition-colors group-hover:text-ro-accent md:text-base">
+              Rangel Oviedo Group
+            </span>
+            <span className="text-[8px] uppercase tracking-[0.28em] opacity-55 transition-opacity group-hover:opacity-100 md:text-[9px]">
+              {t('Boutique Texas Real Estate', 'Boutique inmobiliaria en Texas')}
+            </span>
           </span>
-        </div>
-        
-        <div className="hidden lg:flex items-center space-x-8">
+        </button>
+
+        <div className="hidden items-center space-x-8 lg:flex">
           {menuItems.map((item) => (
-            <a 
-              key={item.href} 
-              href={item.href} 
-              className="text-[10px] uppercase tracking-widest font-bold hover:text-ro-accent transition-colors relative group/link"
+            <a
+              key={item.href}
+              href={item.href}
+              className="group/link relative text-[10px] font-bold uppercase tracking-widest transition-colors hover:text-ro-accent"
             >
               {t(item.labelEn, item.labelEs)}
-              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-ro-accent transition-all group-hover/link:w-full" />
+              <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-ro-accent transition-all group-hover/link:w-full" />
             </a>
           ))}
-          
-          {/* Elegant Language Switcher */}
-          <div className="flex items-center gap-2 border border-ro-dark/10 bg-ro-dark/5 rounded-full px-3 py-1.5 text-[10px] font-bold tracking-wider">
+
+          <div className="flex items-center gap-2 rounded-full border border-ro-dark/10 bg-ro-dark/5 px-3 py-1.5 text-[10px] font-bold tracking-wider">
             <Globe size={12} className="text-ro-dark/40" />
-            <button 
+            <button
+              type="button"
               onClick={() => setLanguage('en')}
-              className={`transition-colors uppercase hover:text-ro-accent ${language === 'en' ? 'text-ro-accent font-extrabold' : 'text-ro-dark/50 font-normal'}`}
+              className={`uppercase transition-colors hover:text-ro-accent ${language === 'en' ? 'font-extrabold text-ro-accent' : 'font-normal text-ro-dark/50'}`}
             >
               EN
             </button>
-            <span className="text-ro-dark/20 font-light">|</span>
-            <button 
+            <span className="font-light text-ro-dark/20">|</span>
+            <button
+              type="button"
               onClick={() => setLanguage('es')}
-              className={`transition-colors uppercase hover:text-ro-accent ${language === 'es' ? 'text-ro-accent font-extrabold' : 'text-ro-dark/50 font-normal'}`}
+              className={`uppercase transition-colors hover:text-ro-accent ${language === 'es' ? 'font-extrabold text-ro-accent' : 'font-normal text-ro-dark/50'}`}
             >
               ES
             </button>
           </div>
 
-          <a 
-            href="#contacto" 
-            className="bg-ro-dark text-ro-light px-6 py-3 rounded-2xl text-[10px] uppercase tracking-widest font-bold hover:bg-ro-accent transition-all transform hover:scale-105 shadow-md"
+          <a
+            href="#contacto"
+            className="rounded-2xl bg-ro-dark px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-ro-light shadow-md transition-all hover:scale-105 hover:bg-ro-accent"
           >
-            {t('Schedule Strategy', 'Agendar Estrategia')}
+            {t('Apply / Book', 'Aplicar / Agenda')}
           </a>
         </div>
 
-        {/* Mobile menu trigger helper or mobile lang toggle */}
-        <div className="flex lg:hidden items-center gap-3">
-          <div className="flex items-center gap-1.5 border border-ro-dark/10 bg-ro-dark/5 rounded-full px-2.5 py-1 text-[9px] font-bold">
-            <button 
+        <div className="flex items-center gap-3 lg:hidden">
+          <div className="flex items-center gap-1.5 rounded-full border border-ro-dark/10 bg-ro-dark/5 px-2.5 py-1 text-[9px] font-bold">
+            <button
+              type="button"
               onClick={() => setLanguage('en')}
-              className={`transition-colors ${language === 'en' ? 'text-ro-accent font-extrabold' : 'text-ro-dark/40'}`}
+              className={`transition-colors ${language === 'en' ? 'font-extrabold text-ro-accent' : 'text-ro-dark/40'}`}
             >
               EN
             </button>
             <span className="text-ro-dark/20">|</span>
-            <button 
+            <button
+              type="button"
               onClick={() => setLanguage('es')}
-              className={`transition-colors ${language === 'es' ? 'text-ro-accent font-extrabold' : 'text-ro-dark/40'}`}
+              className={`transition-colors ${language === 'es' ? 'font-extrabold text-ro-accent' : 'text-ro-dark/40'}`}
             >
               ES
             </button>
