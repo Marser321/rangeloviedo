@@ -442,7 +442,6 @@ export default function ConciergeLanding() {
             >
               {t('Created by AD Media Solution', 'Creado por AD Media Solution')}
             </a>
-            <span>{t('Insider Report + private calendar via GoHighLevel', 'Insider Report + calendario privado vía GoHighLevel')}</span>
           </div>
         </div>
       </footer>
