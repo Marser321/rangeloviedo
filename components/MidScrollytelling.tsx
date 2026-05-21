@@ -431,11 +431,11 @@ export default function MidScrollytelling() {
           ref={mobileCanvasRef}
           aria-hidden="true"
           className="absolute inset-0 z-0 h-full w-full"
-          style={{ opacity: 0.32 }}
+          style={{ opacity: 0.46 }}
         />
 
         {/* Gradient overlays */}
-        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08]/82 via-[#0b0a08]/50 to-[#0b0a08]/88" />
+        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08]/66 via-[#0b0a08]/28 to-[#0b0a08]/72" />
 
         {/* Content */}
         <div className="relative z-10 px-5 py-16">
@@ -458,7 +458,7 @@ export default function MidScrollytelling() {
           <div className="grid grid-cols-2 gap-3">
 
             {/* Card 1 — Supply Lock */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/28 bg-[#1a1612]/38 backdrop-blur-[1px] shadow-[0_18px_44px_rgba(0,0,0,0.24)]">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('01 · Supply Lock', '01 · Oferta Limitada')}
               </span>
@@ -472,7 +472,7 @@ export default function MidScrollytelling() {
             </article>
 
             {/* Card 2 — Terrain Advantage */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/28 bg-[#1a1612]/38 backdrop-blur-[1px] shadow-[0_18px_44px_rgba(0,0,0,0.24)]">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('02 · Terrain Advantage', '02 · Ventaja Geográfica')}
               </span>
@@ -486,7 +486,7 @@ export default function MidScrollytelling() {
             </article>
 
             {/* Card 3 — Tax Efficiency */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/28 bg-[#1a1612]/38 backdrop-blur-[1px] shadow-[0_18px_44px_rgba(0,0,0,0.24)]">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('03 · Tax Efficiency', '03 · Eficiencia Tributaria')}
               </span>
@@ -500,7 +500,7 @@ export default function MidScrollytelling() {
             </article>
 
             {/* Card 4 — Macro Thesis */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/28 bg-[#1a1612]/38 backdrop-blur-[1px] shadow-[0_18px_44px_rgba(0,0,0,0.24)]">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('Macro Thesis', 'Tesis Macro')}
               </span>
@@ -529,9 +529,9 @@ export default function MidScrollytelling() {
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
         
         {/* Cinematic Overlays */}
-        <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_50%_44%,transparent_0%,rgba(11,10,8,0.15)_64%,rgba(11,10,8,0.72)_100%)]" />
-        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-r from-[#0b0a08]/70 via-transparent to-[#0b0a08]/66" />
-        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/30 via-[#0b0a08]/10 to-[#0b0a08]/60" />
+        <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_50%_44%,transparent_0%,rgba(11,10,8,0.08)_64%,rgba(11,10,8,0.54)_100%)]" />
+        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-r from-[#0b0a08]/48 via-transparent to-[#0b0a08]/44" />
+        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/18 via-transparent to-[#0b0a08]/42" />
 
         {/* Floating cards */}
         <div className="absolute inset-0 z-10 flex items-center justify-center p-4">
@@ -557,7 +557,7 @@ export default function MidScrollytelling() {
 
           {/* Stage 1: Houston */}
           <article 
-            className={`absolute flex flex-col p-8 md:p-10 border border-[#c9a864]/25 bg-[#1a1612]/78 backdrop-blur-xl shadow-2xl rounded-2xl max-w-[440px] transition-all duration-700 ease-out pointer-events-auto
+            className={`absolute flex flex-col p-8 md:p-10 border border-[#c9a864]/32 bg-[#1a1612]/36 backdrop-blur-sm shadow-[0_28px_70px_rgba(0,0,0,0.28)] rounded-2xl max-w-[440px] transition-all duration-700 ease-out pointer-events-auto
               top-1/2 left-1/2 md:top-[16%] md:right-[10%] md:left-auto
               ${activeStage === 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             style={{ transform: getCardTransform(1) }}
@@ -574,7 +574,7 @@ export default function MidScrollytelling() {
 
           {/* Stage 2: Austin */}
           <article 
-            className={`absolute flex flex-col p-8 md:p-10 border border-[#c9a864]/25 bg-[#1a1612]/78 backdrop-blur-xl shadow-2xl rounded-2xl max-w-[440px] transition-all duration-700 ease-out pointer-events-auto
+            className={`absolute flex flex-col p-8 md:p-10 border border-[#c9a864]/32 bg-[#1a1612]/36 backdrop-blur-sm shadow-[0_28px_70px_rgba(0,0,0,0.28)] rounded-2xl max-w-[440px] transition-all duration-700 ease-out pointer-events-auto
               top-1/2 left-1/2 md:bottom-[16%] md:left-[10%] md:right-auto
               ${activeStage === 2 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             style={{ transform: getCardTransform(2) }}
@@ -591,7 +591,7 @@ export default function MidScrollytelling() {
 
           {/* Stage 3: Texas fiscal */}
           <article 
-            className={`absolute flex flex-col p-8 md:p-10 border border-[#c9a864]/25 bg-[#1a1612]/78 backdrop-blur-xl shadow-2xl rounded-2xl max-w-[440px] transition-all duration-700 ease-out pointer-events-auto
+            className={`absolute flex flex-col p-8 md:p-10 border border-[#c9a864]/32 bg-[#1a1612]/36 backdrop-blur-sm shadow-[0_28px_70px_rgba(0,0,0,0.28)] rounded-2xl max-w-[440px] transition-all duration-700 ease-out pointer-events-auto
               top-1/2 left-1/2 md:top-[16%] md:left-[10%] md:right-auto
               ${activeStage === 3 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             style={{ transform: getCardTransform(3) }}
