@@ -448,10 +448,10 @@ export default function HeroScrollytelling() {
               <Sparkles size={10} />
               {t('Private Texas market context', 'Lectura privada de mercado en Texas')}
             </span>
-            <h1 className="font-display text-[28px] font-bold leading-[1.08] text-[#f5f1e8] tracking-tight">
+            <h1 className="font-display text-[28px] font-bold leading-[1.08] text-[#f5f1e8] tracking-tight [text-shadow:_0_2px_14px_rgba(0,0,0,0.55),_0_1px_3px_rgba(0,0,0,0.45)]">
               {t('Texas is easier to decide with private market context.', 'Texas se decide mejor con lectura privada.')}
             </h1>
-            <p className="mt-3 text-[13px] text-[#b8b0a0] leading-relaxed max-w-[340px]">
+            <p className="mt-3 text-[13px] text-[#f0e9da]/95 leading-relaxed max-w-[340px] [text-shadow:_0_1px_3px_rgba(0,0,0,0.7),_0_2px_18px_rgba(0,0,0,0.55)]">
               {t('Receive context on market, off-market, and timing before turning a property into a capital decision.', 'Recibe contexto sobre mercado, off-market y timing antes de convertir una propiedad en una decisión de capital.')}
             </p>
             <div className="mt-5 flex gap-3">
@@ -553,10 +553,10 @@ export default function HeroScrollytelling() {
               <Sparkles size={13} />
               {t('Private Texas market context', 'Lectura privada de mercado en Texas')}
             </span>
-            <h1 className="font-display text-4xl md:text-7xl font-extrabold leading-[1.02] text-[#f5f1e8] tracking-tight">
+            <h1 className="font-display text-4xl md:text-7xl font-extrabold leading-[1.02] text-[#f5f1e8] tracking-tight [text-shadow:_0_4px_24px_rgba(0,0,0,0.55),_0_2px_6px_rgba(0,0,0,0.45)]">
               {t('Texas is easier to decide with private market context.', 'Texas se decide mejor con lectura privada.')}
             </h1>
-            <p className="mt-6 text-sm md:text-xl text-[#b8b0a0] leading-relaxed max-w-[620px]">
+            <p className="mt-6 text-sm md:text-xl text-[#f0e9da]/95 leading-relaxed max-w-[620px] [text-shadow:_0_1px_3px_rgba(0,0,0,0.7),_0_3px_22px_rgba(0,0,0,0.55)]">
               {t('Receive context on market, off-market, and timing before turning a property into a capital decision.', 'Recibe contexto sobre mercado, off-market y timing antes de convertir una propiedad en una decisión de capital.')}
             </p>
             <div className="mt-8 flex flex-col md:flex-row justify-center gap-4 w-full md:w-auto px-4 md:px-0">
