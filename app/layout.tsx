@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://rangeloviedo.com';
 const title = 'Rangel Oviedo Group | Texas Real Estate Concierge';
 const description =
-  'Boutique bilingual real estate advisory for buying, investing, selling, and relocating in Texas with Rangel Oviedo Group.';
+  'Private bilingual real estate advisory for buying, investing, selling, and relocating in Texas with Rangel Oviedo Group.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

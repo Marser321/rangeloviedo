@@ -63,7 +63,7 @@ export default function Navigation() {
               Rangel Oviedo Group
             </span>
             <span className="text-[8px] uppercase tracking-[0.28em] opacity-55 transition-opacity group-hover:opacity-100 md:text-[9px]">
-              {t('Boutique Texas Real Estate', 'Boutique inmobiliaria en Texas')}
+              {t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}
             </span>
           </span>
         </button>
@@ -185,7 +185,7 @@ export default function Navigation() {
             {t('Apply / Book', 'Aplicar / Agenda')}
           </a>
           <p className="mt-10 text-[10px] font-bold uppercase tracking-[0.3em] text-ro-dark/40">
-            {t('Boutique Texas Real Estate', 'Boutique inmobiliaria en Texas')}
+            {t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}
           </p>
         </nav>
       </div>

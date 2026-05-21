@@ -164,11 +164,11 @@ export default function ConciergeLanding() {
       <Navigation />
       <HeroScrollytelling />
 
-      <section aria-label="Boutique Texas proof points" className="relative z-10 overflow-hidden border-y border-[var(--ro-ink)]/8 bg-[var(--ro-ink)] text-[var(--ro-paper)]">
+      <section aria-label="Private Texas advisory proof points" className="relative z-10 overflow-hidden border-y border-[var(--ro-ink)]/8 bg-[var(--ro-ink)] text-[var(--ro-paper)]">
         <div className="trust-marquee flex gap-14 py-5 text-[12px] font-bold uppercase tracking-[0.2em]">
           {[...Array(2)].flatMap((_, loop) =>
             [
-              t('Boutique Texas advisory', 'Asesoría boutique en Texas'),
+              t('Private Texas advisory', 'Asesoría privada en Texas'),
               t('Bilingual EN/ES practice', 'Práctica bilingüe EN/ES'),
               t('Mexico + LATAM bridge', 'Puente México + LATAM'),
               t('Off-market lens', 'Lectura off-market'),
@@ -394,7 +394,7 @@ export default function ConciergeLanding() {
                 className="object-contain"
               />
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-center">{t('Boutique Texas Real Estate', 'Boutique inmobiliaria en Texas')}</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-center">{t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}</span>
             <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-center">{t('Texas + Mexico + LATAM', 'Texas + México + LATAM')}</span>
           </div>
 
@@ -433,6 +433,15 @@ export default function ConciergeLanding() {
 
           <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-[10px] font-bold uppercase tracking-[0.22em] md:flex-row">
             <span>© {new Date().getFullYear()} Rangel Oviedo Group</span>
+            <a
+              href="https://admediasolution.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="AD Media Solution"
+              className="transition-colors hover:text-[#c9a864]"
+            >
+              {t('Created by AD Media Solution', 'Creado por AD Media Solution')}
+            </a>
             <span>{t('Insider Report + private calendar via GoHighLevel', 'Insider Report + calendario privado vía GoHighLevel')}</span>
           </div>
         </div>
