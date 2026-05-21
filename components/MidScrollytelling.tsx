@@ -7,12 +7,11 @@ import { Map } from 'lucide-react';
 
 const FRAME_COUNT = 90;
 
-const MID_MOBILE_FRAMES = [
-  '/assets/seq02/mobile/frame_0001.webp',
-  '/assets/seq02/mobile/frame_0034.webp',
-  '/assets/seq02/mobile/frame_0056.webp',
-  '/assets/seq02/mobile/frame_0079.webp',
-];
+const MID_MOBILE_SEQUENCE = Array.from({ length: 45 }, (_, i) => {
+  const frameNum = Math.min(90, Math.max(1, Math.round((i / 44) * 89) + 1));
+  const pad = String(frameNum).padStart(4, '0');
+  return `/assets/seq02/mobile/frame_${pad}.webp`;
+});
 
 export default function MidScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,12 +43,17 @@ export default function MidScrollytelling() {
 
     const actualIsMobile = window.matchMedia('(max-width: 768px)').matches;
     if (actualIsMobile) {
-      // Preload only the 4 mobile keyframes
-      MID_MOBILE_FRAMES.forEach((src) => {
+      // Preload mobile sequence frames
+      MID_MOBILE_SEQUENCE.forEach((src) => {
         const img = new Image();
         img.src = src;
       });
+      // Auto-cycle images like a video (66ms = 15 FPS)
+      const cycleInterval = setInterval(() => {
+        setMobileFrameIndex((prev) => (prev + 1) % MID_MOBILE_SEQUENCE.length);
+      }, 66);
       return () => {
+        clearInterval(cycleInterval);
         window.removeEventListener('resize', checkMobile);
       };
     }
@@ -114,15 +118,6 @@ export default function MidScrollytelling() {
       window.removeEventListener('resize', checkMobile);
     };
   }, []);
-
-  // Mobile background auto-cycle every 5s
-  useEffect(() => {
-    if (!isMobile) return;
-    const timer = setInterval(() => {
-      setMobileFrameIndex((prev) => (prev + 1) % MID_MOBILE_FRAMES.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [isMobile]);
 
   const drawFrame = (index: number) => {
     if (isMobile) return;
@@ -284,14 +279,14 @@ export default function MidScrollytelling() {
           showMobile ? 'block' : 'hidden'
         }`}
       >
-        {/* Auto-cycling background with crossfade */}
+        {/* Auto-cycling background (video-like) */}
         <div className="absolute inset-0 z-0">
-          {MID_MOBILE_FRAMES.map((src, index) => (
+          {MID_MOBILE_SEQUENCE.map((src, index) => (
             <img
               key={src}
               src={src}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+              className="absolute inset-0 w-full h-full object-cover"
               style={{
                 opacity: mobileFrameIndex === index ? 0.25 : 0,
                 pointerEvents: 'none',

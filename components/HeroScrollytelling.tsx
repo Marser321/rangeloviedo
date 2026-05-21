@@ -7,18 +7,17 @@ import { Sparkles } from 'lucide-react';
 
 const FRAME_COUNT = 90;
 
-const HERO_MOBILE_FRAMES = [
-  '/assets/seq01/mobile/frame_0001.webp',
-  '/assets/seq01/mobile/frame_0030.webp',
-  '/assets/seq01/mobile/frame_0055.webp',
-  '/assets/seq01/mobile/frame_0072.webp',
-  '/assets/seq01/mobile/frame_0090.webp',
-];
+const HERO_MOBILE_SEQUENCE = Array.from({ length: 45 }, (_, i) => {
+  const frameNum = Math.min(90, Math.max(1, Math.round((i / 44) * 89) + 1));
+  const pad = String(frameNum).padStart(4, '0');
+  return `/assets/seq01/mobile/frame_${pad}.webp`;
+});
 
 export default function HeroScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [activeStage, setActiveStage] = useState(0);
+  const [mobileFrameIdx, setMobileFrameIdx] = useState(0);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
   const [isClient, setIsClient] = useState(false);
@@ -44,15 +43,15 @@ export default function HeroScrollytelling() {
 
     const actualIsMobile = window.matchMedia('(max-width: 768px)').matches;
     if (actualIsMobile) {
-      // Preload only the 5 mobile keyframes
-      HERO_MOBILE_FRAMES.forEach((src) => {
+      // Preload mobile sequence frames
+      HERO_MOBILE_SEQUENCE.forEach((src) => {
         const img = new Image();
         img.src = src;
       });
-      // Auto-cycle images like a video
+      // Auto-cycle images like a video (66ms = 15 FPS)
       const cycleInterval = setInterval(() => {
-        setActiveStage((prev) => (prev + 1) % HERO_MOBILE_FRAMES.length);
-      }, 4000);
+        setMobileFrameIdx((prev) => (prev + 1) % HERO_MOBILE_SEQUENCE.length);
+      }, 66);
       return () => {
         clearInterval(cycleInterval);
         window.removeEventListener('resize', checkMobile);
@@ -283,43 +282,32 @@ export default function HeroScrollytelling() {
           showMobile ? 'block' : 'hidden'
         }`}
       >
-        {/* ── Hero header: auto-cycling image slideshow ── */}
+        {/* ── Hero header: auto-cycling image sequence ── */}
         <div className="relative h-[85vh] w-full overflow-hidden">
-          {/* Background image crossfade */}
+          {/* Background image cycle (video-like) */}
           <div className="absolute inset-0 z-0">
-            {HERO_MOBILE_FRAMES.map((src, index) => (
+            {HERO_MOBILE_SEQUENCE.map((src, index) => (
               <img
                 key={src}
                 src={src}
                 alt=""
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out ${
-                  activeStage === index ? 'opacity-50' : 'opacity-0'
-                }`}
-                style={{ pointerEvents: 'none' }}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  pointerEvents: 'none',
+                  opacity: mobileFrameIdx === index ? 0.5 : 0,
+                }}
               />
             ))}
           </div>
 
           {/* Gradient overlays */}
-          <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/40 via-transparent to-[#0b0a08]" />
+          <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08]/40 via-transparent to-[#0b0a08]" />
 
           {/* Brand label */}
           <div className="absolute top-20 left-5 z-10 pointer-events-none">
             <span className="block text-[9px] font-extrabold uppercase tracking-[0.22em] text-[#c9a864]">
               Rangel Oviedo Group
             </span>
-          </div>
-
-          {/* Image cycle indicator */}
-          <div className="absolute top-20 right-5 z-10 flex gap-1.5">
-            {HERO_MOBILE_FRAMES.map((_, idx) => (
-              <div
-                key={idx}
-                className={`h-0.5 rounded-full transition-all duration-700 ${
-                  activeStage === idx ? 'w-5 bg-[#c9a864]' : 'w-1.5 bg-white/20'
-                }`}
-              />
-            ))}
           </div>
 
           {/* Hero content overlay — pinned to bottom */}
