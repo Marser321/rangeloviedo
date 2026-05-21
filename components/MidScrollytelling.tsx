@@ -261,13 +261,18 @@ export default function MidScrollytelling() {
     }
   };
 
-  // Mobile rendering
-  if (isClient && isMobile) {
-    return (
+  const showMobile = isClient && isMobile;
+  const showDesktop = !isClient || !isMobile;
+
+  return (
+    <>
+      {/* ═══════════ MOBILE LAYOUT ═══════════ */}
       <section
-        ref={containerRef}
-        id="mercado"
-        className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
+        ref={showMobile ? containerRef : undefined}
+        id={showMobile ? 'mercado' : undefined}
+        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden touch-none ${
+          showMobile ? 'block h-[100dvh]' : 'hidden'
+        }`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -411,12 +416,15 @@ export default function MidScrollytelling() {
 
         </div>
       </section>
-    );
-  }
 
-  // Desktop rendering
-  return (
-    <section ref={containerRef} id="mercado" className="relative h-[400vh] min-h-[2200px] bg-[#0b0a08] select-none">
+      {/* ═══════════ DESKTOP LAYOUT ═══════════ */}
+    <section
+      ref={showDesktop ? containerRef : undefined}
+      id={showDesktop ? 'mercado' : undefined}
+      className={`relative min-h-[2200px] bg-[#0b0a08] select-none ${
+        showDesktop ? 'block h-[400vh]' : 'hidden'
+      }`}
+    >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#0b0a08] z-0">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
         
@@ -509,5 +517,6 @@ export default function MidScrollytelling() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -265,13 +265,18 @@ export default function HeroScrollytelling() {
     }
   };
 
-  // Mobile rendering
-  if (isClient && isMobile) {
-    return (
+  const showMobile = isClient && isMobile;
+  const showDesktop = !isClient || !isMobile;
+
+  return (
+    <>
+      {/* ═══════════ MOBILE LAYOUT ═══════════ */}
       <section
-        ref={containerRef}
-        id="hero-scrolly"
-        className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
+        ref={showMobile ? containerRef : undefined}
+        id={showMobile ? 'hero-scrolly' : undefined}
+        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden touch-none ${
+          showMobile ? 'block h-[100dvh]' : 'hidden'
+        }`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -437,12 +442,15 @@ export default function HeroScrollytelling() {
 
         </div>
       </section>
-    );
-  }
 
-  // Desktop rendering
-  return (
-    <section ref={containerRef} id="hero-scrolly" className="relative h-[500vh] min-h-[2800px] bg-[#0b0a08] select-none">
+      {/* ═══════════ DESKTOP LAYOUT ═══════════ */}
+    <section
+      ref={showDesktop ? containerRef : undefined}
+      id={showDesktop ? 'hero-scrolly' : undefined}
+      className={`relative min-h-[2800px] bg-[#0b0a08] select-none ${
+        showDesktop ? 'block h-[500vh]' : 'hidden'
+      }`}
+    >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#0b0a08] z-0">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
         
@@ -571,5 +579,6 @@ export default function HeroScrollytelling() {
         </div>
       </div>
     </section>
+    </>
   );
 }

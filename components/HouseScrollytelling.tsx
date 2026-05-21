@@ -116,7 +116,7 @@ export default function HouseScrollytelling() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Update active index based on equal 20% segments (Desktop only)
+  // Update active index based on scroll (Desktop only)
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (isMobile) return;
     const idx = Math.min(STEP_COUNT - 1, Math.floor(latest * STEP_COUNT));
@@ -126,56 +126,91 @@ export default function HouseScrollytelling() {
   const FADE = 0.03;
   const GAP  = 0.01;
 
-  // Unconditional hook calls for Image opacities
-  const opacities = scrollySteps.map((_, idx) => {
-    const { start, end } = getStepRange(idx);
-    const t0 = useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
-    const tLast = useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
-    const tMid = useTransform(
-      scrollYProgress,
-      [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
-      [0, 1, 1, 0]
-    );
+  // ── ALL useTransform hooks called unconditionally at top level ──
+  // Image opacities (3 hooks per step × 5 = 15 hooks)
+  const op0_t0 = useTransform(scrollYProgress, [0, 0.2 - GAP - FADE, 0.2 - GAP], [1, 1, 0]);
+  const op0_tL = useTransform(scrollYProgress, [0 + GAP, 0 + GAP + FADE, 0.2], [0, 1, 1]);
+  const op0_tM = useTransform(scrollYProgress, [0 + GAP, 0 + GAP + FADE, 0.2 - GAP - FADE, 0.2 - GAP], [0, 1, 1, 0]);
 
-    if (idx === 0) return t0;
-    if (idx === STEP_COUNT - 1) return tLast;
-    return tMid;
-  });
+  const op1_t0 = useTransform(scrollYProgress, [0.2, 0.4 - GAP - FADE, 0.4 - GAP], [1, 1, 0]);
+  const op1_tL = useTransform(scrollYProgress, [0.2 + GAP, 0.2 + GAP + FADE, 0.4], [0, 1, 1]);
+  const op1_tM = useTransform(scrollYProgress, [0.2 + GAP, 0.2 + GAP + FADE, 0.4 - GAP - FADE, 0.4 - GAP], [0, 1, 1, 0]);
 
-  // Unconditional hook calls for Scales
-  const scales = scrollySteps.map((_, idx) => {
-    const { start, end } = getStepRange(idx);
-    return useTransform(scrollYProgress, [start, end], [1, 1.06]);
-  });
+  const op2_t0 = useTransform(scrollYProgress, [0.4, 0.6 - GAP - FADE, 0.6 - GAP], [1, 1, 0]);
+  const op2_tL = useTransform(scrollYProgress, [0.4 + GAP, 0.4 + GAP + FADE, 0.6], [0, 1, 1]);
+  const op2_tM = useTransform(scrollYProgress, [0.4 + GAP, 0.4 + GAP + FADE, 0.6 - GAP - FADE, 0.6 - GAP], [0, 1, 1, 0]);
 
-  // Unconditional hook calls for Text opacities
-  const textOpacities = scrollySteps.map((_, idx) => {
-    const { start, end } = getStepRange(idx);
-    const t0 = useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
-    const tLast = useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
-    const tMid = useTransform(
-      scrollYProgress,
-      [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
-      [0, 1, 1, 0]
-    );
+  const op3_t0 = useTransform(scrollYProgress, [0.6, 0.8 - GAP - FADE, 0.8 - GAP], [1, 1, 0]);
+  const op3_tL = useTransform(scrollYProgress, [0.6 + GAP, 0.6 + GAP + FADE, 0.8], [0, 1, 1]);
+  const op3_tM = useTransform(scrollYProgress, [0.6 + GAP, 0.6 + GAP + FADE, 0.8 - GAP - FADE, 0.8 - GAP], [0, 1, 1, 0]);
 
-    if (idx === 0) return t0;
-    if (idx === STEP_COUNT - 1) return tLast;
-    return tMid;
-  });
+  const op4_t0 = useTransform(scrollYProgress, [0.8, 1.0 - GAP - FADE, 1.0 - GAP], [1, 1, 0]);
+  const op4_tL = useTransform(scrollYProgress, [0.8 + GAP, 0.8 + GAP + FADE, 1.0], [0, 1, 1]);
+  const op4_tM = useTransform(scrollYProgress, [0.8 + GAP, 0.8 + GAP + FADE, 1.0 - GAP - FADE, 1.0 - GAP], [0, 1, 1, 0]);
 
-  // Unconditional hook calls for Text vertical motion
-  const textYs = scrollySteps.map((_, idx) => {
-    const { start, end } = getStepRange(idx);
-    const t0 = useTransform(scrollYProgress, [start, end - GAP], [0, -24]);
-    const tOther = useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end - GAP], [30, 0, -24]);
+  const opacities = [op0_t0, op1_tM, op2_tM, op3_tM, op4_tL];
 
-    if (idx === 0) return t0;
-    return tOther;
-  });
+  // Scales (5 hooks)
+  const scale0 = useTransform(scrollYProgress, [0, 0.2], [1, 1.06]);
+  const scale1 = useTransform(scrollYProgress, [0.2, 0.4], [1, 1.06]);
+  const scale2 = useTransform(scrollYProgress, [0.4, 0.6], [1, 1.06]);
+  const scale3 = useTransform(scrollYProgress, [0.6, 0.8], [1, 1.06]);
+  const scale4 = useTransform(scrollYProgress, [0.8, 1.0], [1, 1.06]);
+  const scales = [scale0, scale1, scale2, scale3, scale4];
 
+  // Text opacities (3 hooks per step × 5 = 15 hooks)
+  const txOp0_t0 = useTransform(scrollYProgress, [0, 0.2 - GAP - FADE, 0.2 - GAP], [1, 1, 0]);
+  const txOp0_tL = useTransform(scrollYProgress, [0 + GAP, 0 + GAP + FADE, 0.2], [0, 1, 1]);
+  const txOp0_tM = useTransform(scrollYProgress, [0 + GAP, 0 + GAP + FADE, 0.2 - GAP - FADE, 0.2 - GAP], [0, 1, 1, 0]);
+
+  const txOp1_t0 = useTransform(scrollYProgress, [0.2, 0.4 - GAP - FADE, 0.4 - GAP], [1, 1, 0]);
+  const txOp1_tL = useTransform(scrollYProgress, [0.2 + GAP, 0.2 + GAP + FADE, 0.4], [0, 1, 1]);
+  const txOp1_tM = useTransform(scrollYProgress, [0.2 + GAP, 0.2 + GAP + FADE, 0.4 - GAP - FADE, 0.4 - GAP], [0, 1, 1, 0]);
+
+  const txOp2_t0 = useTransform(scrollYProgress, [0.4, 0.6 - GAP - FADE, 0.6 - GAP], [1, 1, 0]);
+  const txOp2_tL = useTransform(scrollYProgress, [0.4 + GAP, 0.4 + GAP + FADE, 0.6], [0, 1, 1]);
+  const txOp2_tM = useTransform(scrollYProgress, [0.4 + GAP, 0.4 + GAP + FADE, 0.6 - GAP - FADE, 0.6 - GAP], [0, 1, 1, 0]);
+
+  const txOp3_t0 = useTransform(scrollYProgress, [0.6, 0.8 - GAP - FADE, 0.8 - GAP], [1, 1, 0]);
+  const txOp3_tL = useTransform(scrollYProgress, [0.6 + GAP, 0.6 + GAP + FADE, 0.8], [0, 1, 1]);
+  const txOp3_tM = useTransform(scrollYProgress, [0.6 + GAP, 0.6 + GAP + FADE, 0.8 - GAP - FADE, 0.8 - GAP], [0, 1, 1, 0]);
+
+  const txOp4_t0 = useTransform(scrollYProgress, [0.8, 1.0 - GAP - FADE, 1.0 - GAP], [1, 1, 0]);
+  const txOp4_tL = useTransform(scrollYProgress, [0.8 + GAP, 0.8 + GAP + FADE, 1.0], [0, 1, 1]);
+  const txOp4_tM = useTransform(scrollYProgress, [0.8 + GAP, 0.8 + GAP + FADE, 1.0 - GAP - FADE, 1.0 - GAP], [0, 1, 1, 0]);
+
+  const textOpacities = [txOp0_t0, txOp1_tM, txOp2_tM, txOp3_tM, txOp4_tL];
+
+  // Text vertical motion (2 hooks per step × 5 = 10 hooks)
+  const ty0_a = useTransform(scrollYProgress, [0, 0.2 - GAP], [0, -24]);
+  const ty0_b = useTransform(scrollYProgress, [0 + GAP, 0 + GAP + FADE, 0.2 - GAP], [30, 0, -24]);
+
+  const ty1_a = useTransform(scrollYProgress, [0.2, 0.4 - GAP], [0, -24]);
+  const ty1_b = useTransform(scrollYProgress, [0.2 + GAP, 0.2 + GAP + FADE, 0.4 - GAP], [30, 0, -24]);
+
+  const ty2_a = useTransform(scrollYProgress, [0.4, 0.6 - GAP], [0, -24]);
+  const ty2_b = useTransform(scrollYProgress, [0.4 + GAP, 0.4 + GAP + FADE, 0.6 - GAP], [30, 0, -24]);
+
+  const ty3_a = useTransform(scrollYProgress, [0.6, 0.8 - GAP], [0, -24]);
+  const ty3_b = useTransform(scrollYProgress, [0.6 + GAP, 0.6 + GAP + FADE, 0.8 - GAP], [30, 0, -24]);
+
+  const ty4_a = useTransform(scrollYProgress, [0.8, 1.0 - GAP], [0, -24]);
+  const ty4_b = useTransform(scrollYProgress, [0.8 + GAP, 0.8 + GAP + FADE, 1.0 - GAP], [30, 0, -24]);
+
+  const textYs = [ty0_a, ty1_b, ty2_b, ty3_b, ty4_b];
+
+  // Stepper progress bars (5 hooks) — previously called inline in JSX
+  const stepperScale0 = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  const stepperScale1 = useTransform(scrollYProgress, [0.2, 0.4], [0, 1]);
+  const stepperScale2 = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
+  const stepperScale3 = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
+  const stepperScale4 = useTransform(scrollYProgress, [0.8, 1.0], [0, 1]);
+  const stepperScales = [stepperScale0, stepperScale1, stepperScale2, stepperScale3, stepperScale4];
+
+  // Progress bar width (1 hook)
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
+  // ── Touch handlers for mobile ──
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
     touchEndX.current = e.targetTouches[0].clientX;
@@ -199,18 +234,25 @@ export default function HouseScrollytelling() {
     }
   };
 
-  // Mobile rendering
-  if (isClient && isMobile) {
-    return (
+  // ── Determine which layout to show ──
+  const showMobile = isClient && isMobile;
+  const showDesktop = !isClient || !isMobile;
+
+  // ── SINGLE RETURN — both layouts are always in the tree ──
+  return (
+    <>
+      {/* ═══════════ MOBILE LAYOUT ═══════════ */}
       <section
-        ref={containerRef}
-        id="casa-interactiva"
-        className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
+        ref={showMobile ? containerRef : undefined}
+        id={showMobile ? 'casa-interactiva' : undefined}
+        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden touch-none ${
+          showMobile ? 'block h-[100dvh]' : 'hidden'
+        }`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Mobile Background Frames with hardware-accelerated crossfade */}
+        {/* Mobile Background Frames */}
         <div className="absolute inset-0 z-0">
           {scrollySteps.map((step, idx) => (
             <div
@@ -246,9 +288,7 @@ export default function HouseScrollytelling() {
 
         {/* Swipe Card Area */}
         <div className="absolute inset-x-4 bottom-12 z-10 flex flex-col items-center">
-          
           <div className="relative w-full min-h-[250px] flex items-center justify-center">
-            
             {scrollySteps.map((step, idx) => {
               const Icon = step.icon;
               return (
@@ -292,7 +332,6 @@ export default function HouseScrollytelling() {
                 </article>
               );
             })}
-
           </div>
 
           {/* Dots Indicator */}
@@ -308,187 +347,184 @@ export default function HouseScrollytelling() {
               />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════ DESKTOP LAYOUT ═══════════ */}
+      <section
+        ref={showDesktop ? containerRef : undefined}
+        id={showDesktop ? 'casa-interactiva' : undefined}
+        className={`relative bg-ro-dark text-ro-light ${
+          showDesktop ? 'block h-[600vh]' : 'hidden'
+        }`}
+      >
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
+          {/* Scrollytelling Header */}
+          <header className="relative z-20 w-full px-6 py-6 md:px-12 flex justify-between items-center border-b border-white/5 bg-gradient-to-b from-ro-dark/80 to-transparent backdrop-blur-sm">
+            <div>
+              <span className="text-[9px] uppercase tracking-[0.3em] font-black text-[#c9a864] flex items-center gap-2">
+                <Sparkles size={12} className="animate-pulse" /> 
+                {t('Editorial Walkthrough', 'Recorrido Editorial')}
+              </span>
+              <h2 className="text-xl md:text-2xl font-display italic text-white mt-1">
+                {t('How we read a home', 'Cómo leemos una casa')}
+              </h2>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] uppercase tracking-widest opacity-40 font-mono">
+                {t('Step by step', 'Paso a paso')}
+              </span>
+              <div className="text-sm font-display italic font-bold text-white">
+                {t('Texas Real Estate Concierge', 'Texas Real Estate Concierge')}
+              </div>
+            </div>
+          </header>
+
+          {/* Central tablet area */}
+          <div className="relative flex-1 flex items-center justify-center p-4 md:p-8">
+            <div className="relative w-full max-w-6xl h-[68vh] md:h-[72vh] rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_45px_130px_rgba(0,0,0,0.6)]">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/55 z-10 pointer-events-none" />
+
+              {/* Images */}
+              {scrollySteps.map((step, idx) => (
+                <motion.div
+                  key={step.step}
+                  style={{
+                    opacity: opacities[idx],
+                    scale: scales[idx],
+                  }}
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                >
+                  <Image
+                    src={step.image}
+                    alt={language === 'es' ? step.titleEs : step.titleEn}
+                    fill
+                    priority={idx === 0}
+                    className="object-cover"
+                    sizes="(max-width: 1200px) 100vw, 1200px"
+                  />
+                </motion.div>
+              ))}
+
+              {/* Text and actions overlay */}
+              <div className="absolute inset-x-0 bottom-0 z-20 p-6 md:p-12 flex flex-col md:flex-row justify-between items-end gap-6 pointer-events-none">
+                <div className="max-w-xl w-full relative min-h-[220px] md:min-h-[170px]">
+                  {scrollySteps.map((step, idx) => {
+                    const Icon = step.icon;
+                    const isActive = activeIndex === idx;
+                    
+                    return (
+                      <motion.div
+                        key={step.step}
+                        style={{
+                          opacity: textOpacities[idx],
+                          y: textYs[idx],
+                        }}
+                        className={`absolute bottom-0 left-0 w-full text-left transition-all duration-300 ${
+                          isActive ? 'pointer-events-auto z-10' : 'pointer-events-none z-0'
+                        }`}
+                      >
+                        <div className="space-y-4">
+                          <div className="inline-flex items-center gap-3 bg-[#a26035]/85 border border-white/20 text-white rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] backdrop-blur-md">
+                            <Icon size={14} />
+                            <span>
+                              {t('Step', 'Paso')} {step.step} • {t(step.labelEn, step.labelEs)}
+                            </span>
+                          </div>
+                          
+                          <h3 className="text-3xl md:text-5xl font-display italic text-white leading-tight font-bold">
+                            {t(step.titleEn, step.titleEs)}
+                          </h3>
+                          
+                          <p className="text-xs md:text-sm leading-relaxed text-white/80 font-light max-w-lg border-l-2 border-[#c9a864] pl-4">
+                            {t(step.textEn, step.textEs)}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Action buttons */}
+                <div className="shrink-0 relative z-30 w-full md:w-auto">
+                  {scrollySteps.map((step, idx) => {
+                    const isActive = activeIndex === idx;
+                    return (
+                      <motion.div
+                        key={`btn-${step.step}`}
+                        style={{
+                          opacity: textOpacities[idx],
+                        }}
+                        className={`transition-all duration-300 w-full md:w-auto ${
+                          isActive ? 'relative pointer-events-auto' : 'absolute bottom-0 right-0 pointer-events-none'
+                        }`}
+                      >
+                        <a
+                          href={actionLink(step.intent)}
+                          {...externalLinkProps(actionLink(step.intent))}
+                          className={`btn w-full md:w-auto ${
+                            idx === 4 ? 'btn-copper bg-[#c9a864] text-[#0b0a08]' : 'btn-ghost border-white/25 text-white hover:bg-white/10'
+                          } text-[11px] shadow-2xl flex items-center justify-center gap-2`}
+                        >
+                          {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
+                          <MessageCircle size={16} />
+                        </a>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Stepper progress indicator — using pre-computed hooks */}
+              <div className="absolute top-6 left-6 z-20 flex gap-1.5 md:gap-2">
+                {scrollySteps.map((step, idx) => {
+                  const isActive = activeIndex === idx;
+                  return (
+                    <div 
+                      key={`dot-${step.step}`} 
+                      className={`h-1.5 rounded-full transition-all duration-500 overflow-hidden relative ${
+                        isActive ? 'w-16 bg-white/30' : 'w-8 bg-white/10'
+                      }`}
+                    >
+                      <motion.div 
+                        className="absolute inset-0 bg-[#c9a864]" 
+                        style={{
+                          scaleX: stepperScales[idx],
+                          transformOrigin: 'left'
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Footer info */}
+          <footer className="relative z-20 w-full px-6 py-5 md:px-12 bg-gradient-to-t from-ro-dark/90 to-transparent border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-[10px] uppercase tracking-[0.24em] text-white/40 font-bold">
+              {t('Rangel Oviedo Group © 2026 • Quiet Luxury', 'Rangel Oviedo Group © 2026 • Lujo Latino')}
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <span className="text-[11px] font-medium text-white/60">
+                {t('Scroll to advance the walkthrough', 'Haz scroll para avanzar en el recorrido')}
+              </span>
+              <div className="w-12 h-6 rounded-full border border-white/20 flex items-center justify-center p-1">
+                <motion.div 
+                  className="w-1.5 h-1.5 bg-[#c9a864] rounded-full"
+                  animate={{ y: [0, 8, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                />
+              </div>
+            </div>
+
+            <motion.div className="absolute top-0 left-0 h-[2px] bg-[#c9a864] z-30" style={{ width: progressWidth }} />
+          </footer>
 
         </div>
       </section>
-    );
-  }
-
-  // Desktop rendering
-  return (
-    <section ref={containerRef} className="relative h-[600vh] bg-ro-dark text-ro-light">
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
-        
-        {/* Scrollytelling Header */}
-        <header className="relative z-20 w-full px-6 py-6 md:px-12 flex justify-between items-center border-b border-white/5 bg-gradient-to-b from-ro-dark/80 to-transparent backdrop-blur-sm">
-          <div>
-            <span className="text-[9px] uppercase tracking-[0.3em] font-black text-[#c9a864] flex items-center gap-2">
-              <Sparkles size={12} className="animate-pulse" /> 
-              {t('Editorial Walkthrough', 'Recorrido Editorial')}
-            </span>
-            <h2 className="text-xl md:text-2xl font-display italic text-white mt-1">
-              {t('How we read a home', 'Cómo leemos una casa')}
-            </h2>
-          </div>
-          <div className="text-right">
-            <span className="text-[10px] uppercase tracking-widest opacity-40 font-mono">
-              {t('Step by step', 'Paso a paso')}
-            </span>
-            <div className="text-sm font-display italic font-bold text-white">
-              {t('Texas Real Estate Concierge', 'Texas Real Estate Concierge')}
-            </div>
-          </div>
-        </header>
-
-        {/* Central tablet area */}
-        <div className="relative flex-1 flex items-center justify-center p-4 md:p-8">
-          <div className="relative w-full max-w-6xl h-[68vh] md:h-[72vh] rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_45px_130px_rgba(0,0,0,0.6)]">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/55 z-10 pointer-events-none" />
-
-            {/* Images */}
-            {scrollySteps.map((step, idx) => (
-              <motion.div
-                key={step.step}
-                style={{
-                  opacity: opacities[idx],
-                  scale: scales[idx],
-                }}
-                className="absolute inset-0 w-full h-full pointer-events-none"
-              >
-                <Image
-                  src={step.image}
-                  alt={language === 'es' ? step.titleEs : step.titleEn}
-                  fill
-                  priority={idx === 0}
-                  className="object-cover"
-                  sizes="(max-width: 1200px) 100vw, 1200px"
-                />
-              </motion.div>
-            ))}
-
-            {/* Text and actions overlay */}
-            <div className="absolute inset-x-0 bottom-0 z-20 p-6 md:p-12 flex flex-col md:flex-row justify-between items-end gap-6 pointer-events-none">
-              <div className="max-w-xl w-full relative min-h-[220px] md:min-h-[170px]">
-                {scrollySteps.map((step, idx) => {
-                  const Icon = step.icon;
-                  const isActive = activeIndex === idx;
-                  
-                  return (
-                    <motion.div
-                      key={step.step}
-                      style={{
-                        opacity: textOpacities[idx],
-                        y: textYs[idx],
-                      }}
-                      className={`absolute bottom-0 left-0 w-full text-left transition-all duration-300 ${
-                        isActive ? 'pointer-events-auto z-10' : 'pointer-events-none z-0'
-                      }`}
-                    >
-                      <div className="space-y-4">
-                        <div className="inline-flex items-center gap-3 bg-[#a26035]/85 border border-white/20 text-white rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] backdrop-blur-md">
-                          <Icon size={14} />
-                          <span>
-                            {t('Step', 'Paso')} {step.step} • {t(step.labelEn, step.labelEs)}
-                          </span>
-                        </div>
-                        
-                        <h3 className="text-3xl md:text-5xl font-display italic text-white leading-tight font-bold">
-                          {t(step.titleEn, step.titleEs)}
-                        </h3>
-                        
-                        <p className="text-xs md:text-sm leading-relaxed text-white/80 font-light max-w-lg border-l-2 border-[#c9a864] pl-4">
-                          {t(step.textEn, step.textEs)}
-                        </p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* Action buttons */}
-              <div className="shrink-0 relative z-30 w-full md:w-auto">
-                {scrollySteps.map((step, idx) => {
-                  const isActive = activeIndex === idx;
-                  return (
-                    <motion.div
-                      key={`btn-${step.step}`}
-                      style={{
-                        opacity: textOpacities[idx],
-                      }}
-                      className={`transition-all duration-300 w-full md:w-auto ${
-                        isActive ? 'relative pointer-events-auto' : 'absolute bottom-0 right-0 pointer-events-none'
-                      }`}
-                    >
-                      <a
-                        href={actionLink(step.intent)}
-                        {...externalLinkProps(actionLink(step.intent))}
-                        className={`btn w-full md:w-auto ${
-                          idx === 4 ? 'btn-copper bg-[#c9a864] text-[#0b0a08]' : 'btn-ghost border-white/25 text-white hover:bg-white/10'
-                        } text-[11px] shadow-2xl flex items-center justify-center gap-2`}
-                      >
-                        {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
-                        <MessageCircle size={16} />
-                      </a>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Stepper progress indicator */}
-            <div className="absolute top-6 left-6 z-20 flex gap-1.5 md:gap-2">
-              {scrollySteps.map((step, idx) => {
-                const { start, end } = getStepRange(idx);
-                const isActive = activeIndex === idx;
-                return (
-                  <div 
-                    key={`dot-${step.step}`} 
-                    className={`h-1.5 rounded-full transition-all duration-500 overflow-hidden relative ${
-                      isActive ? 'w-16 bg-white/30' : 'w-8 bg-white/10'
-                    }`}
-                  >
-                    <motion.div 
-                      className="absolute inset-0 bg-[#c9a864]" 
-                      style={{
-                        scaleX: useTransform(
-                          scrollYProgress, 
-                          [start, end], 
-                          [0, 1]
-                        ),
-                        transformOrigin: 'left'
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-          </div>
-        </div>
-
-        {/* Footer info */}
-        <footer className="relative z-20 w-full px-6 py-5 md:px-12 bg-gradient-to-t from-ro-dark/90 to-transparent border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-white/40 font-bold">
-            {t('Rangel Oviedo Group © 2026 • Quiet Luxury', 'Rangel Oviedo Group © 2026 • Lujo Latino')}
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <span className="text-[11px] font-medium text-white/60">
-              {t('Scroll to advance the walkthrough', 'Haz scroll para avanzar en el recorrido')}
-            </span>
-            <div className="w-12 h-6 rounded-full border border-white/20 flex items-center justify-center p-1">
-              <motion.div 
-                className="w-1.5 h-1.5 bg-[#c9a864] rounded-full"
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-              />
-            </div>
-          </div>
-
-          <motion.div className="absolute top-0 left-0 h-[2px] bg-[#c9a864] z-30" style={{ width: progressWidth }} />
-        </footer>
-
-      </div>
-    </section>
+    </>
   );
 }
