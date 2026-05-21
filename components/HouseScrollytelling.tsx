@@ -126,55 +126,52 @@ export default function HouseScrollytelling() {
   const FADE = 0.03;
   const GAP  = 0.01;
 
-  // Image opacities (Desktop only)
+  // Unconditional hook calls for Image opacities
   const opacities = scrollySteps.map((_, idx) => {
-    if (isMobile) return 0;
     const { start, end } = getStepRange(idx);
-    if (idx === 0) {
-      return useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
-    }
-    if (idx === STEP_COUNT - 1) {
-      return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
-    }
-    return useTransform(
+    const t0 = useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
+    const tLast = useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
+    const tMid = useTransform(
       scrollYProgress,
       [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
       [0, 1, 1, 0]
     );
+
+    if (idx === 0) return t0;
+    if (idx === STEP_COUNT - 1) return tLast;
+    return tMid;
   });
 
-  // Scales (Desktop only)
+  // Unconditional hook calls for Scales
   const scales = scrollySteps.map((_, idx) => {
-    if (isMobile) return 1;
     const { start, end } = getStepRange(idx);
     return useTransform(scrollYProgress, [start, end], [1, 1.06]);
   });
 
-  // Text opacities (Desktop only)
+  // Unconditional hook calls for Text opacities
   const textOpacities = scrollySteps.map((_, idx) => {
-    if (isMobile) return 0;
     const { start, end } = getStepRange(idx);
-    if (idx === 0) {
-      return useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
-    }
-    if (idx === STEP_COUNT - 1) {
-      return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
-    }
-    return useTransform(
+    const t0 = useTransform(scrollYProgress, [start, end - GAP - FADE, end - GAP], [1, 1, 0]);
+    const tLast = useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end], [0, 1, 1]);
+    const tMid = useTransform(
       scrollYProgress,
       [start + GAP, start + GAP + FADE, end - GAP - FADE, end - GAP],
       [0, 1, 1, 0]
     );
+
+    if (idx === 0) return t0;
+    if (idx === STEP_COUNT - 1) return tLast;
+    return tMid;
   });
 
-  // Text vertical motion (Desktop only)
+  // Unconditional hook calls for Text vertical motion
   const textYs = scrollySteps.map((_, idx) => {
-    if (isMobile) return 0;
     const { start, end } = getStepRange(idx);
-    if (idx === 0) {
-      return useTransform(scrollYProgress, [start, end - GAP], [0, -24]);
-    }
-    return useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end - GAP], [30, 0, -24]);
+    const t0 = useTransform(scrollYProgress, [start, end - GAP], [0, -24]);
+    const tOther = useTransform(scrollYProgress, [start + GAP, start + GAP + FADE, end - GAP], [30, 0, -24]);
+
+    if (idx === 0) return t0;
+    return tOther;
   });
 
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
