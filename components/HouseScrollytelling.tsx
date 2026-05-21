@@ -96,6 +96,7 @@ export default function HouseScrollytelling() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileFrameIndex, setMobileFrameIndex] = useState(0);
   const { language, t } = useLanguage();
 
   const touchStartX = useRef(0);
@@ -115,6 +116,15 @@ export default function HouseScrollytelling() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Mobile background auto-cycle every 5s
+  useEffect(() => {
+    if (!isMobile) return;
+    const timer = setInterval(() => {
+      setMobileFrameIndex((prev) => (prev + 1) % scrollySteps.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isMobile]);
 
   // Update active index based on scroll (Desktop only)
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
@@ -245,107 +255,106 @@ export default function HouseScrollytelling() {
       <section
         ref={showMobile ? containerRef : undefined}
         id={showMobile ? 'casa-interactiva' : undefined}
-        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden touch-none ${
-          showMobile ? 'block h-[100dvh]' : 'hidden'
+        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden ${
+          showMobile ? 'block' : 'hidden'
         }`}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
-        {/* Mobile Background Frames */}
-        <div className="absolute inset-0 z-0">
-          {scrollySteps.map((step, idx) => (
-            <div
-              key={step.step}
-              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                activeIndex === idx ? 'opacity-40' : 'opacity-0'
-              }`}
-            >
-              <Image
-                src={step.image}
-                alt={language === 'es' ? step.titleEs : step.titleEn}
-                fill
-                priority={idx === 0}
-                className="object-cover"
-                sizes="100vw"
+        {/* Mobile Header: auto-cycling image slideshow */}
+        <div className="relative h-[85vh] w-full overflow-hidden">
+          {/* Background image crossfade */}
+          <div className="absolute inset-0 z-0">
+            {scrollySteps.map((step, idx) => (
+              <div
+                key={step.step}
+                className="absolute inset-0 w-full h-full transition-opacity duration-[1500ms] ease-in-out"
+                style={{
+                  opacity: mobileFrameIndex === idx ? 0.5 : 0,
+                  pointerEvents: 'none',
+                }}
+              >
+                <Image
+                  src={step.image}
+                  alt={language === 'es' ? step.titleEs : step.titleEn}
+                  fill
+                  priority={idx === 0}
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Gradient Overlays */}
+          <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08]/40 via-transparent to-[#0b0a08]" />
+
+          {/* Mobile Header Label */}
+          <div className="absolute top-20 left-5 z-10 pointer-events-none">
+            <span className="block text-[9px] font-extrabold uppercase tracking-[0.22em] text-[#c9a864]">
+              {t('Editorial Walkthrough', 'Recorrido Editorial')}
+            </span>
+          </div>
+
+          {/* Image cycle indicator */}
+          <div className="absolute top-20 right-5 z-10 flex gap-1.5">
+            {scrollySteps.map((_, idx) => (
+              <div
+                key={idx}
+                className={`h-0.5 rounded-full transition-all duration-700 ${
+                  mobileFrameIndex === idx ? 'w-5 bg-[#c9a864]' : 'w-1.5 bg-white/20'
+                }`}
               />
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Hero text overlay — pinned to bottom */}
+          <div className="absolute bottom-0 inset-x-0 z-10 px-5 pb-8">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a864]/20 bg-[#0b0a08]/60 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.15em] text-[#c9a864] mb-4">
+              <Sparkles size={10} />
+              {t('Editorial Walkthrough', 'Recorrido Editorial')}
+            </span>
+            <h1 className="font-display text-[28px] font-bold leading-[1.08] text-[#f5f1e8] tracking-tight">
+              {t('How we read a home.', 'Cómo leemos una casa.')}
+            </h1>
+            <p className="mt-3 text-[13px] text-[#b8b0a0] leading-relaxed max-w-[340px]">
+              {t('A step-by-step evaluation of architectural heritage, spatial flow, and structural design.', 'Evaluación paso a paso del patrimonio arquitectónico, flujo espacial y diseño estructural.')}
+            </p>
+          </div>
         </div>
 
-        {/* Mobile Overlays */}
-        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/50 via-transparent to-[#0b0a08]/85" />
-
-        {/* Mobile Header Label */}
-        <div className="absolute top-20 left-6 z-10 text-white pointer-events-none">
-          <span className="block text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#c9a864]">
-            {t('Editorial Walkthrough', 'Recorrido Editorial')}
-          </span>
-          <span className="block font-display text-base italic text-[#f5f1e8] mt-0.5">
-            {t('How we read a home', 'Cómo leemos una casa')}
-          </span>
-        </div>
-
-        {/* Swipe Card Area */}
-        <div className="absolute inset-x-4 bottom-12 z-10 flex flex-col items-center">
-          <div className="relative w-full min-h-[250px] flex items-center justify-center">
+        {/* Steps — vertical list of value propositions (no touch-lock, natural scrolling) */}
+        <div className="bg-[#0b0a08] px-5 py-10">
+          <div className="flex flex-col gap-6">
             {scrollySteps.map((step, idx) => {
               const Icon = step.icon;
               return (
-                <article
-                  key={step.step}
-                  className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
-                    activeIndex === idx
-                      ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
-                      : activeIndex < idx
-                      ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
-                      : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
-                  }`}
-                >
-                  <div className="inline-flex items-center gap-2 bg-[#a26035]/90 border border-white/10 text-white rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] w-fit mb-3">
+                <div key={step.step} className="p-5 rounded-xl border border-[#c9a864]/10 bg-[#13110e] flex flex-col">
+                  <div className="inline-flex items-center gap-2 bg-[#a26035]/20 border border-[#a26035]/40 text-[#c9a864] rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] w-fit mb-3">
                     <Icon size={12} />
                     <span>
                       {t('Step', 'Paso')} {step.step} • {t(step.labelEn, step.labelEs)}
                     </span>
                   </div>
-
-                  <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
+                  <h3 className="text-base font-display font-bold text-[#f5f1e8] leading-tight">
                     {t(step.titleEn, step.titleEs)}
                   </h3>
-
-                  <p className="mt-2 text-xs leading-relaxed text-[#b8b0a0] font-light border-l border-[#c9a864]/50 pl-3">
+                  <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed border-l border-[#c9a864]/30 pl-3">
                     {t(step.textEn, step.textEs)}
                   </p>
-
-                  <div className="mt-4 w-full">
+                  <div className="mt-4 pt-3 border-t border-white/5">
                     <a
                       href={actionLink(step.intent)}
                       {...externalLinkProps(actionLink(step.intent))}
                       className={`btn w-full py-2.5 rounded-full ${
-                        idx === 4 ? 'bg-[#c9a864] text-[#0b0a08]' : 'border border-white/20 text-white bg-white/5'
+                        idx === 4 ? 'bg-[#c9a864] text-[#0b0a08]' : 'border border-white/20 text-[#f5f1e8] bg-white/5 hover:bg-white/10'
                       } text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5`}
                     >
                       {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
-                      <MessageCircle size={14} />
+                      <MessageCircle size={13} />
                     </a>
                   </div>
-                </article>
+                </div>
               );
             })}
-          </div>
-
-          {/* Dots Indicator */}
-          <div className="mt-5 flex gap-2">
-            {scrollySteps.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveIndex(idx)}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  activeIndex === idx ? 'w-5 bg-[#c9a864]' : 'w-1.5 bg-white/20'
-                }`}
-                aria-label={`Go to step ${idx + 1}`}
-              />
-            ))}
           </div>
         </div>
       </section>

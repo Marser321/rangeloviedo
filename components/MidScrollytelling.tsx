@@ -22,6 +22,7 @@ export default function MidScrollytelling() {
   const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileFrameIndex, setMobileFrameIndex] = useState(0);
   const { t } = useLanguage();
 
   const touchStartX = useRef(0);
@@ -113,6 +114,15 @@ export default function MidScrollytelling() {
       window.removeEventListener('resize', checkMobile);
     };
   }, []);
+
+  // Mobile background auto-cycle every 5s
+  useEffect(() => {
+    if (!isMobile) return;
+    const timer = setInterval(() => {
+      setMobileFrameIndex((prev) => (prev + 1) % MID_MOBILE_FRAMES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isMobile]);
 
   const drawFrame = (index: number) => {
     if (isMobile) return;
@@ -270,150 +280,106 @@ export default function MidScrollytelling() {
       <section
         ref={showMobile ? containerRef : undefined}
         id={showMobile ? 'mercado' : undefined}
-        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden touch-none ${
-          showMobile ? 'block h-[100dvh]' : 'hidden'
+        className={`relative w-full bg-[#0b0a08] select-none overflow-hidden ${
+          showMobile ? 'block' : 'hidden'
         }`}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
-        {/* Mobile Background Frames with hardware-accelerated crossfade */}
+        {/* Auto-cycling background with crossfade */}
         <div className="absolute inset-0 z-0">
           {MID_MOBILE_FRAMES.map((src, index) => (
             <img
               key={src}
               src={src}
               alt=""
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
-                activeStage === index ? 'opacity-40' : 'opacity-0'
-              }`}
-              style={{ pointerEvents: 'none' }}
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+              style={{
+                opacity: mobileFrameIndex === index ? 0.25 : 0,
+                pointerEvents: 'none',
+              }}
             />
           ))}
         </div>
 
-        {/* Mobile Overlays */}
-        <div className="absolute inset-0 z-1 pointer-events-none bg-gradient-to-b from-[#0b0a08]/50 via-transparent to-[#0b0a08]/85" />
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08] via-[#0b0a08]/60 to-[#0b0a08]" />
 
-        {/* Brand / Context Label */}
-        <div className="absolute top-20 left-6 z-10 text-white pointer-events-none">
-          <span className="block text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#c9a864]">
-            Rangel Oviedo Group
-          </span>
-          <span className="block font-display text-base italic text-[#f5f1e8] mt-0.5">
-            {t('Texas Market Insights', 'Perspectivas del Mercado de Texas')}
-          </span>
-        </div>
+        {/* Content */}
+        <div className="relative z-10 px-5 py-16">
 
-        {/* Swipe Card Area */}
-        <div className="absolute inset-x-4 bottom-12 z-10 flex flex-col items-center">
-          
-          <div className="relative w-full min-h-[230px] flex items-center justify-center">
-            
-            {/* Stage 0: Intro */}
-            <div
-              className={`w-full flex flex-col items-center text-center transition-all duration-500 transform ${
-                activeStage === 0
-                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
-                  : activeStage < 0
-                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
-                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
-              }`}
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a864]/20 bg-[#13110e] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.15em] text-[#c9a864] mb-3">
-                <Map size={11} />
-                {t('Texas Market Intelligence', 'Inteligencia de Mercado en Texas')}
+          {/* Section Header */}
+          <div className="text-center mb-8">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a864]/20 bg-[#13110e] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.18em] text-[#c9a864] mb-4">
+              <Map size={11} />
+              {t('Market Intelligence', 'Inteligencia de Mercado')}
+            </span>
+            <h2 className="font-display text-[22px] font-bold leading-tight text-[#f5f1e8] tracking-tight px-2">
+              {t('Texas is not bought by trend. It is studied in layers.', 'Texas no se compra por tendencia. Se estudia por capas.')}
+            </h2>
+            <p className="mt-3 text-xs text-[#b8b0a0] leading-relaxed max-w-[320px] mx-auto">
+              {t('Three critical readings before looking at MLS list price or properties.', 'Tres lecturas críticas antes de mirar listados o propiedades.')}
+            </p>
+          </div>
+
+          {/* 2×2 Stat Card Grid */}
+          <div className="grid grid-cols-2 gap-3">
+
+            {/* Card 1 — Supply Lock */}
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+              <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
+                {t('01 · Supply Lock', '01 · Oferta Limitada')}
               </span>
-              <h2 className="font-display text-2xl font-bold leading-tight text-[#f5f1e8] tracking-tight px-1">
-                {t('Texas is not bought by trend. It is studied in layers.', 'Texas no se compra por tendencia. Se estudia por capas.')}
-              </h2>
-              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed max-w-[320px] px-1">
-                {t('Three critical readings before looking at MLS list price or properties.', 'Tres lecturas críticas antes de mirar listados o propiedades.')}
+              <div className="h-[1px] w-6 bg-gradient-to-r from-[#c9a864] to-transparent my-2" />
+              <h3 className="font-display text-sm font-bold text-[#f5f1e8] leading-snug">
+                {t('Structural Under-Supply', 'Sub-oferta Estructural')}
+              </h3>
+              <p className="mt-1.5 text-[11px] text-[#b8b0a0] leading-relaxed">
+                {t('Bilingual residential enclaves, elite school districts (Memorial, The Woodlands), and high-yielding corporate relocation hubs that offer secure exits.', 'Enclaves residenciales bilingües, distritos escolares de élite (Memorial, The Woodlands) y polos de relocalización corporativa de alto rendimiento que ofrecen salidas seguras.')}
               </p>
-            </div>
+            </article>
 
-            {/* Stage 1: Houston */}
-            <article
-              className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
-                activeStage === 1
-                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
-                  : activeStage < 1
-                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
-                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
-              }`}
-            >
-              <span className="text-[#c9a864] text-[10px] font-bold font-display tracking-[0.2em]">
-                {t('01 · HOUSTON METRO', '01 · HOUSTON METRO')}
+            {/* Card 2 — Terrain Advantage */}
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+              <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
+                {t('02 · Terrain Advantage', '02 · Ventaja Geográfica')}
               </span>
-              <div className="h-[1px] w-8 bg-gradient-to-r from-[#c9a864] to-transparent my-2.5" />
-              <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
+              <div className="h-[1px] w-6 bg-gradient-to-r from-[#c9a864] to-transparent my-2" />
+              <h3 className="font-display text-sm font-bold text-[#f5f1e8] leading-snug">
+                {t('Terrain-Locked Equity', 'Plusvalía Geográfica')}
+              </h3>
+              <p className="mt-1.5 text-[11px] text-[#b8b0a0] leading-relaxed">
+                {t('Rugged topography and strict environmental zoning limit available buildable land, creating locked-in equity premium for modern architectural properties.', 'La topografía accidentada y regulaciones estrictas limitan la tierra urbanizable, garantizando plusvalía a largo plazo para propiedades de diseño moderno.')}
+              </p>
+            </article>
+
+            {/* Card 3 — Tax Efficiency */}
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+              <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
+                {t('03 · Tax Efficiency', '03 · Eficiencia Tributaria')}
+              </span>
+              <div className="h-[1px] w-6 bg-gradient-to-r from-[#c9a864] to-transparent my-2" />
+              <h3 className="font-display text-sm font-bold text-[#f5f1e8] leading-snug">
+                {t('Fiscal Optimization', 'Optimización Fiscal')}
+              </h3>
+              <p className="mt-1.5 text-[11px] text-[#b8b0a0] leading-relaxed">
+                {t('High property taxes are offset and amortized by the absolute absence of state income tax for business owners, enabling compound capital growth.', 'El alto impuesto predial se ve compensado y amortizado por la ausencia absoluta de impuesto estatal sobre la renta para dueños de negocios.')}
+              </p>
+            </article>
+
+            {/* Card 4 — Macro Thesis */}
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+              <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
+                {t('Macro Thesis', 'Tesis Macro')}
+              </span>
+              <div className="h-[1px] w-6 bg-gradient-to-r from-[#c9a864] to-transparent my-2" />
+              <h3 className="font-display text-sm font-bold text-[#f5f1e8] leading-snug">
                 {t('Industrial Capital & Family Legacy', 'Capital Industrial y Legado Familiar')}
               </h3>
-              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed">
-                {t('Bilingual residential enclaves, elite school districts (Memorial, The Woodlands), and high-yielding corporate relocation hubs that offer secure exits.', 'Enclaves residenciales bilingües, distritos escolares de élite (Memorial, The Woodlands) y polos de relocalización corporativa de alto rendimiento.')}
-              </p>
-            </article>
-
-            {/* Stage 2: Austin */}
-            <article
-              className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
-                activeStage === 2
-                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
-                  : activeStage < 2
-                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
-                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
-              }`}
-            >
-              <span className="text-[#c9a864] text-[10px] font-bold font-display tracking-[0.2em]">
-                {t('02 · AUSTIN & HILL COUNTRY', '02 · AUSTIN Y HILL COUNTRY')}
-              </span>
-              <div className="h-[1px] w-8 bg-gradient-to-r from-[#c9a864] to-transparent my-2.5" />
-              <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
-                {t('Technology and Scarcity Appreciation', 'Tecnología y Plusvalía por Escasez')}
-              </h3>
-              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed">
-                {t('Rugged topography and strict environmental zoning limit available buildable land, creating locked-in equity premium for modern architectural properties.', 'La topografía y regulaciones estrictas limitan la tierra urbanizable, garantizando plusvalía a largo plazo para propiedades de diseño moderno.')}
-              </p>
-            </article>
-
-            {/* Stage 3: Texas Fiscal */}
-            <article
-              className={`w-full flex flex-col p-6 border border-[#c9a864]/20 bg-[#13110e] rounded-xl shadow-xl transition-all duration-500 transform ${
-                activeStage === 3
-                  ? 'opacity-100 translate-x-0 scale-100 pointer-events-auto'
-                  : activeStage < 3
-                  ? 'opacity-0 -translate-x-full scale-95 pointer-events-none absolute'
-                  : 'opacity-0 translate-x-full scale-95 pointer-events-none absolute'
-              }`}
-            >
-              <span className="text-[#c9a864] text-[10px] font-bold font-display tracking-[0.2em]">
-                {t('03 · TAX EFFICIENCY', '03 · EFICIENCIA TRIBUTARIA')}
-              </span>
-              <div className="h-[1px] w-8 bg-gradient-to-r from-[#c9a864] to-transparent my-2.5" />
-              <h3 className="font-display text-lg font-bold text-[#f5f1e8] leading-tight">
-                {t('Fiscal Optimization Mechanics', 'Optimización Fiscal y Tributaria')}
-              </h3>
-              <p className="mt-2 text-xs text-[#b8b0a0] leading-relaxed">
-                {t('High property taxes are offset and amortized by the absolute absence of state income tax for business owners, enabling compound capital growth.', 'El alto predial se ve compensado por la ausencia absoluta de impuesto estatal sobre la renta para dueños de negocios.')}
+              <p className="mt-1.5 text-[11px] text-[#b8b0a0] leading-relaxed">
+                {t('Texas combines zero state income tax, Fortune 500 migration corridors, and terrain-driven scarcity into a single compounding thesis.', 'Texas combina cero impuesto estatal sobre la renta, corredores de migración Fortune 500 y escasez geográfica en una sola tesis de capitalización.')}
               </p>
             </article>
 
           </div>
-
-          {/* Dots Indicator */}
-          <div className="mt-5 flex gap-2">
-            {MID_MOBILE_FRAMES.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveStage(idx)}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  activeStage === idx ? 'w-5 bg-[#c9a864]' : 'w-1.5 bg-white/20'
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-
         </div>
       </section>
 
