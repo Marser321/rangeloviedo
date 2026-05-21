@@ -269,6 +269,7 @@ export default function HeroScrollytelling() {
   if (isClient && isMobile) {
     return (
       <section
+        ref={containerRef}
         id="hero-scrolly"
         className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
         onTouchStart={handleTouchStart}

@@ -265,6 +265,7 @@ export default function MidScrollytelling() {
   if (isClient && isMobile) {
     return (
       <section
+        ref={containerRef}
         id="mercado"
         className="relative h-[100dvh] w-full bg-[#0b0a08] select-none overflow-hidden touch-none"
         onTouchStart={handleTouchStart}
