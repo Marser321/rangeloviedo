@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useScroll, useMotionValueEvent } from 'motion/react';
 import { useLanguage } from './LanguageContext';
 import { Map } from 'lucide-react';
 
 const FRAME_COUNT = 90;
+const MOBILE_SEQUENCE_FPS = 15;
 
 const MID_MOBILE_SEQUENCE = Array.from({ length: 45 }, (_, i) => {
   const frameNum = Math.min(90, Math.max(1, Math.round((i / 44) * 89) + 1));
@@ -16,16 +17,20 @@ const MID_MOBILE_SEQUENCE = Array.from({ length: 45 }, (_, i) => {
 export default function MidScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mobileCanvasRef = useRef<HTMLCanvasElement>(null);
   const [activeStage, setActiveStage] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
+  const [images, setImages] = useState<(HTMLImageElement | null)[]>(
+    () => new Array(FRAME_COUNT).fill(null)
+  );
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [mobileFrameIndex, setMobileFrameIndex] = useState(0);
   const { t } = useLanguage();
 
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const mobileImagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const mobileFrameRef = useRef(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -33,34 +38,24 @@ export default function MidScrollytelling() {
   });
 
   useEffect(() => {
-    setIsClient(true);
-
     const checkMobile = () => {
       setIsMobile(window.matchMedia('(max-width: 768px)').matches);
     };
-    checkMobile();
+    window.queueMicrotask(() => {
+      setIsClient(true);
+      checkMobile();
+    });
     window.addEventListener('resize', checkMobile);
 
-    const actualIsMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (actualIsMobile) {
-      // Preload mobile sequence frames
-      MID_MOBILE_SEQUENCE.forEach((src) => {
-        const img = new Image();
-        img.src = src;
-      });
-      // Auto-cycle images like a video (66ms = 15 FPS)
-      const cycleInterval = setInterval(() => {
-        setMobileFrameIndex((prev) => (prev + 1) % MID_MOBILE_SEQUENCE.length);
-      }, 66);
-      return () => {
-        clearInterval(cycleInterval);
-        window.removeEventListener('resize', checkMobile);
-      };
-    }
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
-    // Desktop initialization
-    const initialImages = new Array(FRAME_COUNT).fill(null);
-    setImages(initialImages);
+  useEffect(() => {
+    if (!isClient || isMobile) return;
+
+    let cancelled = false;
 
     const getFrameUrl = (index: number) => {
       const pad = String(index + 1).padStart(4, '0');
@@ -70,6 +65,7 @@ export default function MidScrollytelling() {
     const img0 = new Image();
     img0.src = getFrameUrl(0);
     img0.onload = () => {
+      if (cancelled) return;
       setImages((prev) => {
         const next = [...prev];
         next[0] = img0;
@@ -85,6 +81,10 @@ export default function MidScrollytelling() {
             const img = new Image();
             img.src = getFrameUrl(i);
             img.onload = () => {
+              if (cancelled) {
+                resolve();
+                return;
+              }
               setImages((prev) => {
                 const next = [...prev];
                 next[i] = img;
@@ -103,6 +103,7 @@ export default function MidScrollytelling() {
         const img = new Image();
         img.src = getFrameUrl(i);
         img.onload = () => {
+          if (cancelled) return;
           setImages((prev) => {
             const next = [...prev];
             next[i] = img;
@@ -115,11 +116,157 @@ export default function MidScrollytelling() {
     preload();
 
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      cancelled = true;
     };
-  }, []);
+  }, [isClient, isMobile]);
 
-  const drawFrame = (index: number) => {
+  useEffect(() => {
+    if (!isClient || !isMobile) return;
+
+    const canvas = mobileCanvasRef.current;
+    if (!canvas) return;
+
+    let animationFrame: number | null = null;
+    let lastFrameTime = 0;
+    let isVisible = true;
+    let isPageVisible = document.visibilityState === 'visible';
+    let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cancelled = false;
+    const frameDuration = 1000 / MOBILE_SEQUENCE_FPS;
+
+    const drawCoverFrame = (img: HTMLImageElement) => {
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
+
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const targetWidth = Math.round(rect.width * dpr);
+      const targetHeight = Math.round(rect.height * dpr);
+      if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const canvasWidth = rect.width;
+      const canvasHeight = rect.height;
+      const imageRatio = img.naturalWidth / img.naturalHeight;
+      const canvasRatio = canvasWidth / canvasHeight;
+
+      let drawWidth = canvasWidth;
+      let drawHeight = canvasHeight;
+      let x = 0;
+      let y = 0;
+
+      if (imageRatio > canvasRatio) {
+        drawHeight = canvasHeight;
+        drawWidth = drawHeight * imageRatio;
+        x = (canvasWidth - drawWidth) / 2;
+      } else {
+        drawWidth = canvasWidth;
+        drawHeight = drawWidth / imageRatio;
+        y = (canvasHeight - drawHeight) / 2;
+      }
+
+      ctx.fillStyle = '#0b0a08';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.drawImage(img, x, y, drawWidth, drawHeight);
+    };
+
+    const findLoadedFrame = (index: number) => {
+      const frames = mobileImagesRef.current;
+      let img = frames[index];
+      if (img) return img;
+
+      for (let offset = 1; offset < frames.length; offset++) {
+        const next = frames[(index + offset) % frames.length];
+        if (next) return next;
+        const previous = frames[(index - offset + frames.length) % frames.length];
+        if (previous) return previous;
+      }
+
+      return null;
+    };
+
+    const drawMobileFrame = (index: number) => {
+      const img = findLoadedFrame(index);
+      if (img) drawCoverFrame(img);
+    };
+
+    const tick = (time: number) => {
+      if (cancelled) return;
+
+      if (!reducedMotion && isVisible && isPageVisible && time - lastFrameTime >= frameDuration) {
+        mobileFrameRef.current = (mobileFrameRef.current + 1) % MID_MOBILE_SEQUENCE.length;
+        drawMobileFrame(mobileFrameRef.current);
+        lastFrameTime = time;
+      }
+
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+
+    mobileImagesRef.current = new Array(MID_MOBILE_SEQUENCE.length).fill(null);
+
+    const firstFrame = new Image();
+    firstFrame.decoding = 'async';
+    firstFrame.src = MID_MOBILE_SEQUENCE[0];
+    firstFrame.onload = () => {
+      if (cancelled) return;
+      mobileImagesRef.current[0] = firstFrame;
+      drawCoverFrame(firstFrame);
+    };
+
+    MID_MOBILE_SEQUENCE.slice(1).forEach((src, offset) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      img.onload = () => {
+        if (cancelled) return;
+        mobileImagesRef.current[offset + 1] = img;
+      };
+    });
+
+    const handleResize = () => {
+      drawMobileFrame(mobileFrameRef.current);
+    };
+    const handleVisibilityChange = () => {
+      isPageVisible = document.visibilityState === 'visible';
+      if (isPageVisible) drawMobileFrame(mobileFrameRef.current);
+    };
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleReducedMotionChange = (event: MediaQueryListEvent) => {
+      reducedMotion = event.matches;
+      drawMobileFrame(mobileFrameRef.current);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) drawMobileFrame(mobileFrameRef.current);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(canvas);
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    motionQuery.addEventListener('change', handleReducedMotionChange);
+    animationFrame = window.requestAnimationFrame(tick);
+
+    return () => {
+      cancelled = true;
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      motionQuery.removeEventListener('change', handleReducedMotionChange);
+    };
+  }, [isClient, isMobile]);
+
+  const drawFrame = useCallback((index: number) => {
     if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -174,13 +321,13 @@ export default function MidScrollytelling() {
     ctx.fillStyle = '#0b0a08';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(img, x, y, drawWidth, drawHeight);
-  };
+  }, [images, isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
     const frameIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.floor(progress * FRAME_COUNT)));
     drawFrame(frameIndex);
-  }, [images, progress, isMobile]);
+  }, [drawFrame, progress, isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
@@ -190,7 +337,7 @@ export default function MidScrollytelling() {
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [images, progress, isMobile]);
+  }, [drawFrame, progress, isMobile]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (isMobile) return;
@@ -280,23 +427,15 @@ export default function MidScrollytelling() {
         }`}
       >
         {/* Auto-cycling background (video-like) */}
-        <div className="absolute inset-0 z-0">
-          {MID_MOBILE_SEQUENCE.map((src, index) => (
-            <img
-              key={src}
-              src={src}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{
-                opacity: mobileFrameIndex === index ? 0.25 : 0,
-                pointerEvents: 'none',
-              }}
-            />
-          ))}
-        </div>
+        <canvas
+          ref={mobileCanvasRef}
+          aria-hidden="true"
+          className="absolute inset-0 z-0 h-full w-full"
+          style={{ opacity: 0.32 }}
+        />
 
         {/* Gradient overlays */}
-        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08] via-[#0b0a08]/60 to-[#0b0a08]" />
+        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08]/82 via-[#0b0a08]/50 to-[#0b0a08]/88" />
 
         {/* Content */}
         <div className="relative z-10 px-5 py-16">
@@ -308,10 +447,10 @@ export default function MidScrollytelling() {
               {t('Market Intelligence', 'Inteligencia de Mercado')}
             </span>
             <h2 className="font-display text-[22px] font-bold leading-tight text-[#f5f1e8] tracking-tight px-2">
-              {t('Texas is not bought by trend. It is studied in layers.', 'Texas no se compra por tendencia. Se estudia por capas.')}
+              {t('Price is only one layer.', 'El precio es solo una capa.')}
             </h2>
             <p className="mt-3 text-xs text-[#b8b0a0] leading-relaxed max-w-[320px] mx-auto">
-              {t('Three critical readings before looking at MLS list price or properties.', 'Tres lecturas críticas antes de mirar listados o propiedades.')}
+              {t('The Insider Report organizes market, scarcity, tax context, and timing before you look at properties.', 'El Insider Report ordena mercado, escasez, fiscalidad y timing antes de mirar propiedades.')}
             </p>
           </div>
 
@@ -319,7 +458,7 @@ export default function MidScrollytelling() {
           <div className="grid grid-cols-2 gap-3">
 
             {/* Card 1 — Supply Lock */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('01 · Supply Lock', '01 · Oferta Limitada')}
               </span>
@@ -333,7 +472,7 @@ export default function MidScrollytelling() {
             </article>
 
             {/* Card 2 — Terrain Advantage */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('02 · Terrain Advantage', '02 · Ventaja Geográfica')}
               </span>
@@ -347,7 +486,7 @@ export default function MidScrollytelling() {
             </article>
 
             {/* Card 3 — Tax Efficiency */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('03 · Tax Efficiency', '03 · Eficiencia Tributaria')}
               </span>
@@ -361,7 +500,7 @@ export default function MidScrollytelling() {
             </article>
 
             {/* Card 4 — Macro Thesis */}
-            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]">
+            <article className="flex flex-col p-4 rounded-xl border border-[#c9a864]/15 bg-[#1a1612]/86 backdrop-blur-sm">
               <span className="text-[#c9a864] text-[9px] font-bold font-display tracking-[0.18em] uppercase">
                 {t('Macro Thesis', 'Tesis Macro')}
               </span>
@@ -409,10 +548,10 @@ export default function MidScrollytelling() {
               {t('Texas Market Intelligence', 'Inteligencia de Mercado en Texas')}
             </span>
             <h2 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] text-[#f5f1e8] tracking-tight">
-              {t('Texas is not bought by trend. It is studied in layers.', 'Texas no se compra por tendencia. Se estudia por capas.')}
+              {t('Price is only one layer.', 'El precio es solo una capa.')}
             </h2>
             <p className="mt-6 text-sm md:text-lg text-[#b8b0a0] leading-relaxed max-w-[620px]">
-              {t('Three critical readings before looking at MLS list price or properties.', 'Tres lecturas críticas antes de mirar listados o propiedades.')}
+              {t('The Insider Report organizes market, scarcity, tax context, and timing before you look at properties.', 'El Insider Report ordena mercado, escasez, fiscalidad y timing antes de mirar propiedades.')}
             </p>
           </div>
 

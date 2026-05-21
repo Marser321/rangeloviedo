@@ -94,7 +94,6 @@ const scrollySteps = [
 export default function HouseScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileFrameIndex, setMobileFrameIndex] = useState(0);
   const { language, t } = useLanguage();
@@ -108,7 +107,6 @@ export default function HouseScrollytelling() {
   });
 
   useEffect(() => {
-    setIsClient(true);
     const checkMobile = () => {
       setIsMobile(window.matchMedia('(max-width: 768px)').matches);
     };
@@ -245,8 +243,8 @@ export default function HouseScrollytelling() {
   };
 
   // ── Determine which layout to show ──
-  const showMobile = isClient && isMobile;
-  const showDesktop = !isClient || !isMobile;
+  const showMobile = isMobile;
+  const showDesktop = !isMobile;
 
   // ── SINGLE RETURN — both layouts are always in the tree ──
   return (
@@ -348,7 +346,7 @@ export default function HouseScrollytelling() {
                         idx === 4 ? 'bg-[#c9a864] text-[#0b0a08]' : 'border border-white/20 text-[#f5f1e8] bg-white/5 hover:bg-white/10'
                       } text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5`}
                     >
-                      {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
+                      {idx === 4 ? t('Receive initial route', 'Recibir ruta inicial') : t('Request this route', 'Pedir esta ruta')}
                       <MessageCircle size={13} />
                     </a>
                   </div>
@@ -426,15 +424,15 @@ export default function HouseScrollytelling() {
                       <motion.div
                         key={step.step}
                         style={{
-                          opacity: textOpacities[idx],
-                          y: textYs[idx],
+                          opacity: isActive ? 1 : 0,
+                          y: isActive ? 0 : 12,
                         }}
-                        className={`absolute bottom-0 left-0 w-full text-left transition-all duration-300 ${
-                          isActive ? 'pointer-events-auto z-10' : 'pointer-events-none z-0'
+                        className={`absolute bottom-0 left-0 w-full text-left transition-all duration-300 ease-out ${
+                          isActive ? 'pointer-events-auto z-10' : 'pointer-events-none invisible z-0'
                         }`}
                       >
-                        <div className="space-y-4">
-                          <div className="inline-flex items-center gap-3 bg-[#a26035]/85 border border-white/20 text-white rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] backdrop-blur-md">
+                        <div className="max-w-xl space-y-4 rounded-2xl border border-white/12 bg-[#0b0a08]/82 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-6">
+                          <div className="inline-flex items-center gap-3 rounded-full border border-[#c9a864]/30 bg-[#a26035]/90 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white">
                             <Icon size={14} />
                             <span>
                               {t('Step', 'Paso')} {step.step} • {t(step.labelEn, step.labelEs)}
@@ -445,7 +443,7 @@ export default function HouseScrollytelling() {
                             {t(step.titleEn, step.titleEs)}
                           </h3>
                           
-                          <p className="text-xs md:text-sm leading-relaxed text-white/80 font-light max-w-lg border-l-2 border-[#c9a864] pl-4">
+                          <p className="text-xs md:text-sm leading-relaxed text-white/86 font-light max-w-lg border-l-2 border-[#c9a864] pl-4">
                             {t(step.textEn, step.textEs)}
                           </p>
                         </div>
@@ -462,10 +460,10 @@ export default function HouseScrollytelling() {
                       <motion.div
                         key={`btn-${step.step}`}
                         style={{
-                          opacity: textOpacities[idx],
+                          opacity: isActive ? 1 : 0,
                         }}
-                        className={`transition-all duration-300 w-full md:w-auto ${
-                          isActive ? 'relative pointer-events-auto' : 'absolute bottom-0 right-0 pointer-events-none'
+                        className={`transition-all duration-300 ease-out w-full md:w-auto ${
+                          isActive ? 'relative pointer-events-auto' : 'absolute bottom-0 right-0 pointer-events-none invisible'
                         }`}
                       >
                         <a
@@ -475,7 +473,7 @@ export default function HouseScrollytelling() {
                             idx === 4 ? 'btn-copper bg-[#c9a864] text-[#0b0a08]' : 'btn-ghost border-white/25 text-white hover:bg-white/10'
                           } text-[11px] shadow-2xl flex items-center justify-center gap-2`}
                         >
-                          {idx === 4 ? t('Qualify this brief', 'Calificar este perfil') : t('Send this brief', 'Enviar este brief')}
+                          {idx === 4 ? t('Receive initial route', 'Recibir ruta inicial') : t('Request this route', 'Pedir esta ruta')}
                           <MessageCircle size={16} />
                         </a>
                       </motion.div>

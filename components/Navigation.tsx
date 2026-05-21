@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Globe } from 'lucide-react';
+import { Globe, Menu, X } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
 export default function Navigation() {
@@ -13,13 +13,25 @@ export default function Navigation() {
   const navBorder = useTransform(scrollY, [0, 100], ['rgba(45, 36, 33, 0.08)', 'rgba(45, 36, 33, 0.07)']);
 
   const { language, setLanguage, t } = useLanguage();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const menuItems = [
-    { labelEn: 'Method', labelEs: 'Metodo', href: '#metodo' },
+    { labelEn: 'Method', labelEs: 'Método', href: '#metodo' },
     { labelEn: 'Profiles', labelEs: 'Perfiles', href: '#perfiles' },
     { labelEn: 'Market', labelEs: 'Mercado', href: '#mercado' },
     { labelEn: 'Apply', labelEs: 'Aplicar', href: '#contacto' },
   ];
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [mobileOpen]);
+
+  const closeMobile = () => setMobileOpen(false);
 
   return (
     <motion.nav
@@ -69,18 +81,22 @@ export default function Navigation() {
           ))}
 
           <div className="flex items-center gap-2 rounded-full border border-ro-dark/10 bg-ro-dark/5 px-3 py-1.5 text-[10px] font-bold tracking-wider">
-            <Globe size={12} className="text-ro-dark/40" />
+            <Globe size={12} className="text-ro-dark/40" aria-hidden="true" />
             <button
               type="button"
               onClick={() => setLanguage('en')}
+              aria-label="Switch to English"
+              aria-pressed={language === 'en'}
               className={`uppercase transition-colors hover:text-ro-accent ${language === 'en' ? 'font-extrabold text-ro-accent' : 'font-normal text-ro-dark/50'}`}
             >
               EN
             </button>
-            <span className="font-light text-ro-dark/20">|</span>
+            <span aria-hidden="true" className="font-light text-ro-dark/20">|</span>
             <button
               type="button"
               onClick={() => setLanguage('es')}
+              aria-label="Cambiar a Español"
+              aria-pressed={language === 'es'}
               className={`uppercase transition-colors hover:text-ro-accent ${language === 'es' ? 'font-extrabold text-ro-accent' : 'font-normal text-ro-dark/50'}`}
             >
               ES
@@ -100,21 +116,79 @@ export default function Navigation() {
             <button
               type="button"
               onClick={() => setLanguage('en')}
+              aria-label="Switch to English"
+              aria-pressed={language === 'en'}
               className={`transition-colors ${language === 'en' ? 'font-extrabold text-ro-accent' : 'text-ro-dark/40'}`}
             >
               EN
             </button>
-            <span className="text-ro-dark/20">|</span>
+            <span aria-hidden="true" className="text-ro-dark/20">|</span>
             <button
               type="button"
               onClick={() => setLanguage('es')}
+              aria-label="Cambiar a Español"
+              aria-pressed={language === 'es'}
               className={`transition-colors ${language === 'es' ? 'font-extrabold text-ro-accent' : 'text-ro-dark/40'}`}
             >
               ES
             </button>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label={mobileOpen ? t('Close menu', 'Cerrar menú') : t('Open menu', 'Abrir menú')}
+            aria-expanded={mobileOpen}
+            aria-controls="rog-mobile-drawer"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-ro-dark/10 bg-ro-dark/5 text-ro-dark transition-colors hover:bg-ro-dark hover:text-ro-light"
+          >
+            {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
+          </button>
         </div>
       </motion.div>
+
+      <div
+        id="rog-mobile-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('Site navigation', 'Navegación del sitio')}
+        className={`fixed inset-0 top-0 z-[90] flex flex-col bg-ro-light/98 backdrop-blur-2xl transition-opacity duration-300 lg:hidden ${
+          mobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <button
+          type="button"
+          aria-label={t('Close menu overlay', 'Cerrar overlay del menú')}
+          onClick={closeMobile}
+          className="absolute inset-0 h-full w-full cursor-default"
+          tabIndex={-1}
+        />
+        <nav className="relative mt-32 flex flex-col gap-2 px-8 pb-12">
+          {menuItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={closeMobile}
+              className="group flex items-center justify-between border-b border-ro-dark/10 py-5 text-2xl font-display tracking-tight text-ro-dark transition-colors hover:text-ro-accent"
+            >
+              {t(item.labelEn, item.labelEs)}
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-ro-dark/30 transition-colors group-hover:text-ro-accent">
+                →
+              </span>
+            </a>
+          ))}
+          <a
+            href="#contacto"
+            onClick={closeMobile}
+            className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-ro-dark px-8 py-4 text-[11px] font-bold uppercase tracking-widest text-ro-light shadow-md transition-all hover:bg-ro-accent"
+          >
+            {t('Apply / Book', 'Aplicar / Agenda')}
+          </a>
+          <p className="mt-10 text-[10px] font-bold uppercase tracking-[0.3em] text-ro-dark/40">
+            {t('Boutique Texas Real Estate', 'Boutique inmobiliaria en Texas')}
+          </p>
+        </nav>
+      </div>
     </motion.nav>
   );
 }

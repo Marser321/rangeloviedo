@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useScroll, useMotionValueEvent } from 'motion/react';
 import { useLanguage } from './LanguageContext';
 import { Sparkles } from 'lucide-react';
 
 const FRAME_COUNT = 90;
+const MOBILE_SEQUENCE_FPS = 15;
 
 const HERO_MOBILE_SEQUENCE = Array.from({ length: 45 }, (_, i) => {
   const frameNum = Math.min(90, Math.max(1, Math.round((i / 44) * 89) + 1));
@@ -16,16 +17,20 @@ const HERO_MOBILE_SEQUENCE = Array.from({ length: 45 }, (_, i) => {
 export default function HeroScrollytelling() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mobileCanvasRef = useRef<HTMLCanvasElement>(null);
   const [activeStage, setActiveStage] = useState(0);
-  const [mobileFrameIdx, setMobileFrameIdx] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
+  const [images, setImages] = useState<(HTMLImageElement | null)[]>(
+    () => new Array(FRAME_COUNT).fill(null)
+  );
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { t } = useLanguage();
 
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const mobileImagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const mobileFrameRef = useRef(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -33,35 +38,24 @@ export default function HeroScrollytelling() {
   });
 
   useEffect(() => {
-    setIsClient(true);
-    
     const checkMobile = () => {
       setIsMobile(window.matchMedia('(max-width: 768px)').matches);
     };
-    checkMobile();
+    window.queueMicrotask(() => {
+      setIsClient(true);
+      checkMobile();
+    });
     window.addEventListener('resize', checkMobile);
 
-    const actualIsMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (actualIsMobile) {
-      // Preload mobile sequence frames
-      HERO_MOBILE_SEQUENCE.forEach((src) => {
-        const img = new Image();
-        img.src = src;
-      });
-      // Auto-cycle images like a video (66ms = 15 FPS)
-      const cycleInterval = setInterval(() => {
-        setMobileFrameIdx((prev) => (prev + 1) % HERO_MOBILE_SEQUENCE.length);
-      }, 66);
-      return () => {
-        clearInterval(cycleInterval);
-        window.removeEventListener('resize', checkMobile);
-      };
-    }
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
-    // Desktop initialization
-    const initialImages = new Array(FRAME_COUNT).fill(null);
-    setImages(initialImages);
+  useEffect(() => {
+    if (!isClient || isMobile) return;
 
+    let cancelled = false;
     const getFrameUrl = (index: number) => {
       const pad = String(index + 1).padStart(4, '0');
       return `/assets/seq01/desktop/frame_${pad}.webp`;
@@ -70,6 +64,7 @@ export default function HeroScrollytelling() {
     const img0 = new Image();
     img0.src = getFrameUrl(0);
     img0.onload = () => {
+      if (cancelled) return;
       setImages((prev) => {
         const next = [...prev];
         next[0] = img0;
@@ -85,6 +80,10 @@ export default function HeroScrollytelling() {
             const img = new Image();
             img.src = getFrameUrl(i);
             img.onload = () => {
+              if (cancelled) {
+                resolve();
+                return;
+              }
               setImages((prev) => {
                 const next = [...prev];
                 next[i] = img;
@@ -103,6 +102,7 @@ export default function HeroScrollytelling() {
         const img = new Image();
         img.src = getFrameUrl(i);
         img.onload = () => {
+          if (cancelled) return;
           setImages((prev) => {
             const next = [...prev];
             next[i] = img;
@@ -115,11 +115,157 @@ export default function HeroScrollytelling() {
     preload();
 
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      cancelled = true;
     };
-  }, []);
+  }, [isClient, isMobile]);
 
-  const drawFrame = (index: number) => {
+  useEffect(() => {
+    if (!isClient || !isMobile) return;
+
+    const canvas = mobileCanvasRef.current;
+    if (!canvas) return;
+
+    let animationFrame: number | null = null;
+    let lastFrameTime = 0;
+    let isVisible = true;
+    let isPageVisible = document.visibilityState === 'visible';
+    let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cancelled = false;
+    const frameDuration = 1000 / MOBILE_SEQUENCE_FPS;
+
+    const drawCoverFrame = (img: HTMLImageElement) => {
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
+
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const targetWidth = Math.round(rect.width * dpr);
+      const targetHeight = Math.round(rect.height * dpr);
+      if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const canvasWidth = rect.width;
+      const canvasHeight = rect.height;
+      const imageRatio = img.naturalWidth / img.naturalHeight;
+      const canvasRatio = canvasWidth / canvasHeight;
+
+      let drawWidth = canvasWidth;
+      let drawHeight = canvasHeight;
+      let x = 0;
+      let y = 0;
+
+      if (imageRatio > canvasRatio) {
+        drawHeight = canvasHeight;
+        drawWidth = drawHeight * imageRatio;
+        x = (canvasWidth - drawWidth) / 2;
+      } else {
+        drawWidth = canvasWidth;
+        drawHeight = drawWidth / imageRatio;
+        y = (canvasHeight - drawHeight) / 2;
+      }
+
+      ctx.fillStyle = '#0b0a08';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.drawImage(img, x, y, drawWidth, drawHeight);
+    };
+
+    const findLoadedFrame = (index: number) => {
+      const frames = mobileImagesRef.current;
+      let img = frames[index];
+      if (img) return img;
+
+      for (let offset = 1; offset < frames.length; offset++) {
+        const next = frames[(index + offset) % frames.length];
+        if (next) return next;
+        const previous = frames[(index - offset + frames.length) % frames.length];
+        if (previous) return previous;
+      }
+
+      return null;
+    };
+
+    const drawMobileFrame = (index: number) => {
+      const img = findLoadedFrame(index);
+      if (img) drawCoverFrame(img);
+    };
+
+    const tick = (time: number) => {
+      if (cancelled) return;
+
+      if (!reducedMotion && isVisible && isPageVisible && time - lastFrameTime >= frameDuration) {
+        mobileFrameRef.current = (mobileFrameRef.current + 1) % HERO_MOBILE_SEQUENCE.length;
+        drawMobileFrame(mobileFrameRef.current);
+        lastFrameTime = time;
+      }
+
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+
+    mobileImagesRef.current = new Array(HERO_MOBILE_SEQUENCE.length).fill(null);
+
+    const firstFrame = new Image();
+    firstFrame.decoding = 'async';
+    firstFrame.src = HERO_MOBILE_SEQUENCE[0];
+    firstFrame.onload = () => {
+      if (cancelled) return;
+      mobileImagesRef.current[0] = firstFrame;
+      drawCoverFrame(firstFrame);
+    };
+
+    HERO_MOBILE_SEQUENCE.slice(1).forEach((src, offset) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      img.onload = () => {
+        if (cancelled) return;
+        mobileImagesRef.current[offset + 1] = img;
+      };
+    });
+
+    const handleResize = () => {
+      drawMobileFrame(mobileFrameRef.current);
+    };
+    const handleVisibilityChange = () => {
+      isPageVisible = document.visibilityState === 'visible';
+      if (isPageVisible) drawMobileFrame(mobileFrameRef.current);
+    };
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleReducedMotionChange = (event: MediaQueryListEvent) => {
+      reducedMotion = event.matches;
+      drawMobileFrame(mobileFrameRef.current);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) drawMobileFrame(mobileFrameRef.current);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(canvas);
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    motionQuery.addEventListener('change', handleReducedMotionChange);
+    animationFrame = window.requestAnimationFrame(tick);
+
+    return () => {
+      cancelled = true;
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      motionQuery.removeEventListener('change', handleReducedMotionChange);
+    };
+  }, [isClient, isMobile]);
+
+  const drawFrame = useCallback((index: number) => {
     if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -174,13 +320,13 @@ export default function HeroScrollytelling() {
     ctx.fillStyle = '#0b0a08';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(img, x, y, drawWidth, drawHeight);
-  };
+  }, [images, isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
     const frameIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.floor(progress * FRAME_COUNT)));
     drawFrame(frameIndex);
-  }, [images, progress, isMobile]);
+  }, [drawFrame, progress, isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
@@ -190,7 +336,7 @@ export default function HeroScrollytelling() {
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [images, progress, isMobile]);
+  }, [drawFrame, progress, isMobile]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (isMobile) return;
@@ -285,46 +431,32 @@ export default function HeroScrollytelling() {
         {/* ── Hero header: auto-cycling image sequence ── */}
         <div className="relative h-[85vh] w-full overflow-hidden">
           {/* Background image cycle (video-like) */}
-          <div className="absolute inset-0 z-0">
-            {HERO_MOBILE_SEQUENCE.map((src, index) => (
-              <img
-                key={src}
-                src={src}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  pointerEvents: 'none',
-                  opacity: mobileFrameIdx === index ? 0.5 : 0,
-                }}
-              />
-            ))}
-          </div>
+          <canvas
+            ref={mobileCanvasRef}
+            aria-hidden="true"
+            className="absolute inset-0 z-0 h-full w-full"
+            style={{ opacity: 0.5 }}
+          />
 
           {/* Gradient overlays */}
           <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#0b0a08]/40 via-transparent to-[#0b0a08]" />
 
           {/* Brand label */}
-          <div className="absolute top-20 left-5 z-10 pointer-events-none">
-            <span className="block text-[9px] font-extrabold uppercase tracking-[0.22em] text-[#c9a864]">
-              Rangel Oviedo Group
-            </span>
-          </div>
-
           {/* Hero content overlay — pinned to bottom */}
           <div className="absolute bottom-0 inset-x-0 z-10 px-5 pb-8">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a864]/20 bg-[#0b0a08]/60 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.15em] text-[#c9a864] mb-4">
               <Sparkles size={10} />
-              {t('Bilingual luxury real estate boutique', 'Boutique bilingüe de bienes raíces de lujo')}
+              {t('Private Texas market context', 'Lectura privada de mercado en Texas')}
             </span>
             <h1 className="font-display text-[28px] font-bold leading-[1.08] text-[#f5f1e8] tracking-tight">
-              {t('Where Texas estates find their next chapter.', 'Donde las estancias de Texas encuentran su próximo capítulo.')}
+              {t('Texas is easier to decide with private market context.', 'Texas se decide mejor con lectura privada.')}
             </h1>
             <p className="mt-3 text-[13px] text-[#b8b0a0] leading-relaxed max-w-[340px]">
-              {t('Trusted to handle the homes most agents never see across Texas, Mexico, and LATAM.', 'Confianza para manejar propiedades que la mayoría de los agentes nunca ve entre Texas, México y LATAM.')}
+              {t('Receive context on market, off-market, and timing before turning a property into a capital decision.', 'Recibe contexto sobre mercado, off-market y timing antes de convertir una propiedad en una decisión de capital.')}
             </p>
             <div className="mt-5 flex gap-3">
               <a href="#contacto" className="flex-1 bg-[#c9a864] text-[#0b0a08] py-3 rounded-full text-[10px] font-bold uppercase tracking-wider text-center">
-                {t('Qualify your brief', 'Calificar tu perfil')}
+                {t('Get Q3 Insider Report', 'Recibir Insider Report Q3')}
               </a>
               <a href="#contacto" className="flex-1 border border-[#c9a864]/30 bg-[#0b0a08]/40 text-[#f5f1e8] py-3 rounded-full text-[10px] font-bold uppercase tracking-wider text-center">
                 {t('Private consultation', 'Consulta privada')}
@@ -398,7 +530,7 @@ export default function HeroScrollytelling() {
         <div className="absolute inset-0 z-2 pointer-events-none shadow-[inset_0_0_0_1px_rgba(245,241,232,0.04),inset_0_-18vh_26vh_rgba(0,0,0,0.52)]" />
 
         {/* Brand/Sequence Label */}
-        <div className="absolute top-24 left-6 md:left-12 z-10 text-white pointer-events-none">
+        <div className="hidden">
           <span className="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#c9a864]">
             Rangel Oviedo Group
           </span>
@@ -419,17 +551,17 @@ export default function HeroScrollytelling() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-[#c9a864]/25 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c9a864] mb-6 backdrop-blur-md">
               <Sparkles size={13} />
-              {t('A bilingual luxury real estate boutique', 'Boutique bilingüe de bienes raíces de lujo')}
+              {t('Private Texas market context', 'Lectura privada de mercado en Texas')}
             </span>
             <h1 className="font-display text-4xl md:text-7xl font-extrabold leading-[1.02] text-[#f5f1e8] tracking-tight">
-              {t('Where Texas estates find their next chapter.', 'Donde las estancias de Texas encuentran su próximo capítulo.')}
+              {t('Texas is easier to decide with private market context.', 'Texas se decide mejor con lectura privada.')}
             </h1>
             <p className="mt-6 text-sm md:text-xl text-[#b8b0a0] leading-relaxed max-w-[620px]">
-              {t('Trusted to handle the homes most agents never see across Texas, Mexico, and LATAM.', 'Confianza para manejar propiedades que la mayoría de los agentes nunca ve entre Texas, México y LATAM.')}
+              {t('Receive context on market, off-market, and timing before turning a property into a capital decision.', 'Recibe contexto sobre mercado, off-market y timing antes de convertir una propiedad en una decisión de capital.')}
             </p>
             <div className="mt-8 flex flex-col md:flex-row justify-center gap-4 w-full md:w-auto px-4 md:px-0">
               <a href="#contacto" className="bg-[#c9a864] text-[#0b0a08] px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[#ebd095] hover:-translate-y-0.5 transition-all text-center">
-                {t('Qualify your brief', 'Calificar tu perfil')}
+                {t('Get Q3 Insider Report', 'Recibir Insider Report Q3')}
               </a>
               <a href="#contacto" className="border border-[#c9a864]/30 bg-[#0b0a08]/20 backdrop-blur-md text-[#f5f1e8] px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#c9a864] hover:-translate-y-0.5 transition-all text-center">
                 {t('Private consultation', 'Consulta privada')}
