@@ -373,7 +373,7 @@ export default function HouseScrollytelling() {
                 <Sparkles size={12} className="animate-pulse" /> 
                 {t('Editorial Walkthrough', 'Recorrido Editorial')}
               </span>
-              <h2 className="text-xl md:text-2xl font-display italic text-white mt-1">
+              <h2 className="text-xl md:text-2xl font-display text-white mt-1">
                 {t('How we read a home', 'Cómo leemos una casa')}
               </h2>
             </div>
@@ -381,7 +381,7 @@ export default function HouseScrollytelling() {
               <span className="text-[10px] uppercase tracking-widest opacity-40 font-mono">
                 {t('Step by step', 'Paso a paso')}
               </span>
-              <div className="text-sm font-display italic font-bold text-white">
+              <div className="text-[11px] font-sans font-bold uppercase tracking-[0.18em] text-white">
                 {t('Texas Real Estate Concierge', 'Texas Real Estate Concierge')}
               </div>
             </div>
@@ -439,7 +439,7 @@ export default function HouseScrollytelling() {
                             </span>
                           </div>
                           
-                          <h3 className="text-3xl md:text-5xl font-display italic text-white leading-tight font-bold">
+                          <h3 className="text-3xl md:text-5xl font-display text-white leading-tight font-bold">
                             {t(step.titleEn, step.titleEs)}
                           </h3>
                           
@@ -511,7 +511,8 @@ export default function HouseScrollytelling() {
           {/* Footer info */}
           <footer className="relative z-20 w-full px-6 py-5 md:px-12 bg-gradient-to-t from-ro-dark/90 to-transparent border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-[10px] uppercase tracking-[0.24em] text-white/40 font-bold">
-              {t('Rangel Oviedo Group © 2026 • Quiet Luxury', 'Rangel Oviedo Group © 2026 • Lujo Latino')}
+              Rangel <span className="font-black">Oviedo</span> Group © {new Date().getFullYear()} •{' '}
+              {t('Quiet Luxury', 'Lujo Latino')}
             </div>
             
             <div className="flex items-center gap-4">

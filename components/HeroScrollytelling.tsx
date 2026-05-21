@@ -534,7 +534,7 @@ export default function HeroScrollytelling() {
           <span className="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#c9a864]">
             Rangel Oviedo Group
           </span>
-          <span className="block font-display text-lg italic text-[#f5f1e8] mt-1">
+          <span className="block font-display text-lg text-[#f5f1e8] mt-1">
             {t('Texas Luxury Estates', 'Bienes Raíces de Lujo en Texas')}
           </span>
         </div>

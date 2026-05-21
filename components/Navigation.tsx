@@ -59,8 +59,8 @@ export default function Navigation() {
             />
           </span>
           <span className="hidden min-w-0 flex-col sm:flex">
-            <span className="text-sm font-display italic font-bold tracking-tight text-ro-dark transition-colors group-hover:text-ro-accent md:text-base">
-              Rangel Oviedo Group
+            <span className="text-[11px] font-sans font-bold uppercase tracking-[0.18em] text-ro-dark transition-colors group-hover:text-ro-accent md:text-xs">
+              Rangel <span className="font-black">Oviedo</span> Group
             </span>
             <span className="text-[8px] uppercase tracking-[0.28em] opacity-55 transition-opacity group-hover:opacity-100 md:text-[9px]">
               {t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}

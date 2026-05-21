@@ -280,7 +280,7 @@ export default function ConciergeLanding() {
               className="object-cover object-[50%_22%]"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/74 to-transparent p-8">
-              <p className="max-w-sm font-display text-3xl italic leading-tight text-white">
+              <p className="max-w-sm font-display text-3xl leading-tight text-white">
                 {t(
                   'Texas rooted. Global heart. Personal attention.',
                   'Raíces en Texas. Corazón global. Atención personal.',
@@ -432,7 +432,9 @@ export default function ConciergeLanding() {
           )}
 
           <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-[10px] font-bold uppercase tracking-[0.22em] md:flex-row">
-            <span>© {new Date().getFullYear()} Rangel Oviedo Group</span>
+            <span className="tracking-[0.18em]">
+              © {new Date().getFullYear()} Rangel <span className="font-black">Oviedo</span> Group
+            </span>
             <a
               href="https://admediasolution.com"
               target="_blank"
