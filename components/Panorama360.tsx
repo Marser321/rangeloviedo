@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { Compass, Loader2 } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
-// Kuula 360 collection. Swap this URL to change the tour; params keep
-// the logo, info, fullscreen, side-bar and thumbnails controls enabled.
+// Kuula 360 collection. Swap this URL to change the tour; params enable
+// logo, info, fullscreen, mouse-wheel zoom, side-bar and thumbnails.
+// Mobile gyroscope works via the iframe `allow` attribute below.
 const KUULA_SRC =
-  'https://kuula.co/share/collection/7HFSl?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1';
+  'https://kuula.co/share/collection/7HFB7?logo=1&info=1&fs=1&vr=0&zoom=1&sd=1&thumbs=1';
 
 export default function Panorama360() {
   const { t } = useLanguage();
