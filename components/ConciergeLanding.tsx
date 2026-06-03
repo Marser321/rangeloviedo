@@ -15,6 +15,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import Navigation from './Navigation';
+import Panorama360 from './Panorama360';
 import { useLanguage } from './LanguageContext';
 
 const ScrollyPlaceholder = () => (
@@ -35,7 +36,6 @@ const HouseScrollytelling = dynamic(() => import('./HouseScrollytelling'), {
   ssr: false,
   loading: ScrollyPlaceholder,
 });
-const Panorama360 = dynamic(() => import('./Panorama360'), { ssr: false });
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_RANGEL_WHATSAPP ?? '';
 const GHL_FORM_URL = process.env.NEXT_PUBLIC_GHL_FORM_URL ?? '';
