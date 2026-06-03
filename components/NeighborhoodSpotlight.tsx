@@ -25,7 +25,7 @@ const neighborhoods = [
 
 export default function NeighborhoodSpotlight() {
   return (
-    <section className="py-32 bg-white px-8">
+    <section className="py-20 md:py-32 bg-white px-5 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24 space-y-6">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">Territorios de Valor</h6>
@@ -54,7 +54,7 @@ export default function NeighborhoodSpotlight() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ro-dark via-ro-dark/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
               
-              <div className="absolute inset-0 p-12 flex flex-col justify-end transform translate-y-12 group-hover:translate-y-0 transition-transform duration-700">
+              <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end transform translate-y-12 group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-700">
                 <div className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-4xl font-display italic text-ro-light tracking-tight">{n.name}</h3>
@@ -62,7 +62,7 @@ export default function NeighborhoodSpotlight() {
                       <ArrowUpRight size={20} />
                     </div>
                   </div>
-                  <p className="text-stone-300 font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100 italic">
+                  <p className="text-stone-300 font-light leading-relaxed opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-700 delay-100 italic">
                     {n.description}
                   </p>
                 </div>

@@ -6,10 +6,10 @@ import { Calendar, ArrowRight, Instagram, Linkedin, MessageCircle } from 'lucide
 
 export default function ClosingContact() {
   return (
-    <section id="contacto" className="relative py-32 px-6 bg-ro-dark text-ro-light overflow-hidden rounded-t-[5rem]">
+    <section id="contacto" className="relative py-20 px-5 md:py-32 md:px-6 bg-ro-dark text-ro-light overflow-hidden rounded-t-[2.5rem] md:rounded-t-[5rem]">
       <div className="absolute top-0 right-0 w-[40%] h-full bg-ro-accent/10 blur-3xl rounded-full translate-x-1/2 translate-y-[-20%] pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
+
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
         
         <div className="space-y-12">
           <div className="space-y-6">
@@ -24,25 +24,25 @@ export default function ClosingContact() {
           </div>
 
           <div className="flex flex-col space-y-6">
-            <div className="flex items-center gap-6 group cursor-pointer">
-              <div className="bg-white/10 p-5 rounded-2xl group-hover:bg-ro-accent transition-all">
+            <button type="button" className="flex items-center gap-6 group cursor-pointer text-left w-full">
+              <div className="bg-white/10 p-5 rounded-2xl group-hover:bg-ro-accent group-active:bg-ro-accent group-focus-visible:bg-ro-accent transition-all">
                 <Calendar className="text-ro-light" size={28} />
               </div>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-widest opacity-40">Agenda Directa</p>
                 <p className="text-xl font-display italic">Sesión de Inteligencia 15 min</p>
               </div>
-            </div>
-            
-            <div className="flex items-center gap-6 group cursor-pointer">
-              <div className="bg-white/10 p-5 rounded-2xl group-hover:bg-ro-accent transition-all">
+            </button>
+
+            <button type="button" className="flex items-center gap-6 group cursor-pointer text-left w-full">
+              <div className="bg-white/10 p-5 rounded-2xl group-hover:bg-ro-accent group-active:bg-ro-accent group-focus-visible:bg-ro-accent transition-all">
                 <MessageCircle className="text-ro-light" size={28} />
               </div>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-widest opacity-40">Atención Personal</p>
                 <p className="text-xl font-display italic">Concierge WhatsApp 24/7</p>
               </div>
-            </div>
+            </button>
           </div>
 
           <div className="flex gap-6 opacity-40 hover:opacity-100 transition-opacity">
@@ -82,9 +82,9 @@ export default function ClosingContact() {
               <label className="text-[10px] uppercase font-black tracking-widest opacity-40">Perfil de interés</label>
               <div className="flex flex-wrap gap-4 pt-2">
                  {['Inversión Texas', 'Compra Lujo', 'Gestión Portafolio'].map((item) => (
-                   <div key={item} className="px-5 py-2 border border-ro-dark/10 rounded-full text-xs font-bold tracking-widest cursor-pointer hover:bg-ro-dark hover:text-ro-light transition-all">
+                   <button type="button" key={item} className="px-5 py-2 border border-ro-dark/10 rounded-full text-xs font-bold tracking-widest cursor-pointer hover:bg-ro-dark hover:text-ro-light active:bg-ro-dark active:text-ro-light transition-all">
                      {item}
-                   </div>
+                   </button>
                  ))}
               </div>
             </div>

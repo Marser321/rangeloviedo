@@ -5,3 +5,7 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local tooling & build artifacts
+.claude/
+tsconfig.tsbuildinfo

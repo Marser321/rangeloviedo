@@ -84,7 +84,25 @@ const jsonLd = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
+      <head>
+        {/* Preload the first hero sequence frame for a faster LCP, per device. */}
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/seq01/mobile/frame_0001.webp"
+          media="(max-width: 768px)"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/seq01/desktop/frame_0001.webp"
+          media="(min-width: 769px)"
+        />
+      </head>
       <body suppressHydrationWarning className="bg-ro-light font-sans text-ro-dark selection:bg-ro-accent selection:text-white">
+        <a href="#main-content" className="skip-link">
+          Saltar al contenido
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

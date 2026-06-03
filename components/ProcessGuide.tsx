@@ -24,7 +24,7 @@ const steps = [
 
 export default function ProcessGuide() {
   return (
-    <section className="py-32 bg-ro-light px-8">
+    <section className="py-20 md:py-32 bg-ro-light px-5 md:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-24 space-y-4">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">Metodología de Éxito</h6>

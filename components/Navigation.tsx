@@ -17,6 +17,7 @@ export default function Navigation() {
 
   const menuItems = [
     { labelEn: 'Method', labelEs: 'Método', href: '#metodo' },
+    { labelEn: 'Tour 360°', labelEs: 'Tour 360°', href: '#tour-360' },
     { labelEn: 'Profiles', labelEs: 'Perfiles', href: '#perfiles' },
     { labelEn: 'Market', labelEs: 'Mercado', href: '#mercado' },
     { labelEn: 'Apply', labelEs: 'Aplicar', href: '#contacto' },

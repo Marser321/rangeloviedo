@@ -133,6 +133,11 @@ export default function HeroScrollytelling() {
     let cancelled = false;
     const frameDuration = 1000 / MOBILE_SEQUENCE_FPS;
 
+    // Connection-aware: on Save-Data or slow links, show a static poster
+    // (first frame only) instead of streaming ~45 frames.
+    const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const lowData = !!conn && (conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType ?? ''));
+
     const drawCoverFrame = (img: HTMLImageElement) => {
       const ctx = canvas.getContext('2d', { alpha: false });
       if (!ctx) return;
@@ -197,7 +202,7 @@ export default function HeroScrollytelling() {
     const tick = (time: number) => {
       if (cancelled) return;
 
-      if (!reducedMotion && isVisible && isPageVisible && time - lastFrameTime >= frameDuration) {
+      if (!reducedMotion && !lowData && isVisible && isPageVisible && time - lastFrameTime >= frameDuration) {
         mobileFrameRef.current = (mobileFrameRef.current + 1) % HERO_MOBILE_SEQUENCE.length;
         drawMobileFrame(mobileFrameRef.current);
         lastFrameTime = time;
@@ -217,15 +222,17 @@ export default function HeroScrollytelling() {
       drawCoverFrame(firstFrame);
     };
 
-    HERO_MOBILE_SEQUENCE.slice(1).forEach((src, offset) => {
-      const img = new Image();
-      img.decoding = 'async';
-      img.src = src;
-      img.onload = () => {
-        if (cancelled) return;
-        mobileImagesRef.current[offset + 1] = img;
-      };
-    });
+    if (!lowData) {
+      HERO_MOBILE_SEQUENCE.slice(1).forEach((src, offset) => {
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = src;
+        img.onload = () => {
+          if (cancelled) return;
+          mobileImagesRef.current[offset + 1] = img;
+        };
+      });
+    }
 
     const handleResize = () => {
       drawMobileFrame(mobileFrameRef.current);

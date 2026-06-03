@@ -50,12 +50,14 @@
 
 html {
   background: var(--ro-paper);
+  position: relative;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   overflow-x: hidden;
+  position: relative;
 }
 
 a {
@@ -70,6 +72,27 @@ a {
 :focus-visible {
   outline: 3px solid color-mix(in srgb, var(--ro-copper), white 24%);
   outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-150%);
+  background: var(--ro-dark);
+  color: var(--ro-light);
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 .nav-link {

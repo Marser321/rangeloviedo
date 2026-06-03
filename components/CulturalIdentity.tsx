@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function CulturalIdentity() {
   return (
-    <section id="insights" className="py-32 px-8 bg-white overflow-hidden rounded-[4rem] mx-4 mb-32 shadow-xl">
+    <section id="insights" className="py-20 md:py-32 px-5 md:px-8 bg-white overflow-hidden rounded-[2.5rem] md:rounded-[4rem] mx-2 md:mx-4 mb-20 md:mb-32 shadow-xl">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-20 items-center">
           

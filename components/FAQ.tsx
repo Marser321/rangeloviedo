@@ -27,7 +27,7 @@ export default function FAQ() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-32 bg-white px-8">
+    <section className="py-20 md:py-32 bg-white px-5 md:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-20 space-y-4">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">Resolviendo Inquietudes</h6>

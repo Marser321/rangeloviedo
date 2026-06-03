@@ -7,8 +7,8 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <section className="relative pt-64 pb-32 px-8 overflow-hidden">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+    <section className="relative pt-32 pb-20 px-5 sm:pt-40 md:pt-64 md:pb-32 md:px-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
         
         <motion.div 
           initial={{ opacity: 0, x: -30 }} 
@@ -20,7 +20,7 @@ export default function Hero() {
             <span className="text-xs uppercase tracking-[0.3em] font-black">Texas Investment Experts</span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-display text-ro-dark leading-[1.1] mb-8">
+          <h1 className="text-5xl sm:text-6xl md:text-8xl font-display text-ro-dark leading-[1.1] mb-8">
             Tu futuro en Texas, <br />
             <span className="italic font-normal">diseñado con raíces.</span>
           </h1>
@@ -64,9 +64,9 @@ export default function Hero() {
             />
           </div>
           
-          <div className="absolute -bottom-10 -left-10 z-20 bg-white/80 backdrop-blur-md p-10 rounded-[3rem] shadow-xl border border-white/50 max-w-[280px]">
+          <div className="absolute -bottom-6 left-2 sm:-bottom-10 sm:-left-10 z-20 bg-white/80 backdrop-blur-md p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] shadow-xl border border-white/50 max-w-[240px] sm:max-w-[280px]">
               <div className="text-4xl text-ro-accent mb-4">“</div>
-              <p className="text-ro-dark font-display italic text-xl mb-6">Unimos tu capital con soluciones que tienen corazón.</p>
+              <p className="text-ro-dark font-display italic text-lg sm:text-xl mb-6">Unimos tu capital con soluciones que tienen corazón.</p>
               <span className="text-[10px] uppercase font-black tracking-widest text-ro-dark/40">— Desiré Oviedo</span>
           </div>
 

@@ -30,7 +30,7 @@ export default function StrategyServices() {
   ];
 
   return (
-    <section id="metodologia" className="py-32 bg-ro-light px-8 overflow-hidden">
+    <section id="metodologia" className="py-20 md:py-32 bg-ro-light px-5 md:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div className="max-w-2xl">

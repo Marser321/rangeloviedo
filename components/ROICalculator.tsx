@@ -20,7 +20,7 @@ export default function ROICalculator() {
   }, [investment, years, appreciation]);
 
   return (
-    <section className="py-32 bg-ro-dark text-ro-light px-8 rounded-[5rem] mx-4 relative overflow-hidden">
+    <section className="py-20 md:py-32 bg-ro-dark text-ro-light px-5 md:px-8 rounded-[2.5rem] md:rounded-[5rem] mx-2 md:mx-4 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-[60%] h-full bg-ro-accent/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2" />
       
       <div className="max-w-7xl mx-auto relative z-10">

@@ -37,7 +37,7 @@ const scrollySteps = [
     titleEs: 'Arquitectura con Criterio',
     textEn: 'We do not choose listings at random. We evaluate architectural heritage, solar orientation, and the integrity of local materials like Texas limestone from the first exterior glance.',
     textEs: 'No buscamos listados al azar. Evaluamos el valor patrimonial, la orientación solar y la integridad de materiales locales como la piedra caliza de Texas desde el primer vistazo exterior.',
-    image: '/rog/scrolly_1_facade.png',
+    image: '/rog/scrolly_1_facade.webp',
     intent: 'visitar fachadas y arquitectura en Texas',
     icon: Home,
   },
@@ -49,7 +49,7 @@ const scrollySteps = [
     titleEs: 'Acceso Privado & Off-Market',
     textEn: 'Unlocking private doors. Through deep-rooted partnerships across Austin and Houston, we gain access to exclusive off-market inventory long before it ever touches public listings.',
     textEs: 'Abrimos las puertas correctas. Gracias a relaciones consolidadas en Austin y Houston, accedemos a inventario exclusivo off-market mucho antes de que sea listado públicamente.',
-    image: '/rog/scrolly_2_entrance.png',
+    image: '/rog/scrolly_2_entrance.webp',
     intent: 'conocer propiedades off-market',
     icon: Eye,
   },
@@ -61,7 +61,7 @@ const scrollySteps = [
     titleEs: 'La Lectura del Espacio',
     textEn: 'We analyze natural light diffusion, acoustics, ceiling proportions, and how daily family flow interacts with the environment. We design your lifestyle before you commit.',
     textEs: 'Analizamos la difusión de luz natural, la acústica, las proporciones de techos y cómo interactúa el flujo familiar cotidiano con el espacio. Diseñamos tu día a día antes de comprar.',
-    image: '/rog/scrolly_3_livingroom.png',
+    image: '/rog/scrolly_3_livingroom.webp',
     intent: 'evaluar distribución y espacios amplios',
     icon: Maximize2,
   },
@@ -73,7 +73,7 @@ const scrollySteps = [
     titleEs: 'Calidad Sin Concesiones',
     textEn: 'Inspecting custom joinery, premium marble, and professional-grade culinary appliances. We verify social areas designed to endure, appreciate, and entertain.',
     textEs: 'Inspeccionamos ebanistería a medida, mármoles premium y equipamiento culinario profesional. Áreas sociales diseñadas para perdurar, valorizarse y disfrutar.',
-    image: '/rog/scrolly_4_kitchen.png',
+    image: '/rog/scrolly_4_kitchen.webp',
     intent: 'propiedades con cocinas premium',
     icon: Layers,
   },
@@ -85,7 +85,7 @@ const scrollySteps = [
     titleEs: 'La Vida en el Exterior',
     textEn: 'Real estate value extends beyond the walls. We evaluate native landscaping, entertainment capacity under the Texas sky, and the long-term investment liquidity.',
     textEs: 'El valor patrimonial se extiende afuera. Evaluamos el paisajismo nativo, la capacidad de entretenimiento bajo el cielo de Texas y la liquidez de salida de la inversión.',
-    image: '/rog/scrolly_5_terrace.png',
+    image: '/rog/scrolly_5_terrace.webp',
     intent: 'terrazas y exteriores exclusivos',
     icon: Compass,
   },
@@ -261,7 +261,7 @@ export default function HouseScrollytelling() {
         <div className="relative h-[85vh] w-full overflow-hidden">
           {/* Background image crossfade */}
           <div className="absolute inset-0 z-0">
-            {scrollySteps.map((step, idx) => (
+            {showMobile && scrollySteps.map((step, idx) => (
               <div
                 key={step.step}
                 className="absolute inset-0 w-full h-full transition-opacity duration-[1500ms] ease-in-out"
@@ -393,7 +393,7 @@ export default function HouseScrollytelling() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/55 z-10 pointer-events-none" />
 
               {/* Images */}
-              {scrollySteps.map((step, idx) => (
+              {showDesktop && scrollySteps.map((step, idx) => (
                 <motion.div
                   key={step.step}
                   style={{

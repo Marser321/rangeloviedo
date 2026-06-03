@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function MarketThesis() {
   return (
-    <section id="tesis" className="py-32 bg-ro-dark text-ro-light rounded-[5rem] mx-4 relative z-40 shadow-2xl">
+    <section id="tesis" className="py-20 md:py-32 bg-ro-dark text-ro-light rounded-[2.5rem] md:rounded-[5rem] mx-2 md:mx-4 relative z-40 shadow-2xl">
       <div className="max-w-6xl mx-auto px-8">
         <div className="grid lg:grid-cols-2 gap-24 items-end">
           <div>

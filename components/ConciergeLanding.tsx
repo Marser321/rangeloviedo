@@ -35,6 +35,7 @@ const HouseScrollytelling = dynamic(() => import('./HouseScrollytelling'), {
   ssr: false,
   loading: ScrollyPlaceholder,
 });
+const Panorama360 = dynamic(() => import('./Panorama360'), { ssr: false });
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_RANGEL_WHATSAPP ?? '';
 const GHL_FORM_URL = process.env.NEXT_PUBLIC_GHL_FORM_URL ?? '';
@@ -160,7 +161,7 @@ export default function ConciergeLanding() {
   }, []);
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[var(--ro-paper)] text-[var(--ro-ink)]">
+    <main id="main-content" className="min-h-screen overflow-x-clip bg-[var(--ro-paper)] text-[var(--ro-ink)]">
       <Navigation />
       <HeroScrollytelling />
 
@@ -213,6 +214,8 @@ export default function ConciergeLanding() {
       </section>
 
       <HouseScrollytelling />
+
+      <Panorama360 />
 
       <section id="perfiles" className="relative z-10 bg-white px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto max-w-7xl">
