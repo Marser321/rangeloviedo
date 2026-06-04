@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Globe, Menu, X } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
 export default function Navigation() {
+  const pathname = usePathname();
   const { scrollY } = useScroll();
   const navHeight = useTransform(scrollY, [0, 100], ['112px', '78px']);
   const navBg = useTransform(scrollY, [0, 100], ['rgba(255, 255, 255, 0.72)', 'rgba(255, 255, 255, 0.9)']);
@@ -16,11 +19,11 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const menuItems = [
-    { labelEn: 'Method', labelEs: 'Método', href: '#metodo' },
-    { labelEn: 'Tour 360°', labelEs: 'Tour 360°', href: '#tour-360' },
-    { labelEn: 'Profiles', labelEs: 'Perfiles', href: '#perfiles' },
-    { labelEn: 'Market', labelEs: 'Mercado', href: '#mercado' },
-    { labelEn: 'Apply', labelEs: 'Aplicar', href: '#contacto' },
+    { labelEn: 'Home', labelEs: 'Inicio', href: '/' },
+    { labelEn: 'CEO', labelEs: 'CEO', href: '/ceo' },
+    { labelEn: 'Properties', labelEs: 'Propiedades', href: '/propiedades' },
+    { labelEn: 'Search', labelEs: 'Buscar', href: '/buscar' },
+    { labelEn: 'Team', labelEs: 'Equipo', href: '/equipo' },
   ];
 
   useEffect(() => {
@@ -34,6 +37,13 @@ export default function Navigation() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <motion.nav
       style={{ height: navHeight }}
@@ -43,10 +53,10 @@ export default function Navigation() {
         style={{ backgroundColor: navBg, borderColor: navBorder }}
         className="mx-auto flex w-[calc(100vw-2.5rem)] max-w-7xl items-center justify-between gap-3 overflow-hidden rounded-[2.5rem] border px-4 py-3 shadow-sm backdrop-blur-xl md:w-full md:gap-4 md:px-8 md:py-4"
       >
-        <button
-          type="button"
+        <Link
+          href="/"
+          onClick={handleLogoClick}
           className="group flex min-w-0 items-center gap-3 text-left"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Rangel Oviedo Group home"
         >
           <span className="relative block h-10 w-14 shrink-0 md:h-14 md:w-20">
@@ -67,18 +77,22 @@ export default function Navigation() {
               {t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}
             </span>
           </span>
-        </button>
+        </Link>
 
         <div className="hidden items-center space-x-8 lg:flex">
           {menuItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
-              className="group/link relative text-[10px] font-bold uppercase tracking-widest transition-colors hover:text-ro-accent"
+              className={`group/link relative text-[10px] font-bold uppercase tracking-widest transition-colors hover:text-ro-accent ${
+                pathname === item.href ? 'text-ro-accent font-extrabold' : 'text-ro-dark/80'
+              }`}
             >
               {t(item.labelEn, item.labelEs)}
-              <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-ro-accent transition-all group-hover/link:w-full" />
-            </a>
+              <span className={`absolute -bottom-1 left-0 h-[1px] bg-ro-accent transition-all group-hover/link:w-full ${
+                pathname === item.href ? 'w-full' : 'w-0'
+              }`} />
+            </Link>
           ))}
 
           <div className="flex items-center gap-2 rounded-full border border-ro-dark/10 bg-ro-dark/5 px-3 py-1.5 text-[10px] font-bold tracking-wider">
@@ -104,12 +118,12 @@ export default function Navigation() {
             </button>
           </div>
 
-          <a
-            href="#contacto"
+          <Link
+            href="/#contacto"
             className="rounded-2xl bg-ro-dark px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-ro-light shadow-md transition-all hover:scale-105 hover:bg-ro-accent"
           >
             {t('Apply / Book', 'Aplicar / Agenda')}
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-3 lg:hidden">
@@ -166,25 +180,27 @@ export default function Navigation() {
         />
         <nav className="relative mt-32 flex flex-col gap-2 px-8 pb-12">
           {menuItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               onClick={closeMobile}
-              className="group flex items-center justify-between border-b border-ro-dark/10 py-5 text-2xl font-display tracking-tight text-ro-dark transition-colors hover:text-ro-accent"
+              className={`group flex items-center justify-between border-b border-ro-dark/10 py-5 text-2xl font-display tracking-tight transition-colors hover:text-ro-accent ${
+                pathname === item.href ? 'text-ro-accent font-extrabold' : 'text-ro-dark'
+              }`}
             >
               {t(item.labelEn, item.labelEs)}
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-ro-dark/30 transition-colors group-hover:text-ro-accent">
                 →
               </span>
-            </a>
+            </Link>
           ))}
-          <a
-            href="#contacto"
+          <Link
+            href="/#contacto"
             onClick={closeMobile}
             className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-ro-dark px-8 py-4 text-[11px] font-bold uppercase tracking-widest text-ro-light shadow-md transition-all hover:bg-ro-accent"
           >
             {t('Apply / Book', 'Aplicar / Agenda')}
-          </a>
+          </Link>
           <p className="mt-10 text-[10px] font-bold uppercase tracking-[0.3em] text-ro-dark/40">
             {t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}
           </p>

@@ -14,8 +14,10 @@ import {
   MessageCircle,
   ShieldCheck,
 } from 'lucide-react';
+import Link from 'next/link';
 import Navigation from './Navigation';
 import Panorama360 from './Panorama360';
+import Footer from './Footer';
 import { useLanguage } from './LanguageContext';
 
 const ScrollyPlaceholder = () => (
@@ -217,6 +219,40 @@ export default function ConciergeLanding() {
 
       <Panorama360 />
 
+      <section className="relative z-10 bg-[var(--ro-paper)] px-5 py-20 text-[var(--ro-ink)] md:px-8 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <div data-reveal className="grid gap-8 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="eyebrow">{t('Curated Catalog', 'Catálogo Curado')}</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
+                {t('Texas assets, selected with absolute filter.', 'Activos en Texas, seleccionados con filtro absoluto.')}
+              </h2>
+              <p className="mt-6 text-base leading-7 text-[var(--ro-muted)] md:text-lg">
+                {t(
+                  'We do not compile listings; we curate opportunities. Explore our active investments, projected yields, and neighborhood spotlights in Austin and Houston.',
+                  'No compilamos listados; curamos oportunidades. Explora nuestras inversiones activas, rendimientos proyectados y análisis de zonas en Austin y Houston.'
+                )}
+              </p>
+              <div className="mt-8">
+                <Link href="/propiedades" className="btn btn-copper">
+                  {t('Explore Properties', 'Explorar Propiedades')}
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-ro-dark/10 shadow-2xl">
+              <Image
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+                alt="Texas luxury properties"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 90vw, 45vw"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="perfiles" className="relative z-10 bg-white px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto max-w-7xl">
           <div data-reveal className="mb-9 grid gap-5 lg:grid-cols-[0.78fr_1fr] lg:items-end">
@@ -273,6 +309,12 @@ export default function ConciergeLanding() {
                 'Rangel traduce mercado, negociación y contexto familiar para compradores y vendedores entre Texas, México y Latinoamérica.',
               )}
             </p>
+            <div className="mt-10">
+              <Link href="/ceo" className="btn bg-[#c9a864] text-[#0b0a08] hover:bg-[#ebd095]">
+                {t('Read CEO Vision', 'Ver visión del CEO')}
+                <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
           <div data-reveal className="relative min-h-[560px] overflow-hidden rounded-[2.2rem] border border-white/12">
             <Image
@@ -289,6 +331,40 @@ export default function ConciergeLanding() {
                   'Raíces en Texas. Corazón global. Atención personal.',
                 )}
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 bg-white px-5 py-20 text-[var(--ro-ink)] md:px-8 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <div data-reveal className="grid gap-8 lg:grid-cols-[0.85fr_1fr] lg:items-center">
+            <div className="order-2 lg:order-1 relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-ro-dark/10 shadow-xl">
+              <Image
+                src="/rog/hero-rangel.webp"
+                alt="Rangel Oviedo Group Team"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 90vw, 40vw"
+              />
+            </div>
+            <div className="order-1 lg:order-2">
+              <p className="eyebrow">{t('The Advisory Team', 'El Equipo Consultor')}</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
+                {t('A bilingual bridge from brief to keys.', 'Un puente bilingüe de brief a llaves.')}
+              </h2>
+              <p className="mt-6 text-base leading-7 text-[var(--ro-muted)] md:text-lg">
+                {t(
+                  'More than agents, we are partners in wealth protection. Our team coordinates legal context, tax efficiency, property sourcing, and local school integration so your transition is completely seamless.',
+                  'Más que agentes, somos socios en la protección de tu patrimonio. Nuestro equipo coordina el contexto legal, eficiencia fiscal, búsqueda de propiedades e integración escolar local para que tu transición sea impecable.'
+                )}
+              </p>
+              <div className="mt-8">
+                <Link href="/equipo" className="btn btn-dark">
+                  {t('Meet the Team', 'Conocer al Equipo')}
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -385,71 +461,7 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-[var(--ro-ink)]/8 bg-[var(--ro-ink)] px-5 py-12 text-white/55 md:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8">
-          <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
-            <span className="relative block h-16 w-20">
-              <Image
-                src="/brand/rog-logo-white.png"
-                alt="Rangel Oviedo Group"
-                fill
-                sizes="80px"
-                className="object-contain"
-              />
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-center">{t('Private Texas Real Estate', 'Inmobiliaria privada en Texas')}</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-center">{t('Texas + Mexico + LATAM', 'Texas + México + LATAM')}</span>
-          </div>
-
-          {(CONTACT_EMAIL || CONTACT_PHONE || WHATSAPP_NUMBER) && (
-            <div className="flex flex-col items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] md:flex-row md:gap-8">
-              {CONTACT_EMAIL && (
-                <a
-                  href={`mailto:${CONTACT_EMAIL}`}
-                  className="transition-colors hover:text-[#c9a864]"
-                  aria-label={t('Send email', 'Enviar correo')}
-                >
-                  {CONTACT_EMAIL}
-                </a>
-              )}
-              {CONTACT_PHONE && (
-                <a
-                  href={`tel:${CONTACT_PHONE.replace(/[^+\d]/g, '')}`}
-                  className="transition-colors hover:text-[#c9a864]"
-                  aria-label={t('Call by phone', 'Llamar por teléfono')}
-                >
-                  {CONTACT_PHONE}
-                </a>
-              )}
-              {WHATSAPP_NUMBER && whatsappHref && (
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-colors hover:text-[#c9a864]"
-                >
-                  WhatsApp
-                </a>
-              )}
-            </div>
-          )}
-
-          <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-[10px] font-bold uppercase tracking-[0.22em] md:flex-row">
-            <span className="tracking-[0.18em]">
-              © {new Date().getFullYear()} Rangel <span className="font-black">Oviedo</span> Group
-            </span>
-            <a
-              href="https://admediasolution.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="AD Media Solution"
-              className="transition-colors hover:text-[#c9a864]"
-            >
-              {t('Created by AD Media Solution', 'Creado por AD Media Solution')}
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

@@ -3,34 +3,49 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Search, ShieldCheck, Key, ArrowRight } from 'lucide-react';
-
-const steps = [
-  {
-    title: 'Análisis de Perfil e Inteligencia',
-    description: 'Definimos su tesis de inversión personal, analizando tolerancia al riesgo, horizonte temporal y objetivos de capitalización en el mercado tejano.',
-    icon: <Search className="w-6 h-6" />
-  },
-  {
-    title: 'Arquitectura y Negociación',
-    description: 'Utilizamos nuestra red de contactos (off-market) y datos demográficos para asegurar activos con ventajas competitivas antes de que lleguen al público.',
-    icon: <ShieldCheck className="w-6 h-6" />
-  },
-  {
-    title: 'Cierre y Gestión Patrimonial',
-    description: 'Acompañamos en todo el proceso legal y administrativo, asegurando que su inversión esté protegida y lista para generar valor desde el primer día.',
-    icon: <Key className="w-6 h-6" />
-  }
-];
+import Link from 'next/link';
+import { useLanguage } from './LanguageContext';
 
 export default function ProcessGuide() {
+  const { t } = useLanguage();
+
+  const steps = [
+    {
+      title: t('Profile Analysis & Intelligence', 'Análisis de Perfil e Inteligencia'),
+      description: t(
+        'We define your personal investment thesis, analyzing risk tolerance, time horizon, and capitalization goals in the Texas market.',
+        'Definimos su tesis de inversión personal, analizando tolerancia al riesgo, horizonte temporal y objetivos de capitalización en el mercado tejano.'
+      ),
+      icon: <Search className="w-6 h-6" />
+    },
+    {
+      title: t('Architecture & Negotiation', 'Arquitectura y Negociación'),
+      description: t(
+        'We use our off-market network and demographic data to secure assets with competitive advantages before they reach the public.',
+        'Utilizamos nuestra red de contactos (off-market) y datos demográficos para asegurar activos con ventajas competitivas antes de que lleguen al público.'
+      ),
+      icon: <ShieldCheck className="w-6 h-6" />
+    },
+    {
+      title: t('Closing & Wealth Management', 'Cierre y Gestión Patrimonial'),
+      description: t(
+        'We accompany you through the entire legal and administrative process, ensuring your investment is protected and ready to generate value from day one.',
+        'Acompañamos en todo el proceso legal y administrativo, asegurando que su inversión esté protegida y lista para generar valor desde el primer día.'
+      ),
+      icon: <Key className="w-6 h-6" />
+    }
+  ];
+
   return (
     <section className="py-20 md:py-32 bg-ro-light px-5 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-24 space-y-4">
-          <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">Metodología de Éxito</h6>
-          <h2 className="text-5xl md:text-7xl font-display text-ro-dark leading-tight">
-            Tres pasos hacia su <br />
-            <span className="italic font-normal">libertad patrimonial.</span>
+        <div className="text-center mb-16 md:mb-24 space-y-4">
+          <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">
+            {t('Success Methodology', 'Metodología de Éxito')}
+          </h6>
+          <h2 className="text-4xl md:text-7xl font-display text-ro-dark leading-tight">
+            {t('Three steps to your', 'Tres pasos hacia su')} <br />
+            <span className="italic font-normal">{t('wealth freedom.', 'libertad patrimonial.')}</span>
           </h2>
         </div>
 
@@ -46,24 +61,26 @@ export default function ProcessGuide() {
               transition={{ delay: i * 0.2 }}
               className="relative z-10 flex flex-col items-center text-center group"
             >
-              <div className="w-24 h-24 bg-white rounded-[2.5rem] shadow-xl flex items-center justify-center text-ro-accent mb-10 group-hover:bg-ro-accent group-hover:text-white transition-all duration-500 border border-ro-dark/5">
+              <div className="w-24 h-24 bg-white rounded-[2.5rem] shadow-xl flex items-center justify-center text-ro-accent mb-8 md:mb-10 group-hover:bg-ro-accent group-hover:text-white transition-all duration-500 border border-ro-dark/5">
                 {s.icon}
               </div>
               
               <div className="space-y-4">
-                <span className="text-[10px] uppercase font-black tracking-widest text-ro-accent opacity-40">Fase 0{i + 1}</span>
-                <h3 className="text-2xl font-display italic text-ro-dark tracking-tight">{s.title}</h3>
-                <p className="text-ro-dark/60 font-light leading-relaxed italic">{s.description}</p>
+                <span className="text-[10px] uppercase font-black tracking-widest text-ro-accent opacity-40">
+                  {t('Phase', 'Fase')} 0{i + 1}
+                </span>
+                <h3 className="text-xl md:text-2xl font-display italic text-ro-dark tracking-tight">{s.title}</h3>
+                <p className="text-sm md:text-base text-ro-dark/60 font-light leading-relaxed italic">{s.description}</p>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-24 flex justify-center">
-           <a href="#contacto" className="group flex items-center gap-4 text-ro-dark hover:text-ro-accent transition-colors font-bold uppercase text-[10px] tracking-[0.3em]">
-             Comenzar Fase de Inteligencia
+        <div className="mt-16 md:mt-24 flex justify-center">
+           <Link href="/#contacto" className="group flex items-center gap-4 text-ro-dark hover:text-ro-accent transition-colors font-bold uppercase text-[10px] tracking-[0.3em] text-center">
+             {t('Begin Intelligence Phase', 'Comenzar Fase de Inteligencia')}
              <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
-           </a>
+           </Link>
         </div>
       </div>
     </section>
