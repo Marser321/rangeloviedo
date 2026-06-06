@@ -13,14 +13,19 @@ import MarketTicker from "@/components/MarketTicker";
 import ROICalculator from "@/components/ROICalculator";
 import NeighborhoodSpotlight from "@/components/NeighborhoodSpotlight";
 
+// Página interna de librería de componentes: no debe indexarse.
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 export default function ShowcasePage() {
   return (
-    <main className="min-h-screen bg-ro-light">
-      <MarketTicker />
-      <Navigation />
+    <main className="ro-bg-page min-h-screen">
+      <MarketTicker fixed />
+      <Navigation withTicker />
       
       {/* Introduction */}
-      <div className="pt-40 pb-20 px-8 text-center bg-white border-b border-ro-dark/5">
+      <div className="ro-bg-section pt-40 pb-20 px-8 text-center border-b border-ro-dark/5">
         <h1 className="text-4xl md:text-6xl font-display italic text-ro-dark mb-4">Librería de Componentes</h1>
         <p className="text-ro-dark/60 font-light italic max-w-2xl mx-auto">
           Esta página muestra todas las secciones disponibles para el proyecto Rangel Oviedo Group. 

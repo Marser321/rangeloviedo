@@ -99,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           media="(min-width: 769px)"
         />
       </head>
-      <body suppressHydrationWarning className="bg-ro-light font-sans text-ro-dark selection:bg-ro-accent selection:text-white">
+      <body suppressHydrationWarning className="ro-bg-page font-sans text-ro-dark selection:bg-ro-accent selection:text-white">
         <a href="#main-content" className="skip-link">
           Saltar al contenido
         </a>

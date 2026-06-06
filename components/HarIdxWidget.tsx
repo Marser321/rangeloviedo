@@ -6,27 +6,47 @@ import { useLanguage } from './LanguageContext';
 import { siteConfig } from '@/lib/site-config';
 
 /**
- * Embebe el widget IDX (Home Finder) de HAR.com — la búsqueda completa del MLS.
- * Toma la URL del iframe desde `siteConfig.har.idxWidgetUrl`
- * (NEXT_PUBLIC_HAR_IDX_WIDGET_URL). Si no está configurada, muestra un
- * placeholder on-brand con instrucciones para conectar el widget.
+ * Embebe un widget IDX de HAR.com — búsqueda completa del MLS (Home Finder) o
+ * el catálogo propio del agente ("View My Listings"). La URL del iframe se pasa
+ * por `src`; si no se indica, usa `siteConfig.har.idxWidgetUrl`
+ * (NEXT_PUBLIC_HAR_IDX_WIDGET_URL, el buscador). Si la URL está vacía, muestra
+ * un placeholder on-brand con instrucciones.
+ *
+ * Nota: estos embeds heredan el color de tema configurado en el panel Platinum
+ * de HAR (IDX Theme Color → seleccionar el tono oscuro → Submit). Su interior
+ * no se puede reestilizar desde aquí; por eso las tarjetas "Lujo Latino" propias
+ * conviven con este catálogo auto-actualizado.
  */
-export default function HarIdxWidget({ minHeight = 900 }: { minHeight?: number }) {
+export default function HarIdxWidget({
+  src,
+  minHeight = 900,
+  eyebrow,
+  title,
+  description,
+}: {
+  src?: string;
+  minHeight?: number;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   const { t } = useLanguage();
-  const url = siteConfig.har.idxWidgetUrl;
+  const url = src ?? siteConfig.har.idxWidgetUrl;
+  const frameTitle = title ?? t('HAR MLS property search', 'Búsqueda de propiedades del MLS de HAR');
 
   if (!url) {
     return (
-      <div className="rounded-[2rem] border border-dashed border-[var(--ro-ink)]/25 bg-[var(--ro-sand)]/40 p-10 text-center md:p-16">
-        <p className="eyebrow justify-center">{t('IDX search', 'Buscador IDX')}</p>
+      <div className="ro-bg-surface-soft rounded-[2rem] border border-dashed border-[var(--ro-ink)]/25 p-10 text-center md:p-16">
+        <p className="eyebrow justify-center">{eyebrow ?? t('IDX search', 'Buscador IDX')}</p>
         <h3 className="mt-5 font-display text-3xl md:text-4xl">
-          {t('The HAR MLS search connects here', 'Aquí se conecta el buscador del MLS de HAR')}
+          {title ?? t('The HAR MLS search connects here', 'Aquí se conecta el buscador del MLS de HAR')}
         </h3>
         <p className="mx-auto mt-5 max-w-xl leading-7 text-[var(--ro-muted)]">
-          {t(
-            'Generate the IDX Home Finder widget from the HAR Platinum panel and paste its iframe URL into the NEXT_PUBLIC_HAR_IDX_WIDGET_URL environment variable.',
-            'Genera el widget IDX (Home Finder) desde el panel Platinum de HAR y pega la URL de su iframe en la variable de entorno NEXT_PUBLIC_HAR_IDX_WIDGET_URL.'
-          )}
+          {description ??
+            t(
+              'Generate the IDX Home Finder widget from the HAR Platinum panel and paste its iframe URL into the NEXT_PUBLIC_HAR_IDX_WIDGET_URL environment variable.',
+              'Genera el widget IDX (Home Finder) desde el panel Platinum de HAR y pega la URL de su iframe en la variable de entorno NEXT_PUBLIC_HAR_IDX_WIDGET_URL.'
+            )}
         </p>
         <a
           href="https://cms.har.com/idxtools/"
@@ -42,10 +62,10 @@ export default function HarIdxWidget({ minHeight = 900 }: { minHeight?: number }
   }
 
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-[var(--ro-ink)]/10 bg-white shadow-sm">
+    <div className="ro-bg-surface overflow-hidden rounded-[2rem] border border-[var(--ro-ink)]/10">
       <iframe
         src={url}
-        title={t('HAR MLS property search', 'Búsqueda de propiedades del MLS de HAR')}
+        title={frameTitle}
         className="w-full"
         style={{ minHeight }}
         loading="lazy"

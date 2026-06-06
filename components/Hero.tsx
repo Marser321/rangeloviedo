@@ -37,11 +37,11 @@ export default function Hero() {
               </div>
             </a>
             
-            <div className="flex justify-center items-center gap-4 bg-white/50 backdrop-blur-sm px-6 py-4 rounded-[2rem] border border-ro-dark/5">
+            <div className="ro-bg-surface-soft flex justify-center items-center gap-4 backdrop-blur-sm px-6 py-4 rounded-[2rem] border border-ro-dark/5">
               <div className="flex text-ro-accent">
                   {[1,2,3,4,5].map(i => <Star key={i} size={14} fill="currentColor" />)}
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-widest opacity-60 italic">Elite en Trustindex</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest opacity-60 italic">5.0 · 45 reseñas Google</span>
             </div>
           </div>
         </motion.div>
@@ -64,7 +64,7 @@ export default function Hero() {
             />
           </div>
           
-          <div className="absolute -bottom-6 left-2 sm:-bottom-10 sm:-left-10 z-20 bg-white/80 backdrop-blur-md p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] shadow-xl border border-white/50 max-w-[240px] sm:max-w-[280px]">
+          <div className="ro-bg-surface absolute -bottom-6 left-2 sm:-bottom-10 sm:-left-10 z-20 backdrop-blur-md p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-white/50 max-w-[240px] sm:max-w-[280px]">
               <div className="text-4xl text-ro-accent mb-4">“</div>
               <p className="text-ro-dark font-display italic text-lg sm:text-xl mb-6">Unimos tu capital con soluciones que tienen corazón.</p>
               <span className="text-[10px] uppercase font-black tracking-widest text-ro-dark/40">— Desiré Oviedo</span>

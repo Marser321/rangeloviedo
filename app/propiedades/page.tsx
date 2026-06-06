@@ -1,24 +1,39 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import MarketTicker from '@/components/MarketTicker';
 import PropertiesGrid from '@/components/PropertiesGrid';
+import TrackRecordBand from '@/components/TrackRecordBand';
+import HarIdxWidget from '@/components/HarIdxWidget';
 import ROICalculator from '@/components/ROICalculator';
 import NeighborhoodSpotlight from '@/components/NeighborhoodSpotlight';
 import Footer from '@/components/Footer';
 import MlsDisclaimer from '@/components/MlsDisclaimer';
+import LazyMount from '@/components/LazyMount';
+import ScrollyPlaceholder from '@/components/ScrollyPlaceholder';
 import { useLanguage } from '@/components/LanguageContext';
-import { ArrowRight, Compass, Search } from 'lucide-react';
+import { siteConfig } from '@/lib/site-config';
+import { Compass, Search } from 'lucide-react';
+
+const HouseScrollytelling = dynamic(() => import('@/components/HouseScrollytelling'), {
+  ssr: false,
+  loading: ScrollyPlaceholder,
+});
+const Panorama360 = dynamic(() => import('@/components/Panorama360'), {
+  ssr: false,
+  loading: ScrollyPlaceholder,
+});
 
 export default function PropertiesPage() {
   const { t } = useLanguage();
 
   return (
-    <main id="main-content" className="min-h-screen bg-[var(--ro-paper)] text-[var(--ro-ink)]">
-      <MarketTicker />
-      <Navigation />
+    <main id="main-content" className="ro-bg-page min-h-screen text-[var(--ro-ink)]">
+      <MarketTicker fixed />
+      <Navigation withTicker />
 
       {/* Header section */}
       <section className="relative pt-36 pb-12 md:pt-48 md:pb-20 overflow-hidden">
@@ -37,8 +52,66 @@ export default function PropertiesPage() {
         </div>
       </section>
 
-      {/* Properties Grid */}
+      {/* Track record / credibilidad (prueba social) */}
+      <TrackRecordBand />
+
+      {/* Properties Grid — destacadas a medida (diseño "Lujo Latino") */}
       <PropertiesGrid />
+
+      {/* Catálogo completo auto-actualizado desde HAR ("View My Listings") */}
+      <section className="mx-auto max-w-7xl px-5 pt-20 md:px-8 md:pt-32">
+        <span className="eyebrow">{t('Always up to date', 'Siempre actualizado')}</span>
+        <h2 className="mt-5 font-display text-4xl leading-tight md:text-6xl">
+          {t('Every active listing, live from HAR', 'Todos los listados activos, en vivo desde HAR')}
+        </h2>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--ro-muted)] font-light">
+          {t(
+            "Rangel Oviedo's complete, always-current inventory — served directly from the Houston MLS, updated automatically.",
+            'El inventario completo y siempre actualizado de Rangel Oviedo, servido directamente desde el MLS de Houston y al día de forma automática.'
+          )}
+        </p>
+        <div className="mt-10">
+          <HarIdxWidget
+            src={siteConfig.har.myListingsUrl}
+            eyebrow={t('My listings', 'Mis propiedades')}
+            title={t('My HAR listings connect here', 'Aquí se conectan mis propiedades de HAR')}
+            description={t(
+              'Generate the "View My Listings" widget from the HAR Platinum panel and paste its URL into NEXT_PUBLIC_HAR_MY_LISTINGS_URL.',
+              'Genera el widget "View My Listings" desde el panel Platinum de HAR y pega su URL en NEXT_PUBLIC_HAR_MY_LISTINGS_URL.'
+            )}
+          />
+        </div>
+      </section>
+
+      {/* Showcase de vendidas (View My Sold Listings) — trayectoria */}
+      <section className="mx-auto max-w-7xl px-5 pt-20 md:px-8 md:pt-28">
+        <span className="eyebrow">{t('Track record', 'Trayectoria')}</span>
+        <h2 className="mt-5 font-display text-4xl leading-tight md:text-6xl">
+          {t('Properties Rangel has sold', 'Propiedades que Rangel ha vendido')}
+        </h2>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--ro-muted)] font-light">
+          {t(
+            'A portfolio of closed transactions — real proof of results in the Houston market.',
+            'Un portafolio de transacciones cerradas: prueba real de resultados en el mercado de Houston.'
+          )}
+        </p>
+        <div className="mt-10">
+          <HarIdxWidget
+            src={siteConfig.har.soldListingsUrl}
+            eyebrow={t('Sold listings', 'Vendidas')}
+            title={t('The sold-listings showcase connects here', 'Aquí se conecta el portafolio de vendidas')}
+            description={t(
+              'Generate the "View My Sold Listings" widget from the HAR Platinum panel and paste its URL into NEXT_PUBLIC_HAR_SOLD_LISTINGS_URL.',
+              'Genera el widget "View My Sold Listings" desde el panel Platinum de HAR y pega su URL en NEXT_PUBLIC_HAR_SOLD_LISTINGS_URL.'
+            )}
+          />
+        </div>
+      </section>
+
+      {/* Editorial: cómo leemos una casa (lazy, monta al acercarse) */}
+      <LazyMount placeholder={<ScrollyPlaceholder />}>
+        <HouseScrollytelling />
+      </LazyMount>
 
       {/* ROI Calculator Section */}
       <div className="my-10">
@@ -48,8 +121,13 @@ export default function PropertiesPage() {
       {/* Neighborhood Spotlight */}
       <NeighborhoodSpotlight />
 
+      {/* Tour 360 (lazy, monta al acercarse) */}
+      <LazyMount placeholder={<ScrollyPlaceholder />}>
+        <Panorama360 />
+      </LazyMount>
+
       {/* Call to Action */}
-      <section className="relative px-5 py-20 md:px-8 md:py-28 z-10 overflow-hidden bg-white mx-2 md:mx-4 rounded-[2rem] md:rounded-[4rem] shadow-lg mb-20">
+      <section className="ro-bg-section relative px-5 py-20 md:px-8 md:py-28 z-10 overflow-hidden mx-2 md:mx-4 rounded-[2rem] md:rounded-[4rem] shadow-lg mb-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(169,105,55,0.08),transparent_32%)]" />
         <div className="relative mx-auto max-w-4xl text-center">
           <p className="eyebrow justify-center">{t('Advisory Access', 'Acceso a Asesoría')}</p>

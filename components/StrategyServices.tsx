@@ -16,7 +16,7 @@ export default function StrategyServices() {
     {
       id: '02',
       title: 'Arquitectura de Portafolios de Inversión',
-      description: 'Diseñamos una estructura diversificada de Real Estate para proteger tu capital contra la inflación, optimizando beneficios fiscales vigentes en Houston y Austin.',
+      description: 'Diseñamos una estructura diversificada de Real Estate para proteger tu capital contra la inflación, aprovechando el marco fiscal favorable de Houston y Austin.',
       icon: <TrendingUp className="w-8 h-8" />,
       detail: 'Enfoque: Rendimiento Pasivo y Multi-Family.'
     },
@@ -30,11 +30,11 @@ export default function StrategyServices() {
   ];
 
   return (
-    <section id="metodologia" className="py-20 md:py-32 bg-ro-light px-5 md:px-8 overflow-hidden">
+    <section id="metodologia" className="ro-bg-section-soft py-20 md:py-32 px-5 md:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div className="max-w-2xl">
-            <h6 className="text-ro-accent font-black uppercase tracking-[0.3em] text-[11px] mb-6">Expertise Sistémico</h6>
+            <h6 className="text-ro-accent font-black uppercase tracking-[0.3em] text-[11px] mb-6">Experiencia Sistémica</h6>
             <h2 className="text-5xl md:text-7xl font-display text-ro-dark leading-tight tracking-tighter">
               Soluciones para <br />
               <span className="italic font-normal">inversiones con propósito.</span>
@@ -53,7 +53,7 @@ export default function StrategyServices() {
               key={service.id}
               whileHover={{ backgroundColor: "rgba(255,255,255,0.4)" }}
               initial={{ backgroundColor: "rgba(255,255,255,0)" }}
-              className="bg-white/40 backdrop-blur-sm p-12 md:p-16 flex flex-col justify-between group transition-all duration-700 min-h-[550px]"
+              className="ro-bg-surface-soft backdrop-blur-sm p-12 md:p-16 flex flex-col justify-between group transition-all duration-700 min-h-[550px]"
             >
               <div className="space-y-10">
                 <div className="flex justify-between items-start">
@@ -95,7 +95,7 @@ export default function StrategyServices() {
               ))}
            </div>
            <p className="text-sm font-light text-ro-dark/60 italic max-w-xs text-center md:text-left leading-snug">
-             Más de <strong>30 familias internacionales</strong> han transformado su capital bajo nuestra arquitectura de servicios.
+             Familias e inversores de Texas y Latinoamérica han transformado su capital con nuestra arquitectura de servicios.
            </p>
         </div>
       </div>

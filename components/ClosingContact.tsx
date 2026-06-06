@@ -30,7 +30,7 @@ export default function ClosingContact() {
               </div>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-widest opacity-40">Agenda Directa</p>
-                <p className="text-xl font-display italic">Sesión de Inteligencia 15 min</p>
+                <p className="text-xl font-display italic">Consulta de estrategia · 15 min</p>
               </div>
             </button>
 
@@ -40,7 +40,7 @@ export default function ClosingContact() {
               </div>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-widest opacity-40">Atención Personal</p>
-                <p className="text-xl font-display italic">Concierge WhatsApp 24/7</p>
+                <p className="text-xl font-display italic">Concierge por WhatsApp</p>
               </div>
             </button>
           </div>
@@ -56,7 +56,7 @@ export default function ClosingContact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-ro-light p-10 md:p-16 rounded-[4rem] text-ro-dark shadow-2xl relative"
+          className="ro-bg-surface p-10 md:p-16 rounded-[4rem] text-ro-dark relative"
         >
           <div className="mb-12">
             <h4 className="text-3xl font-display italic mb-2 tracking-tight">Forme parte de nuestra red exclusiva</h4>
@@ -96,7 +96,7 @@ export default function ClosingContact() {
           </form>
 
           <div className="mt-12 flex justify-center border-t border-ro-dark/5 pt-8 text-[10px] font-bold uppercase tracking-[0.3em] opacity-40 text-center">
-             Protegiendo el capital de 30+ inversores globales
+             Protegiendo el capital de familias e inversores en Texas
           </div>
         </motion.div>
       </div>

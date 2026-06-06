@@ -11,10 +11,10 @@ export default function FAQ() {
 
   const faqs = [
     {
-      question: t('Why is Texas the strongest market for international investors in 2026?', '¿Por qué Texas es el mercado más sólido para inversores internacionales en 2026?'),
+      question: t('Why is Texas such a strong market for international investors?', '¿Por qué Texas es un mercado tan sólido para inversores internacionales?'),
       answer: t(
-        'Texas combines a competitive tax advantage (no state income tax), massive corporate inward migration, and constantly expanding infrastructure, ensuring sustained capital appreciation above the national average.',
-        'Texas combina una ventaja fiscal competitiva (sin impuesto estatal sobre la renta), un flujo migratorio corporativo masivo y una infraestructura en constante expansión, lo que garantiza una plusvalía sostenida por encima de la media nacional.'
+        'Texas combines a competitive tax advantage (no state income tax), strong corporate in-migration, and constantly expanding infrastructure — fundamentals that have long supported sustained housing demand.',
+        'Texas combina una ventaja fiscal competitiva (sin impuesto estatal sobre la renta), una fuerte migración corporativa y una infraestructura en constante expansión: fundamentos que han sostenido la demanda de vivienda durante años.'
       )
     },
     {
@@ -27,29 +27,29 @@ export default function FAQ() {
     {
       question: t('What post-acquisition management services do you offer?', '¿Qué servicios de gestión ofrecen post-adquisición?'),
       answer: t(
-        'Our investment concierge handles tenant selection for corporate leases, preventive maintenance, and continuous tax optimization, ensuring that your asset generates real passive income.',
-        'Nuestro concierge de inversión se encarga de la selección de inquilinos corporativos, el mantenimiento preventivo y la optimización fiscal continua, asegurando que su activo genere rendimiento pasivo real.'
+        'Our concierge handles tenant selection for corporate leases and preventive maintenance, and coordinates the tax and legal partners who keep your asset efficient — so it generates real, hands-off income.',
+        'Nuestro concierge se encarga de la selección de inquilinos corporativos y el mantenimiento preventivo, y coordina a los socios fiscales y legales que mantienen tu activo eficiente, para que genere ingresos reales sin que tengas que gestionarlo.'
       )
     },
     {
       question: t('What is the average investment ticket for the luxury segment?', '¿Cuál es el ticket promedio de inversión para el segmento de lujo?'),
       answer: t(
-        'In the "Purposeful Luxury" segment, investments typically start at $800k, although our main focus is on assets between $1.5M and $5M with high capital appreciation potential.',
-        'En el segmento de "Lujo con Propósito", las inversiones suelen comenzar a partir de los $800k, aunque nuestro enfoque principal está en activos de entre $1.5M y $5M con alto potencial de revalorización.'
+        'Most of our clients invest between $800k and $5M. Our sharpest focus is the $1.5M–$5M range, where selection and negotiation make the biggest difference to long-term value.',
+        'La mayoría de nuestros clientes invierte entre $800k y $5M. Nuestro foco principal está en el rango de $1.5M a $5M, donde la selección y la negociación marcan la mayor diferencia en el valor a largo plazo.'
       )
     }
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-white px-5 md:px-8">
+    <section className="ro-bg-section-soft py-20 md:py-32 px-5 md:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-12 md:mb-20 space-y-4">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">
-            {t('Resolving Inquiries', 'Resolviendo Inquietudes')}
+            {t('Frequent questions', 'Preguntas frecuentes')}
           </h6>
           <h2 className="text-4xl md:text-6xl font-display text-ro-dark leading-tight">
-            {t('Queries of', 'Consultas de')} <br />
-            <span className="italic font-normal">{t('High Intelligence.', 'Alta Inteligencia.')}</span>
+            {t('The answers', 'Las respuestas')} <br />
+            <span className="italic font-normal">{t('that matter.', 'que importan.')}</span>
           </h2>
         </div>
 

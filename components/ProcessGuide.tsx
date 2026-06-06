@@ -21,8 +21,8 @@ export default function ProcessGuide() {
     {
       title: t('Architecture & Negotiation', 'Arquitectura y Negociación'),
       description: t(
-        'We use our off-market network and demographic data to secure assets with competitive advantages before they reach the public.',
-        'Utilizamos nuestra red de contactos (off-market) y datos demográficos para asegurar activos con ventajas competitivas antes de que lleguen al público.'
+        'We use our private, off-market network and demographic data to secure assets with a competitive edge before they reach the public.',
+        'Usamos nuestra red privada y off-market, más datos demográficos, para asegurar activos con ventaja competitiva antes de que salgan al mercado público.'
       ),
       icon: <ShieldCheck className="w-6 h-6" />
     },
@@ -37,7 +37,7 @@ export default function ProcessGuide() {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-ro-light px-5 md:px-8">
+    <section className="ro-bg-section-soft py-20 md:py-32 px-5 md:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16 md:mb-24 space-y-4">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">
@@ -61,7 +61,7 @@ export default function ProcessGuide() {
               transition={{ delay: i * 0.2 }}
               className="relative z-10 flex flex-col items-center text-center group"
             >
-              <div className="w-24 h-24 bg-white rounded-[2.5rem] shadow-xl flex items-center justify-center text-ro-accent mb-8 md:mb-10 group-hover:bg-ro-accent group-hover:text-white transition-all duration-500 border border-ro-dark/5">
+              <div className="ro-bg-surface-soft w-24 h-24 rounded-[2.5rem] flex items-center justify-center text-ro-accent mb-8 md:mb-10 group-hover:bg-ro-accent group-hover:text-white transition-all duration-500 border border-ro-dark/5">
                 {s.icon}
               </div>
               
@@ -78,7 +78,7 @@ export default function ProcessGuide() {
 
         <div className="mt-16 md:mt-24 flex justify-center">
            <Link href="/#contacto" className="group flex items-center gap-4 text-ro-dark hover:text-ro-accent transition-colors font-bold uppercase text-[10px] tracking-[0.3em] text-center">
-             {t('Begin Intelligence Phase', 'Comenzar Fase de Inteligencia')}
+             {t('Start with a consultation', 'Empieza con una asesoría')}
              <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
            </Link>
         </div>

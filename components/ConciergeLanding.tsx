@@ -16,25 +16,12 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Navigation from './Navigation';
-import Panorama360 from './Panorama360';
 import Footer from './Footer';
+import ScrollyPlaceholder from './ScrollyPlaceholder';
+import AnimatedBackground from './AnimatedBackground';
 import { useLanguage } from './LanguageContext';
 
-const ScrollyPlaceholder = () => (
-  <div className="h-screen w-full bg-[#0b0a08] flex items-center justify-center">
-    <div className="w-6 h-6 border-2 border-[#c9a864] border-t-transparent rounded-full animate-spin" />
-  </div>
-);
-
 const HeroScrollytelling = dynamic(() => import('./HeroScrollytelling'), {
-  ssr: false,
-  loading: ScrollyPlaceholder,
-});
-const MidScrollytelling = dynamic(() => import('./MidScrollytelling'), {
-  ssr: false,
-  loading: ScrollyPlaceholder,
-});
-const HouseScrollytelling = dynamic(() => import('./HouseScrollytelling'), {
   ssr: false,
   loading: ScrollyPlaceholder,
 });
@@ -46,6 +33,13 @@ const GHL_FORM_EMBED_URL = process.env.NEXT_PUBLIC_GHL_FORM_EMBED_URL ?? '';
 const GHL_CALENDAR_EMBED_URL = process.env.NEXT_PUBLIC_GHL_CALENDAR_EMBED_URL ?? '';
 const CONTACT_EMAIL = process.env.NEXT_PUBLIC_RANGEL_EMAIL ?? '';
 const CONTACT_PHONE = process.env.NEXT_PUBLIC_RANGEL_PHONE ?? '';
+
+const CATALOG_BG_VIDEO = '/rog/scrolly_1_facade.mp4';
+const CATALOG_BG_POSTER = '/rog/scrolly_1_facade.webp';
+const PROFILES_BG_VIDEO = '/rog/scrolly_3_livingroom.mp4';
+const PROFILES_BG_POSTER = '/rog/scrolly_3_livingroom.webp';
+const CONTACTO_BG_VIDEO = process.env.NEXT_PUBLIC_CONTACTO_BG_VIDEO || '/rog/scrolly_4_kitchen.mp4';
+const CONTACTO_BG_POSTER = '/rog/scrolly_4_kitchen.webp';
 
 const BASE_MESSAGE =
   'Hola Rangel, vi tu web y quiero una orientación personalizada sobre real estate en Texas. Mi interés principal es:';
@@ -163,7 +157,7 @@ export default function ConciergeLanding() {
   }, []);
 
   return (
-    <main id="main-content" className="min-h-screen overflow-x-clip bg-[var(--ro-paper)] text-[var(--ro-ink)]">
+    <main id="main-content" className="ro-bg-page min-h-screen overflow-x-clip text-[var(--ro-ink)]">
       <Navigation />
       <HeroScrollytelling />
 
@@ -171,11 +165,12 @@ export default function ConciergeLanding() {
         <div className="trust-marquee flex gap-14 py-5 text-[12px] font-bold uppercase tracking-[0.2em]">
           {[...Array(2)].flatMap((_, loop) =>
             [
-              t('Private Texas advisory', 'Asesoría privada en Texas'),
-              t('Bilingual EN/ES practice', 'Práctica bilingüe EN/ES'),
-              t('Mexico + LATAM bridge', 'Puente México + LATAM'),
-              t('Off-market lens', 'Lectura off-market'),
-              t('Concierge from brief to keys', 'Concierge de brief a llaves'),
+              t('Bilingual advisory EN/ES', 'Asesoría bilingüe EN/ES'),
+              t('86 properties sold', '86 propiedades vendidas'),
+              t('55 leased', '55 rentadas'),
+              t('45 Google reviews · 5★', '45 reseñas Google · 5★'),
+              t('HAR Platinum agent', 'Agente HAR Platinum'),
+              t('Texas ↔ Latin America bridge', 'Puente Texas ↔ Latinoamérica'),
             ].map((item) => (
               <span key={`${loop}-${item}`} className="inline-flex shrink-0 items-center gap-4">
                 <CheckCircle2 size={16} className="text-[#c9a864]" />
@@ -215,22 +210,29 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <HouseScrollytelling />
+      <section className="relative z-10 overflow-hidden px-5 py-24 text-white md:px-8 md:py-32" style={{ '--ro-muted': 'rgba(255,255,255,0.74)' } as React.CSSProperties}>
+        <div className="absolute inset-0 -z-10">
+          <AnimatedBackground
+            src={CATALOG_BG_VIDEO}
+            poster={CATALOG_BG_POSTER}
+            className="h-full w-full"
+            videoClassName="object-[center_52%]"
+            overlayClassName="bg-[linear-gradient(90deg,rgba(11,10,8,0.88)_0%,rgba(11,10,8,0.62)_44%,rgba(11,10,8,0.38)_100%)]"
+          />
+        </div>
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0b0a08]/20 via-transparent to-[#0b0a08]/36" aria-hidden />
 
-      <Panorama360 />
-
-      <section className="relative z-10 bg-[var(--ro-paper)] px-5 py-20 text-[var(--ro-ink)] md:px-8 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <div data-reveal className="grid gap-8 lg:grid-cols-2 lg:items-center">
-            <div>
+          <div data-reveal className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
+            <div className="max-w-3xl">
               <p className="eyebrow">{t('Curated Catalog', 'Catálogo Curado')}</p>
               <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-                {t('Texas assets, selected with absolute filter.', 'Activos en Texas, seleccionados con filtro absoluto.')}
+                {t('Texas properties, chosen with a strict filter.', 'Propiedades en Texas, elegidas con un filtro estricto.')}
               </h2>
               <p className="mt-6 text-base leading-7 text-[var(--ro-muted)] md:text-lg">
                 {t(
-                  'We do not compile listings; we curate opportunities. Explore our active investments, projected yields, and neighborhood spotlights in Austin and Houston.',
-                  'No compilamos listados; curamos oportunidades. Explora nuestras inversiones activas, rendimientos proyectados y análisis de zonas en Austin y Houston.'
+                  "We don't compile listings — we curate opportunities. Explore active investments and key neighborhoods in Austin and Houston.",
+                  'No compilamos listados: curamos oportunidades. Explora inversiones activas y zonas clave en Austin y Houston.'
                 )}
               </p>
               <div className="mt-8">
@@ -240,20 +242,38 @@ export default function ConciergeLanding() {
                 </Link>
               </div>
             </div>
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-ro-dark/10 shadow-2xl">
-              <Image
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-                alt="Texas luxury properties"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 90vw, 45vw"
-              />
+            <div className="relative rounded-[1.6rem] border border-white/16 bg-[#0b0a08]/42 p-6 shadow-[0_34px_100px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-8">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d4b16f]">
+                {t('Selection lens', 'Filtro de seleccion')}
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+                {[
+                  t('Architecture', 'Arquitectura'),
+                  t('Scarcity', 'Escasez'),
+                  t('Exit logic', 'Logica de salida'),
+                ].map((item, index) => (
+                  <div key={item} className="border-t border-white/14 pt-4">
+                    <span className="font-display text-3xl text-white/92">0{index + 1}</span>
+                    <p className="mt-1 text-[11px] font-black uppercase tracking-[0.16em] text-white/62">{item}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="perfiles" className="relative z-10 bg-white px-5 py-16 md:px-8 md:py-20">
+      <section id="perfiles" className="relative z-10 overflow-hidden px-5 py-20 text-white md:px-8 md:py-28" style={{ '--ro-muted': 'rgba(255,255,255,0.70)' } as React.CSSProperties}>
+        <div className="absolute inset-0 -z-10">
+          <AnimatedBackground
+            src={PROFILES_BG_VIDEO}
+            poster={PROFILES_BG_POSTER}
+            className="h-full w-full"
+            videoClassName="object-[center_48%]"
+            overlayClassName="bg-[linear-gradient(180deg,rgba(11,10,8,0.82)_0%,rgba(11,10,8,0.68)_48%,rgba(11,10,8,0.88)_100%)]"
+          />
+        </div>
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_18%,rgba(212,177,111,0.20),transparent_34%)]" aria-hidden />
         <div className="mx-auto max-w-7xl">
           <div data-reveal className="mb-9 grid gap-5 lg:grid-cols-[0.78fr_1fr] lg:items-end">
             <div className="max-w-3xl">
@@ -274,16 +294,16 @@ export default function ConciergeLanding() {
             {profiles.map((profile) => {
               const Icon = profile.icon;
               return (
-                <article data-reveal key={profile.title} className="profile-card">
+                <article data-reveal key={profile.title} className="flex min-h-[286px] flex-col rounded-[1.35rem] border border-white/16 bg-white/10 p-6 text-white shadow-[0_24px_90px_rgba(0,0,0,0.26)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/14">
                   <div className="mb-7 flex items-center justify-between">
-                    <Icon size={24} className="text-[var(--ro-copper)]" />
-                    <span className="rounded-full bg-[var(--ro-sand)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--ro-muted)]">
+                    <Icon size={24} className="text-[#d4b16f]" />
+                    <span className="rounded-full bg-white/12 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/62">
                       {t('Profile', 'Perfil')}
                     </span>
                   </div>
-                  <h3>{profile.title}</h3>
-                  <p>{profile.text}</p>
-                  <a href={formHref} {...externalLinkProps(GHL_FORM_URL)} className="profile-link">
+                  <h3 className="font-display text-2xl leading-tight md:text-3xl">{profile.title}</h3>
+                  <p className="mt-4 text-sm leading-6 text-white/68">{profile.text}</p>
+                  <a href={formHref} {...externalLinkProps(GHL_FORM_URL)} className="mt-auto inline-flex items-center gap-2 pt-8 text-[11px] font-black uppercase tracking-[0.14em] text-[#d4b16f] transition-colors hover:text-white">
                     {t('Receive initial route', 'Recibir ruta inicial')}
                     <ArrowRight size={16} />
                   </a>
@@ -293,8 +313,6 @@ export default function ConciergeLanding() {
           </div>
         </div>
       </section>
-
-      <MidScrollytelling />
 
       <section className="relative z-10 bg-[var(--ro-ink)] px-5 py-24 text-[var(--ro-paper)] md:px-8 md:py-32">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center">
@@ -318,7 +336,7 @@ export default function ConciergeLanding() {
           </div>
           <div data-reveal className="relative min-h-[560px] overflow-hidden rounded-[2.2rem] border border-white/12">
             <Image
-              src="/rog/portrait-rangel.webp"
+              src="/rog/ceo-seated-dark.jpg"
               alt={t('Rangel Oviedo professional portrait', 'Rangel Oviedo en retrato profesional')}
               fill
               sizes="(max-width: 1024px) 90vw, 38vw"
@@ -336,12 +354,12 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <section className="relative z-10 bg-white px-5 py-20 text-[var(--ro-ink)] md:px-8 md:py-28">
+      <section className="ro-bg-section-soft relative z-10 px-5 py-20 text-[var(--ro-ink)] md:px-8 md:py-28">
         <div className="mx-auto max-w-7xl">
           <div data-reveal className="grid gap-8 lg:grid-cols-[0.85fr_1fr] lg:items-center">
             <div className="order-2 lg:order-1 relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-ro-dark/10 shadow-xl">
               <Image
-                src="/rog/hero-rangel.webp"
+                src="/rog/team-texans.jpg"
                 alt="Rangel Oviedo Group Team"
                 fill
                 className="object-cover"
@@ -351,12 +369,12 @@ export default function ConciergeLanding() {
             <div className="order-1 lg:order-2">
               <p className="eyebrow">{t('The Advisory Team', 'El Equipo Consultor')}</p>
               <h2 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-                {t('A bilingual bridge from brief to keys.', 'Un puente bilingüe de brief a llaves.')}
+                {t('The team behind every closing.', 'El equipo detrás de cada cierre.')}
               </h2>
               <p className="mt-6 text-base leading-7 text-[var(--ro-muted)] md:text-lg">
                 {t(
-                  'More than agents, we are partners in wealth protection. Our team coordinates legal context, tax efficiency, property sourcing, and local school integration so your transition is completely seamless.',
-                  'Más que agentes, somos socios en la protección de tu patrimonio. Nuestro equipo coordina el contexto legal, eficiencia fiscal, búsqueda de propiedades e integración escolar local para que tu transición sea impecable.'
+                  'More than agents, we protect your wealth: legal context, tax efficiency, property sourcing, and school integration — start to finish.',
+                  'Más que agentes, protegemos tu patrimonio: contexto legal, eficiencia fiscal, búsqueda de propiedades e integración escolar, de principio a fin.'
                 )}
               </p>
               <div className="mt-8">
@@ -371,36 +389,48 @@ export default function ConciergeLanding() {
       </section>
 
       <section id="contacto" className="relative z-10 overflow-hidden px-5 py-24 md:px-8 md:py-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(169,105,55,0.18),transparent_32%)]" />
+        {CONTACTO_BG_VIDEO ? (
+          <div className="absolute inset-0 -z-10">
+            <AnimatedBackground
+              src={CONTACTO_BG_VIDEO}
+              poster={CONTACTO_BG_POSTER}
+              className="h-full w-full"
+              videoClassName="object-[center_50%]"
+              overlayClassName="bg-[linear-gradient(180deg,rgba(246,240,232,0.88)_0%,rgba(246,240,232,0.76)_46%,rgba(234,223,206,0.90)_100%)]"
+            />
+          </div>
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(169,105,55,0.18),transparent_32%)]" />
+        )}
         <div data-reveal className="relative mx-auto max-w-7xl">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="eyebrow justify-center">{t('Insider Report Q3 2026', 'Insider Report Q3 2026')}</p>
+            <p className="eyebrow justify-center">{t('Private advisory', 'Asesoría privada')}</p>
             <h2 className="mt-5 font-display text-5xl leading-tight md:text-8xl">
-              {t('Start with context. Book when the decision is active.', 'Empieza con contexto. Agenda cuando la decisión esté activa.')}
+              {t("Let's talk about your next move in Texas.", 'Hablemos de tu próximo paso en Texas.')}
             </h2>
             <p className="mx-auto mt-8 max-w-2xl text-xl leading-8 text-[var(--ro-muted)]">
               {t(
-                'The report is the soft entry point. The private calendar is for focused strategy conversations.',
-                'El reporte es el primer paso suave. El calendario privado queda para conversaciones de estrategia.',
+                "Tell us where you are and we'll map the next step — no pressure, in your language.",
+                'Cuéntanos en qué punto estás y trazamos el siguiente paso — sin presión y en tu idioma.',
               )}
             </p>
           </div>
 
           <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            <article className="rounded-[2rem] border border-[var(--ro-ink)]/10 bg-white/72 p-6 shadow-[0_28px_90px_rgba(39,31,26,0.09)] backdrop-blur md:p-8">
+            <article className="ro-bg-surface rounded-[2rem] border border-[var(--ro-ink)]/10 p-6 backdrop-blur md:p-8">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
-                  <p className="eyebrow">{t('Quarterly insider report', 'Reporte trimestral insider')}</p>
+                  <p className="eyebrow">{t('Private consultation', 'Asesoría privada')}</p>
                   <h3 className="mt-4 font-display text-4xl leading-tight">
-                    {t('Receive the private report.', 'Recibe el reporte privado.')}
+                    {t('Request your private consultation.', 'Solicita tu asesoría privada.')}
                   </h3>
                 </div>
                 <ClipboardCheck className="mt-1 shrink-0 text-[var(--ro-copper)]" size={30} />
               </div>
               <p className="mb-7 text-base leading-7 text-[var(--ro-muted)]">
                 {t(
-                  'Ideal if you are exploring Texas and want context before scheduling.',
-                  'Ideal si estás explorando Texas y quieres contexto antes de agendar.',
+                  'Ideal if you are exploring Texas and want clarity before committing.',
+                  'Ideal si estás explorando Texas y quieres claridad antes de comprometerte.',
                 )}
               </p>
               {GHL_FORM_EMBED_URL ? (
@@ -412,7 +442,7 @@ export default function ConciergeLanding() {
                 />
               ) : (
                 <a className="btn btn-copper w-full sm:w-auto" href={formHref} {...externalLinkProps(GHL_FORM_URL)}>
-                  {t('Receive Insider Report', 'Recibir Insider Report')}
+                  {t('Request consultation', 'Agenda tu asesoría')}
                   <ArrowRight size={18} />
                 </a>
               )}

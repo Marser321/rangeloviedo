@@ -11,7 +11,7 @@ export default function CulturalIdentity() {
   const { t } = useLanguage();
 
   return (
-    <section id="insights" className="py-20 md:py-32 px-5 md:px-8 bg-white overflow-hidden rounded-[2rem] md:rounded-[4rem] mx-2 md:mx-4 mb-20 md:mb-32 shadow-xl">
+    <section id="insights" className="ro-bg-section py-20 md:py-32 px-5 md:px-8 overflow-hidden rounded-[2rem] md:rounded-[4rem] mx-2 md:mx-4 mb-20 md:mb-32 shadow-xl">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           
@@ -23,12 +23,11 @@ export default function CulturalIdentity() {
               className="relative z-10 rounded-[2rem] md:rounded-[4rem] overflow-hidden shadow-2xl aspect-[4/5] bg-stone-100"
             >
               <Image 
-                src="https://picsum.photos/seed/cultural/1000/1250" 
+                src="/rog/rangel-desire-studio.jpg" 
                 alt="Rangel y Desiré Oviedo - Liderazgo con Propósito"
                 className="w-full object-cover"
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
-                referrerPolicy="no-referrer"
               />
             </motion.div>
             
@@ -82,7 +81,7 @@ export default function CulturalIdentity() {
                 </div>
               </div>
 
-              <div className="bg-ro-light p-6 md:p-8 rounded-3xl border-l-4 border-ro-accent">
+              <div className="ro-bg-surface-soft p-6 md:p-8 rounded-3xl border-l-4 border-ro-accent">
                  <p className="text-base md:text-lg italic font-display">
                    {t('"We are young, dynamic, and deeply grateful for Texas. Here, we unite our cultural roots with the strength of the most powerful real estate market in the world."', '"Somos jóvenes, dinámicos y profundamente agradecidos por Texas. Aquí, unimos nuestras raíces culturales con la solidez del mercado inmobiliario más potente del mundo."')}
                  </p>

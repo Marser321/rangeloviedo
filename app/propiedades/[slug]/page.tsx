@@ -41,9 +41,9 @@ export default async function PropertyPage({
   }
 
   return (
-    <main id="main-content" className="min-h-screen bg-[var(--ro-paper)] text-[var(--ro-ink)]">
-      <MarketTicker />
-      <Navigation />
+    <main id="main-content" className="ro-bg-page min-h-screen text-[var(--ro-ink)]">
+      <MarketTicker fixed />
+      <Navigation withTicker />
       <PropertyDetail property={property} />
       <MlsDisclaimer />
       <Footer />

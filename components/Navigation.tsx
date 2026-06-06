@@ -8,7 +8,7 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { Globe, Menu, X } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
-export default function Navigation() {
+export default function Navigation({ withTicker = false }: { withTicker?: boolean }) {
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const navHeight = useTransform(scrollY, [0, 100], ['112px', '78px']);
@@ -46,8 +46,8 @@ export default function Navigation() {
 
   return (
     <motion.nav
-      style={{ height: navHeight }}
-      className="fixed top-0 z-[100] flex w-full items-center px-4 transition-all duration-500 md:px-8"
+      style={{ height: navHeight, top: withTicker ? 40 : 0 }}
+      className="fixed z-[100] flex w-full items-center px-4 transition-all duration-500 md:px-8"
     >
       <motion.div
         style={{ backgroundColor: navBg, borderColor: navBorder }}

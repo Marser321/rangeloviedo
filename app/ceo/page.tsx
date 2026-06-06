@@ -3,12 +3,20 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
+import dynamic from 'next/dynamic';
 import { ArrowRight, CalendarDays, CheckCircle2, MessageCircle } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import CulturalIdentity from '@/components/CulturalIdentity';
 import MarketThesis from '@/components/MarketThesis';
 import Footer from '@/components/Footer';
+import LazyMount from '@/components/LazyMount';
+import ScrollyPlaceholder from '@/components/ScrollyPlaceholder';
 import { useLanguage } from '@/components/LanguageContext';
+
+const MidScrollytelling = dynamic(() => import('@/components/MidScrollytelling'), {
+  ssr: false,
+  loading: ScrollyPlaceholder,
+});
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_RANGEL_WHATSAPP ?? '';
 const GHL_CALENDAR_URL = process.env.NEXT_PUBLIC_GHL_CALENDAR_URL ?? '';
@@ -28,7 +36,7 @@ export default function CEOPage() {
   const whatsappHref = WHATSAPP_NUMBER ? whatsappLink() : '';
 
   return (
-    <main id="main-content" className="min-h-screen bg-[var(--ro-paper)] text-[var(--ro-ink)]">
+    <main id="main-content" className="ro-bg-page min-h-screen text-[var(--ro-ink)]">
       <Navigation />
 
       {/* Hero Section */}
@@ -54,14 +62,14 @@ export default function CEOPage() {
               <div className="space-y-6 text-base md:text-lg text-[var(--ro-muted)] leading-relaxed max-w-2xl font-light">
                 <p>
                   {t(
-                    'As the founder of Rangel Oviedo Group, Rangel represents a new breed of real estate advisor. Educated with both financial modeling precision and a deep respect for LATAM family structures, he bridges the gap between high-ticket Mexican/Latin capital and the complex Texas housing market.',
-                    'Como fundador de Rangel Oviedo Group, Rangel representa una nueva generación de asesores inmobiliarios. Educado con la precisión del modelado financiero y un profundo respeto por las estructuras familiares latinoamericanas, actúa como puente entre el capital de alto nivel y el complejo mercado inmobiliario de Texas.'
+                    'As founder of Rangel Oviedo Group, Rangel is a new kind of real estate advisor — one who reads both the numbers and the family behind every decision, bridging Latin American capital and families with the complexity of the Texas market.',
+                    'Como fundador de Rangel Oviedo Group, Rangel es una nueva clase de asesor inmobiliario: uno que lee tanto los números como a la familia detrás de cada decisión, conectando el capital y las familias de Latinoamérica con la complejidad del mercado de Texas.'
                   )}
                 </p>
                 <p>
                   {t(
-                    'Personally accountable for every strategic brief, Rangel operates under a strict mandate of absolute privacy, sourcing off-market luxury listings and structuring tax-efficient acquisitions that traditional brokerages fail to identify.',
-                    'Responsable personal de cada estrategia, Rangel opera bajo un mandato estricto de privacidad absoluta, localizando oportunidades fuera del mercado de lujo y estructurando adquisiciones fiscalmente eficientes que las corredurías tradicionales no logran identificar.'
+                    'Personally accountable on every deal, Rangel works with discretion — surfacing private and off-market opportunities and coordinating the legal, tax, and mortgage experts most brokerages leave you to find on your own.',
+                    'Responsable personal en cada operación, Rangel trabaja con discreción: saca a la luz oportunidades privadas y off-market, y coordina a los expertos legales, fiscales e hipotecarios que la mayoría de las corredurías te deja buscar por tu cuenta.'
                   )}
                 </p>
               </div>
@@ -84,7 +92,7 @@ export default function CEOPage() {
             <div className="lg:col-span-5 relative">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem] border border-ro-dark/10 shadow-[0_35px_90px_rgba(0,0,0,0.18)]">
                 <Image
-                  src="/rog/ceo-rangel-my9a3487.jpg"
+                  src="/rog/portrait-rangel.webp"
                   alt={t('Rangel Oviedo, Managing Director & Founder', 'Rangel Oviedo, Director General y Fundador')}
                   fill
                   priority
@@ -105,6 +113,11 @@ export default function CEOPage() {
       {/* Market Thesis Section */}
       <MarketThesis />
 
+      {/* Cinematic vision interlude (seq02) — lazy, monta al acercarse */}
+      <LazyMount placeholder={<ScrollyPlaceholder />}>
+        <MidScrollytelling />
+      </LazyMount>
+
       {/* Core Values Section */}
       <section className="py-20 md:py-28 px-5 md:px-8 bg-[var(--ro-dark)] text-white relative z-10 overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_20%_20%,#c9a864_0%,transparent_50%)]" />
@@ -121,8 +134,8 @@ export default function CEOPage() {
               {
                 title: t('Absolute Accountability', 'Responsabilidad Absoluta'),
                 desc: t(
-                  'We do not delegate client relationships. Rangel Oviedo personally designs the acquisitions layout and guides negotiations, providing a single point of accountability.',
-                  'No delegamos las relaciones con los clientes. Rangel Oviedo diseña personalmente el plan de adquisición y guía las negociaciones, brindando un único punto de contacto responsable.'
+                  "We don't delegate client relationships. Rangel personally designs the acquisition strategy and leads negotiations — one accountable point of contact, start to finish.",
+                  'No delegamos la relación con el cliente. Rangel diseña personalmente la estrategia de adquisición y lidera las negociaciones: un único punto de contacto responsable, de principio a fin.'
                 ),
               },
               {
@@ -170,7 +183,7 @@ export default function CEOPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-[2.5rem] border border-ro-dark/10 p-6 md:p-10 shadow-[0_28px_90px_rgba(39,31,26,0.08)]">
+          <div className="ro-bg-surface rounded-[2.5rem] border border-ro-dark/10 p-6 md:p-10">
             <div className="flex items-start justify-between gap-4 mb-8">
               <div>
                 <p className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-ro-accent">{t('Private Calendar Link', 'Calendario Privado')}</p>

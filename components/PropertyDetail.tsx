@@ -105,7 +105,7 @@ export default function PropertyDetail({ property }: { property: Property }) {
               {specs.map((spec) => (
                 <div
                   key={spec.label}
-                  className="rounded-2xl border border-[var(--ro-ink)]/10 bg-[var(--ro-sand)]/40 px-3 py-4 text-center"
+                  className="ro-bg-surface-soft rounded-2xl border border-[var(--ro-ink)]/10 px-3 py-4 text-center"
                 >
                   <spec.icon size={18} className="mx-auto text-ro-accent" />
                   <div className="mt-2 font-display text-2xl">{spec.value}</div>

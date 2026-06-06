@@ -4,20 +4,27 @@ import React from 'react';
 import { TrendingUp, ArrowUpRight } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
-export default function MarketTicker() {
+export default function MarketTicker({ fixed = false }: { fixed?: boolean }) {
   const { t } = useLanguage();
 
   const stats = [
-    t('Houston Median Price: +5.2% YoY', 'Precio Medio Houston: +5.2% Anual'),
-    t('Austin Rental Demand: 94% Capacity', 'Demanda de Alquiler Austin: 94% de Capacidad'),
-    t('Texas GDP Growth: 4th Globally (Equivalent)', 'Crecimiento PIB Texas: 4° Global (Equivalente)'),
-    t('No State Income Tax Benefit', 'Beneficio de Cero Impuesto Estatal sobre la Renta'),
-    t('Luxury Inventory Turn: 42 Days', 'Rotación de Inventario de Lujo: 42 Días'),
-    t('Rangel Oviedo Exclusive ROI: 12% Avg', 'ROI Exclusivo Rangel Oviedo: 12% Promedio')
+    t('No state income tax in Texas', 'Texas · sin impuesto estatal sobre la renta'),
+    t('Full Houston MLS access', 'Acceso completo al MLS de Houston'),
+    t('86 properties sold', '86 propiedades vendidas'),
+    t('55 properties leased', '55 propiedades rentadas'),
+    t('45 Google reviews · 5.0★', '45 reseñas Google · 5.0★'),
+    t('HAR Platinum agent', 'Agente HAR Platinum'),
+    t('Bilingual advisory EN/ES', 'Asesoría bilingüe EN/ES'),
   ];
 
   return (
-    <div className="bg-ro-accent py-4 overflow-hidden relative z-50">
+    <div
+      className={`overflow-hidden bg-ro-accent ${
+        fixed
+          ? 'fixed left-0 top-0 z-[120] flex h-10 w-full items-center'
+          : 'relative z-50 py-4'
+      }`}
+    >
       <div 
         className="trust-marquee flex whitespace-nowrap gap-20 items-center"
       >

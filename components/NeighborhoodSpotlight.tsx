@@ -13,8 +13,8 @@ export default function NeighborhoodSpotlight() {
     {
       name: 'The Woodlands',
       description: t(
-        'The ultimate executive retreat, with the highest corporate growth in Texas.',
-        'El refugio ejecutivo por excelencia, con el mayor crecimiento corporativo de Texas.'
+        'The ultimate executive retreat, in one of the fastest-growing corporate corridors in Texas.',
+        'El refugio ejecutivo por excelencia, en uno de los corredores corporativos de mayor crecimiento de Texas.'
       ),
       image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80'
     },
@@ -37,7 +37,7 @@ export default function NeighborhoodSpotlight() {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-white px-5 md:px-8">
+    <section className="ro-bg-section py-24 md:py-32 px-5 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 space-y-4 md:space-y-6">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">

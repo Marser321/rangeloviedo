@@ -24,21 +24,21 @@ export default function MarketThesis() {
           <div className="space-y-10 border-l border-white/10 lg:pl-10 pl-0">
              <p className="text-lg md:text-xl text-stone-400 font-light leading-relaxed">
                {t(
-                 '"It is not just about finding a house; it is about predicting the demographic flow of Texas and understanding how its tax advantages maximize your transgenerational wealth."',
-                 '"No se trata solo de encontrar una casa; se trata de predecir el flujo demográfico de Texas y entender cómo su ventaja fiscal de 2026 maximiza tu riqueza transgeneracional."'
+                 '"It is not just about finding a house; it is about reading the demographic flow of Texas and understanding how its fundamentals — including no state income tax — support your family\'s long-term wealth."',
+                 '"No se trata solo de encontrar una casa; se trata de leer el flujo demográfico de Texas y entender cómo sus fundamentos —incluido el cero impuesto estatal sobre la renta— sostienen el patrimonio de tu familia a largo plazo."'
                )}
              </p>
              <div className="grid grid-cols-2 gap-8">
                 <div>
-                   <h4 className="text-3xl md:text-4xl font-display mb-2">$50M+</h4>
+                   <h4 className="text-3xl md:text-4xl font-display mb-2">86</h4>
                    <p className="text-[10px] uppercase opacity-40 font-bold tracking-widest">
-                     {t('In Curated Transactions', 'En Transacciones Curadas')}
+                     {t('Properties sold', 'Propiedades vendidas')}
                    </p>
                 </div>
                 <div>
-                   <h4 className="text-4xl font-display mb-2">100%</h4>
+                   <h4 className="text-4xl font-display mb-2">45★</h4>
                    <p className="text-[10px] uppercase opacity-40 font-bold tracking-widest">
-                     {t('Verified Satisfaction', 'Satisfacción Verificada')}
+                     {t('Google reviews · 5.0', 'Reseñas Google · 5.0')}
                    </p>
                 </div>
              </div>

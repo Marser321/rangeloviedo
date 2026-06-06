@@ -36,6 +36,7 @@ The repo is pre-configured for Vercel (`vercel.json`, `next.config.ts` with `out
    | `NEXT_PUBLIC_RANGEL_WHATSAPP` | optional | International phone, no `+` or spaces — enables the WhatsApp secondary CTA |
    | `NEXT_PUBLIC_RANGEL_EMAIL` | optional | Email shown in the footer as direct fallback |
    | `NEXT_PUBLIC_RANGEL_PHONE` | optional | Phone shown in the footer as direct fallback |
+   | `NEXT_PUBLIC_CONTACTO_BG_VIDEO` | optional | Public `.mp4` path for the contact section background video; leave empty for the static fallback |
    | `GEMINI_API_KEY` | only if Gemini features are used | Server-side key for Google Generative AI |
 
 3. All `NEXT_PUBLIC_*` vars must be set **at build time** in Vercel — re-deploy after adding them.

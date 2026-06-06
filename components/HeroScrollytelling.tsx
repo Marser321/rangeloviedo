@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useScroll, useMotionValueEvent } from 'motion/react';
+import Link from 'next/link';
 import { useLanguage } from './LanguageContext';
 import { Sparkles } from 'lucide-react';
 
@@ -453,21 +454,21 @@ export default function HeroScrollytelling() {
           <div className="absolute bottom-0 inset-x-0 z-10 px-5 pb-8">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a864]/20 bg-[#0b0a08]/60 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.15em] text-[#c9a864] mb-4">
               <Sparkles size={10} />
-              {t('Private Texas market context', 'Lectura privada de mercado en Texas')}
+              {t('Bilingual real estate advisory · Texas', 'Asesoría inmobiliaria bilingüe · Texas')}
             </span>
             <h1 className="font-display text-[28px] font-bold leading-[1.08] text-[#f5f1e8] tracking-tight [text-shadow:_0_2px_14px_rgba(0,0,0,0.55),_0_1px_3px_rgba(0,0,0,0.45)]">
-              {t('Texas is easier to decide with private market context.', 'Texas se decide mejor con lectura privada.')}
+              {t('Invest, buy, or move to Texas — with an advisor who speaks your language.', 'Invierte, compra o múdate a Texas — con un asesor que habla tu idioma.')}
             </h1>
             <p className="mt-3 text-[13px] text-[#f0e9da]/95 leading-relaxed max-w-[340px] [text-shadow:_0_1px_3px_rgba(0,0,0,0.7),_0_2px_18px_rgba(0,0,0,0.55)]">
-              {t('Receive context on market, off-market, and timing before turning a property into a capital decision.', 'Recibe contexto sobre mercado, off-market y timing antes de convertir una propiedad en una decisión de capital.')}
+              {t('From your first question to keys in hand, Rangel guides you through Texas real estate in both languages — protecting your money, your time, and your peace of mind.', 'Desde tu primera pregunta hasta las llaves, Rangel te acompaña en el mercado de Texas en ambos idiomas — cuidando tu dinero, tu tiempo y tu tranquilidad.')}
             </p>
             <div className="mt-5 flex gap-3">
               <a href="#contacto" className="flex-1 bg-[#c9a864] text-[#0b0a08] py-3 rounded-full text-[10px] font-bold uppercase tracking-wider text-center">
-                {t('Get Q3 Insider Report', 'Recibir Insider Report Q3')}
+                {t('Book your private consultation', 'Agenda tu asesoría privada')}
               </a>
-              <a href="#contacto" className="flex-1 border border-[#c9a864]/30 bg-[#0b0a08]/40 text-[#f5f1e8] py-3 rounded-full text-[10px] font-bold uppercase tracking-wider text-center">
-                {t('Private consultation', 'Consulta privada')}
-              </a>
+              <Link href="/propiedades" className="flex-1 border border-[#c9a864]/30 bg-[#0b0a08]/40 text-[#f5f1e8] py-3 rounded-full text-[10px] font-bold uppercase tracking-wider text-center">
+                {t('Explore properties', 'Explorar propiedades')}
+              </Link>
             </div>
           </div>
         </div>
@@ -480,29 +481,29 @@ export default function HeroScrollytelling() {
                 num: '01',
                 titleEn: 'Market access',
                 titleEs: 'Acceso de mercado',
-                textEn: 'Off-market listings across Texas, Mexico and LATAM.',
-                textEs: 'Propiedades off-market en Texas, México y LATAM.',
+                textEn: 'Full access to the Houston MLS, plus private and off-market opportunities.',
+                textEs: 'Acceso completo al MLS de Houston, más oportunidades privadas y off-market.',
               },
               {
                 num: '02',
                 titleEn: 'Negotiation craft',
                 titleEs: 'Negociación de oficio',
-                textEn: '4.2% above asking on sales, 6.1% below on buys.',
-                textEs: '4.2% sobre asking en ventas, 6.1% bajo en compras.',
+                textEn: 'Negotiation built on preparation, not pressure — to protect your margin.',
+                textEs: 'Negociación basada en preparación, no en presión — para proteger tu margen.',
               },
               {
                 num: '03',
                 titleEn: 'Global network',
                 titleEs: 'Red global',
-                textEn: 'Native bilingual EN/ES bridging Texas with HNW buyers.',
-                textEs: 'Bilingüe nativo EN/ES conectando Texas con compradores HNW.',
+                textEn: 'Native English and Spanish — a real bridge between Texas and Latin America.',
+                textEs: 'Inglés y español nativos — un puente real entre Texas y Latinoamérica.',
               },
               {
                 num: '04',
                 titleEn: 'Full concierge',
                 titleEs: 'Concierge total',
-                textEn: 'Staging, legal, mortgage and relocation — end to end.',
-                textEs: 'Staging, legal, hipoteca y mudanza — de punta a punta.',
+                textEn: 'Staging, legal, mortgage, and relocation — handled end to end.',
+                textEs: 'Staging, legal, hipoteca y mudanza — gestionados de punta a punta.',
               },
             ].map((item) => (
               <div key={item.num} className="p-4 rounded-xl border border-[#c9a864]/10 bg-[#13110e]">
@@ -558,21 +559,21 @@ export default function HeroScrollytelling() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-[#c9a864]/25 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c9a864] mb-6 backdrop-blur-md">
               <Sparkles size={13} />
-              {t('Private Texas market context', 'Lectura privada de mercado en Texas')}
+              {t('Bilingual real estate advisory · Texas', 'Asesoría inmobiliaria bilingüe · Texas')}
             </span>
             <h1 className="font-display text-4xl md:text-7xl font-extrabold leading-[1.02] text-[#f5f1e8] tracking-tight [text-shadow:_0_4px_24px_rgba(0,0,0,0.55),_0_2px_6px_rgba(0,0,0,0.45)]">
-              {t('Texas is easier to decide with private market context.', 'Texas se decide mejor con lectura privada.')}
+              {t('Invest, buy, or move to Texas — with an advisor who speaks your language.', 'Invierte, compra o múdate a Texas — con un asesor que habla tu idioma.')}
             </h1>
             <p className="mt-6 text-sm md:text-xl text-[#f0e9da]/95 leading-relaxed max-w-[620px] [text-shadow:_0_1px_3px_rgba(0,0,0,0.7),_0_3px_22px_rgba(0,0,0,0.55)]">
-              {t('Receive context on market, off-market, and timing before turning a property into a capital decision.', 'Recibe contexto sobre mercado, off-market y timing antes de convertir una propiedad en una decisión de capital.')}
+              {t('From your first question to keys in hand, Rangel guides you through Texas real estate in both languages — protecting your money, your time, and your peace of mind.', 'Desde tu primera pregunta hasta las llaves, Rangel te acompaña en el mercado de Texas en ambos idiomas — cuidando tu dinero, tu tiempo y tu tranquilidad.')}
             </p>
             <div className="mt-8 flex flex-col md:flex-row justify-center gap-4 w-full md:w-auto px-4 md:px-0">
               <a href="#contacto" className="bg-[#c9a864] text-[#0b0a08] px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[#ebd095] hover:-translate-y-0.5 transition-all text-center">
-                {t('Get Q3 Insider Report', 'Recibir Insider Report Q3')}
+                {t('Book your private consultation', 'Agenda tu asesoría privada')}
               </a>
-              <a href="#contacto" className="border border-[#c9a864]/30 bg-[#0b0a08]/20 backdrop-blur-md text-[#f5f1e8] px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#c9a864] hover:-translate-y-0.5 transition-all text-center">
-                {t('Private consultation', 'Consulta privada')}
-              </a>
+              <Link href="/propiedades" className="border border-[#c9a864]/30 bg-[#0b0a08]/20 backdrop-blur-md text-[#f5f1e8] px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#c9a864] hover:-translate-y-0.5 transition-all text-center">
+                {t('Explore properties', 'Explorar propiedades')}
+              </Link>
             </div>
           </div>
 
@@ -589,7 +590,7 @@ export default function HeroScrollytelling() {
               {t('Unmatched market access', 'Acceso de mercado sin par')}
             </h2>
             <p className="mt-3 text-sm text-[#b8b0a0] leading-relaxed">
-              {t('Off-market listings powered by a decade of trusted relationships across Texas, Mexico and Latin America.', 'Propiedades off-market gracias a una década de relaciones de confianza en Texas, México y Latinoamérica.')}
+              {t('Full access to the Houston MLS — plus the private and off-market opportunities that never reach the public portals.', 'Acceso completo al MLS de Houston — y a las oportunidades privadas y off-market que nunca llegan a los portales públicos.')}
             </p>
           </article>
 
@@ -606,7 +607,7 @@ export default function HeroScrollytelling() {
               {t('Negotiation as a craft', 'Negociación de oficio')}
             </h2>
             <p className="mt-3 text-sm text-[#b8b0a0] leading-relaxed">
-              {t('4.2% average closing above asking on listings sold, 6.1% below on buys closed. Numbers that come from preparation, not pressure.', '4.2% sobre asking en propiedades vendidas. 6.1% bajo en compras cerradas. Números que vienen de la preparación, no de la presión.')}
+              {t('Seller reading, inspection leverage, and offer strategy that protect your margin. Results that come from preparation, not pressure.', 'Lectura del vendedor, palanca en la inspección y estrategia de oferta que protegen tu margen. Resultados que vienen de la preparación, no de la presión.')}
             </p>
           </article>
 
@@ -623,7 +624,7 @@ export default function HeroScrollytelling() {
               {t('Global network, local intuition', 'Red global, intuición local')}
             </h2>
             <p className="mt-3 text-sm text-[#b8b0a0] leading-relaxed">
-              {t('Native bilingual EN/ES service bridging Texas with HNW buyers from Mexico, Argentina, Uruguay and the broader region.', 'Servicio bilingüe nativo EN/ES que conecta Texas con compradores HNW de México, Argentina, Uruguay y la región.')}
+              {t('Native English and Spanish service that connects Texas with buyers and investors across Mexico and Latin America.', 'Servicio bilingüe nativo en inglés y español que conecta Texas con compradores e inversores de México y Latinoamérica.')}
             </p>
           </article>
 

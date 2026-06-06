@@ -46,7 +46,7 @@ const scrollySteps = [
     labelEn: 'The Threshold',
     labelEs: 'El Umbral',
     titleEn: 'Private Access & Off-Market',
-    titleEs: 'Acceso Privado & Off-Market',
+    titleEs: 'Acceso Privado y Off-Market',
     textEn: 'Unlocking private doors. Through deep-rooted partnerships across Austin and Houston, we gain access to exclusive off-market inventory long before it ever touches public listings.',
     textEs: 'Abrimos las puertas correctas. Gracias a relaciones consolidadas en Austin y Houston, accedemos a inventario exclusivo off-market mucho antes de que sea listado públicamente.',
     image: '/rog/scrolly_2_entrance.webp',
@@ -83,8 +83,8 @@ const scrollySteps = [
     labelEs: 'La Terraza',
     titleEn: 'Outdoor Entertaining Flow',
     titleEs: 'La Vida en el Exterior',
-    textEn: 'Real estate value extends beyond the walls. We evaluate native landscaping, entertainment capacity under the Texas sky, and the long-term investment liquidity.',
-    textEs: 'El valor patrimonial se extiende afuera. Evaluamos el paisajismo nativo, la capacidad de entretenimiento bajo el cielo de Texas y la liquidez de salida de la inversión.',
+    textEn: 'Real estate value extends beyond the walls. We evaluate native landscaping, entertainment capacity under the Texas sky, and how easily the home will resell when you decide to exit.',
+    textEs: 'El valor patrimonial se extiende afuera. Evaluamos el paisajismo nativo, la capacidad de entretenimiento bajo el cielo de Texas y la facilidad de reventa cuando decidas salir.',
     image: '/rog/scrolly_5_terrace.webp',
     intent: 'terrazas y exteriores exclusivos',
     icon: Compass,
@@ -262,23 +262,23 @@ export default function HouseScrollytelling() {
           {/* Background image crossfade */}
           <div className="absolute inset-0 z-0">
             {showMobile && scrollySteps.map((step, idx) => (
-              <div
-                key={step.step}
-                className="absolute inset-0 w-full h-full transition-opacity duration-[1500ms] ease-in-out"
-                style={{
-                  opacity: mobileFrameIndex === idx ? 0.5 : 0,
-                  pointerEvents: 'none',
-                }}
-              >
-                <Image
-                  src={step.image}
-                  alt={language === 'es' ? step.titleEs : step.titleEn}
-                  fill
-                  priority={idx === 0}
-                  className="object-cover"
-                  sizes="100vw"
-                />
-              </div>
+                <div
+                  key={step.step}
+                  className="absolute inset-0 w-full h-full transition-opacity duration-[1500ms] ease-in-out"
+                  style={{
+                    opacity: mobileFrameIndex === idx ? 0.5 : 0,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <Image
+                    src={step.image}
+                    alt={language === 'es' ? step.titleEs : step.titleEn}
+                    fill
+                    priority={idx === 0}
+                    className="object-cover"
+                    sizes="100vw"
+                  />
+                </div>
             ))}
           </div>
 
@@ -325,7 +325,7 @@ export default function HouseScrollytelling() {
             {scrollySteps.map((step, idx) => {
               const Icon = step.icon;
               return (
-                <div key={step.step} className="p-5 rounded-xl border border-[#c9a864]/10 bg-[#13110e] flex flex-col">
+                <div key={step.step} className="p-6 rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md flex flex-col shadow-lg">
                   <div className="inline-flex items-center gap-2 bg-[#a26035]/20 border border-[#a26035]/40 text-[#c9a864] rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] w-fit mb-3">
                     <Icon size={12} />
                     <span>
@@ -394,23 +394,23 @@ export default function HouseScrollytelling() {
 
               {/* Images */}
               {showDesktop && scrollySteps.map((step, idx) => (
-                <motion.div
-                  key={step.step}
-                  style={{
-                    opacity: opacities[idx],
-                    scale: scales[idx],
-                  }}
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                >
-                  <Image
-                    src={step.image}
-                    alt={language === 'es' ? step.titleEs : step.titleEn}
-                    fill
-                    priority={idx === 0}
-                    className="object-cover"
-                    sizes="(max-width: 1200px) 100vw, 1200px"
-                  />
-                </motion.div>
+                  <motion.div
+                    key={step.step}
+                    style={{
+                      opacity: opacities[idx],
+                      scale: scales[idx],
+                    }}
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                  >
+                    <Image
+                      src={step.image}
+                      alt={language === 'es' ? step.titleEs : step.titleEn}
+                      fill
+                      priority={idx === 0}
+                      className="object-cover"
+                      sizes="(max-width: 1200px) 100vw, 1200px"
+                    />
+                  </motion.div>
               ))}
 
               {/* Text and actions overlay */}
@@ -429,9 +429,9 @@ export default function HouseScrollytelling() {
                         }}
                         className={`absolute bottom-0 left-0 w-full text-left transition-all duration-300 ease-out ${
                           isActive ? 'pointer-events-auto z-10' : 'pointer-events-none invisible z-0'
-                        }`}
+                         }`}
                       >
-                        <div className="max-w-xl space-y-4 rounded-2xl border border-white/12 bg-[#0b0a08]/82 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-6">
+                        <div className="max-w-xl space-y-4 rounded-3xl border border-white/10 bg-black/40 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-lg md:p-8 relative overflow-hidden">
                           <div className="inline-flex items-center gap-3 rounded-full border border-[#c9a864]/30 bg-[#a26035]/90 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white">
                             <Icon size={14} />
                             <span>
@@ -512,7 +512,7 @@ export default function HouseScrollytelling() {
           <footer className="relative z-20 w-full px-6 py-5 md:px-12 bg-gradient-to-t from-ro-dark/90 to-transparent border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-[10px] uppercase tracking-[0.24em] text-white/40 font-bold">
               Rangel <span className="font-black">Oviedo</span> Group © {new Date().getFullYear()} •{' '}
-              {t('Quiet Luxury', 'Lujo Latino')}
+              {t('Latin Luxury', 'Lujo Latino')}
             </div>
             
             <div className="flex items-center gap-4">

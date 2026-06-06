@@ -457,7 +457,7 @@ export default function MidScrollytelling() {
               {t('Price is only one layer.', 'El precio es solo una capa.')}
             </h2>
             <p className="mt-3 text-xs text-[#b8b0a0] leading-relaxed max-w-[320px] mx-auto">
-              {t('The Insider Report organizes market, scarcity, tax context, and timing before you look at properties.', 'El Insider Report ordena mercado, escasez, fiscalidad y timing antes de mirar propiedades.')}
+              {t('We map market, scarcity, tax context, and timing before you ever look at properties.', 'Ordenamos mercado, escasez, contexto fiscal y timing antes de que mires propiedades.')}
             </p>
           </div>
 
@@ -499,10 +499,10 @@ export default function MidScrollytelling() {
               </span>
               <div className="h-[1px] w-6 bg-gradient-to-r from-[#c9a864] to-transparent my-2" />
               <h3 className="font-display text-sm font-bold text-[#f5f1e8] leading-snug">
-                {t('Fiscal Optimization', 'Optimización Fiscal')}
+                {t('The Texas Tax Advantage', 'La Ventaja Fiscal de Texas')}
               </h3>
               <p className="mt-1.5 text-[11px] text-[#b8b0a0] leading-relaxed">
-                {t('High property taxes are offset and amortized by the absolute absence of state income tax for business owners, enabling compound capital growth.', 'El alto impuesto predial se ve compensado y amortizado por la ausencia absoluta de impuesto estatal sobre la renta para dueños de negocios.')}
+                {t('High property taxes are balanced by the fact that Texas has no state income tax — a structural advantage that supports long-term capital growth.', 'El alto impuesto predial se equilibra con la ausencia de impuesto estatal sobre la renta en Texas: una ventaja estructural que favorece el crecimiento del capital a largo plazo.')}
               </p>
             </article>
 
@@ -558,7 +558,7 @@ export default function MidScrollytelling() {
               {t('Price is only one layer.', 'El precio es solo una capa.')}
             </h2>
             <p className="mt-6 text-sm md:text-lg text-[#b8b0a0] leading-relaxed max-w-[620px]">
-              {t('The Insider Report organizes market, scarcity, tax context, and timing before you look at properties.', 'El Insider Report ordena mercado, escasez, fiscalidad y timing antes de mirar propiedades.')}
+              {t('We map market, scarcity, tax context, and timing before you ever look at properties.', 'Ordenamos mercado, escasez, contexto fiscal y timing antes de que mires propiedades.')}
             </p>
           </div>
 
@@ -606,10 +606,10 @@ export default function MidScrollytelling() {
             <span className="text-[#c9a864] text-xs font-bold font-display tracking-[0.2em]">{t('03 · TAX EFFICIENCY', '03 · EFICIENCIA TRIBUTARIA')}</span>
             <div className="h-[1px] w-12 bg-gradient-to-r from-[#c9a864] to-transparent my-4" />
             <h3 className="font-display text-2xl font-bold text-[#f5f1e8] leading-tight">
-              {t('Fiscal Optimization Mechanics', 'Optimización Fiscal y Tributaria')}
+              {t('The Texas Tax Advantage', 'La Ventaja Fiscal de Texas')}
             </h3>
             <p className="mt-3 text-sm text-[#b8b0a0] leading-relaxed">
-              {t('High property taxes are offset and amortized by the absolute absence of state income tax for business owners, enabling compound capital growth.', 'El alto impuesto predial se ve compensado y amortizado por la ausencia absoluta de impuesto estatal sobre la renta para dueños de negocios.')}
+              {t('High property taxes are balanced by the fact that Texas has no state income tax — a structural advantage that supports long-term capital growth.', 'El alto impuesto predial se equilibra con la ausencia de impuesto estatal sobre la renta en Texas: una ventaja estructural que favorece el crecimiento del capital a largo plazo.')}
             </p>
           </article>
 

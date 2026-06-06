@@ -35,13 +35,13 @@ export default function ROICalculator() {
                 {t('Intelligence Tool', 'Herramienta de Inteligencia')}
               </h6>
               <h2 className="text-4xl md:text-7xl font-display leading-tight tracking-tighter">
-                {t('Project your', 'Proyecte su')} <br />
+                {t('Project your', 'Proyecta tu')} <br />
                 <span className="italic font-normal">{t('future in Texas.', 'futuro en Texas.')}</span>
               </h2>
               <p className="text-lg md:text-xl text-stone-400 font-light max-w-md leading-relaxed italic">
                 {t(
-                  '"Data removes doubt. Use our appreciation simulator to visualize your capital growth."',
-                  '"Los datos eliminan la duda. Utilice nuestro simulador de plusvalía para visualizar el crecimiento de su capital."'
+                  '"Data removes doubt. Use our appreciation simulator to picture your capital growth."',
+                  '"Los datos eliminan la duda. Usa nuestro simulador de plusvalía para visualizar el crecimiento de tu capital."'
                 )}
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function ROICalculator() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="bg-ro-light p-6 md:p-16 rounded-[2.5rem] md:rounded-[4rem] text-ro-dark shadow-2xl space-y-8 md:space-y-12"
+            className="ro-bg-surface p-6 md:p-16 rounded-[2.5rem] md:rounded-[4rem] text-ro-dark space-y-8 md:space-y-12"
           >
             <div className="space-y-8">
               {/* Investment Slider */}
@@ -87,7 +87,7 @@ export default function ROICalculator() {
               <div className="space-y-4">
                 <div className="flex justify-between items-end gap-4">
                   <label className="text-[10px] uppercase font-black tracking-widest opacity-40">
-                    {t('Holding Period', 'Periodo de Retención')}
+                    {t('Holding Period', 'Período de Retención')}
                   </label>
                   <span className="text-xl md:text-2xl font-display text-ro-accent">
                     {years} {t(years === 1 ? 'Year' : 'Years', years === 1 ? 'Año' : 'Años')}
