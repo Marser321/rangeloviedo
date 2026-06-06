@@ -137,11 +137,15 @@ export const teamGallery: GalleryImage[] = [
   }
 ];
 
+// 7 fotos grupales (priorizando 'union' / más miembros) para un bento de 12
+// columnas que llena las 3 filas sin huecos: [6x2][6] · [3][3] · [4][4][4].
 export const teamStoryImages: GalleryImage[] = [
   teamGallery.find((image) => image.src.endsWith('MY9A0105.jpg'))!,
-  teamGallery.find((image) => image.src.endsWith('MY9A0071.jpg'))!,
-  teamGallery.find((image) => image.src.endsWith('MY9A0107.jpg'))!,
   teamGallery.find((image) => image.src.endsWith('MY9A0115.jpg'))!,
+  teamGallery.find((image) => image.src.endsWith('MY9A0107.jpg'))!,
+  teamGallery.find((image) => image.src.endsWith('MY9A0099.jpg'))!,
+  teamGallery.find((image) => image.src.endsWith('MY9A0071.jpg'))!,
+  teamGallery.find((image) => image.src.endsWith('MY9A0237.jpg'))!,
   teamGallery.find((image) => image.src.endsWith('MY9A0257.jpg'))!,
 ];
 

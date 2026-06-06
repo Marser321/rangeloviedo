@@ -20,7 +20,7 @@ export default function Testimonials() {
   const { t } = useLanguage();
 
   return (
-    <section className="ro-bg-section py-20 md:py-32 px-5 md:px-8 overflow-hidden">
+    <section className="ro-bg-section py-16 md:py-20 px-5 md:px-8 overflow-hidden">
       <div className="max-w-4xl mx-auto text-center">
         <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">
           {t('Verified reviews', 'Reseñas verificadas')}

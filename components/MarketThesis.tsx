@@ -7,7 +7,7 @@ export default function MarketThesis() {
   const { t } = useLanguage();
 
   return (
-    <section id="tesis" className="py-20 md:py-32 bg-ro-dark text-ro-light rounded-[2.5rem] md:rounded-[5rem] mx-2 md:mx-4 relative z-40 shadow-2xl">
+    <section id="tesis" className="py-16 md:py-24 bg-ro-dark text-ro-light rounded-[2.5rem] md:rounded-[5rem] mx-2 md:mx-4 relative z-40 shadow-2xl">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-end">
           <div>

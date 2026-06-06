@@ -162,7 +162,7 @@ export default function ConciergeLanding() {
       <HeroScrollytelling />
 
       <section aria-label="Private Texas advisory proof points" className="relative z-10 overflow-hidden border-y border-[var(--ro-ink)]/8 bg-[var(--ro-ink)] text-[var(--ro-paper)]">
-        <div className="trust-marquee flex gap-14 py-5 text-[12px] font-bold uppercase tracking-[0.2em]">
+        <div className="trust-marquee flex gap-14 py-3 text-[12px] font-bold uppercase tracking-[0.2em]">
           {[...Array(2)].flatMap((_, loop) =>
             [
               t('Bilingual advisory EN/ES', 'Asesoría bilingüe EN/ES'),
@@ -210,7 +210,7 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden px-5 py-24 text-white md:px-8 md:py-32" style={{ '--ro-muted': 'rgba(255,255,255,0.74)' } as React.CSSProperties}>
+      <section className="relative z-10 overflow-hidden px-5 py-20 text-white md:px-8 md:py-24" style={{ '--ro-muted': 'rgba(255,255,255,0.74)' } as React.CSSProperties}>
         <div className="absolute inset-0 -z-10">
           <AnimatedBackground
             src={CATALOG_BG_VIDEO}
@@ -263,7 +263,7 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <section id="perfiles" className="relative z-10 overflow-hidden px-5 py-20 text-white md:px-8 md:py-28" style={{ '--ro-muted': 'rgba(255,255,255,0.70)' } as React.CSSProperties}>
+      <section id="perfiles" className="relative z-10 overflow-hidden px-5 py-16 text-white md:px-8 md:py-20" style={{ '--ro-muted': 'rgba(255,255,255,0.70)' } as React.CSSProperties}>
         <div className="absolute inset-0 -z-10">
           <AnimatedBackground
             src={PROFILES_BG_VIDEO}
@@ -294,16 +294,16 @@ export default function ConciergeLanding() {
             {profiles.map((profile) => {
               const Icon = profile.icon;
               return (
-                <article data-reveal key={profile.title} className="flex min-h-[286px] flex-col rounded-[1.35rem] border border-white/16 bg-white/10 p-6 text-white shadow-[0_24px_90px_rgba(0,0,0,0.26)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/14">
-                  <div className="mb-7 flex items-center justify-between">
-                    <Icon size={24} className="text-[#d4b16f]" />
+                <article data-reveal key={profile.title} className="flex flex-col rounded-[1.35rem] border border-white/16 bg-white/10 p-6 text-white shadow-[0_24px_90px_rgba(0,0,0,0.26)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/14">
+                  <div className="mb-5 flex items-center justify-between">
+                    <Icon size={28} className="text-[#d4b16f]" />
                     <span className="rounded-full bg-white/12 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/62">
                       {t('Profile', 'Perfil')}
                     </span>
                   </div>
                   <h3 className="font-display text-2xl leading-tight md:text-3xl">{profile.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-white/68">{profile.text}</p>
-                  <a href={formHref} {...externalLinkProps(GHL_FORM_URL)} className="mt-auto inline-flex items-center gap-2 pt-8 text-[11px] font-black uppercase tracking-[0.14em] text-[#d4b16f] transition-colors hover:text-white">
+                  <p className="mt-3 text-sm leading-6 text-white/68">{profile.text}</p>
+                  <a href={formHref} {...externalLinkProps(GHL_FORM_URL)} className="mt-6 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#d4b16f] transition-colors hover:text-white">
                     {t('Receive initial route', 'Recibir ruta inicial')}
                     <ArrowRight size={16} />
                   </a>
@@ -314,7 +314,7 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <section className="relative z-10 bg-[var(--ro-ink)] px-5 py-24 text-[var(--ro-paper)] md:px-8 md:py-32">
+      <section className="relative z-10 bg-[var(--ro-ink)] px-5 py-20 text-[var(--ro-paper)] md:px-8 md:py-24">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center">
           <div data-reveal>
             <p className="eyebrow text-[#c9a864]">{t('Roots + criterion', 'Raíces + criterio')}</p>
@@ -354,7 +354,7 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <section className="ro-bg-section-soft relative z-10 px-5 py-20 text-[var(--ro-ink)] md:px-8 md:py-28">
+      <section className="ro-bg-section-soft relative z-10 px-5 py-16 text-[var(--ro-ink)] md:px-8 md:py-20">
         <div className="mx-auto max-w-7xl">
           <div data-reveal className="grid gap-8 lg:grid-cols-[0.85fr_1fr] lg:items-center">
             <div className="order-2 lg:order-1 relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-ro-dark/10 shadow-xl">
@@ -388,7 +388,7 @@ export default function ConciergeLanding() {
         </div>
       </section>
 
-      <section id="contacto" className="relative z-10 overflow-hidden px-5 py-24 md:px-8 md:py-32">
+      <section id="contacto" className="relative z-10 overflow-hidden px-5 py-20 md:px-8 md:py-24">
         {CONTACTO_BG_VIDEO ? (
           <div className="absolute inset-0 -z-10">
             <AnimatedBackground

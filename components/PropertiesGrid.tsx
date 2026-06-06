@@ -24,7 +24,7 @@ export default function PropertiesGrid({
   const { t } = useLanguage();
 
   return (
-    <section className="py-20 md:py-32 bg-ro-dark text-ro-light px-5 md:px-8 rounded-[2.5rem] md:rounded-[5rem] mx-2 md:mx-4 relative z-40">
+    <section className="py-16 md:py-24 bg-ro-dark text-ro-light px-5 md:px-8 rounded-[2.5rem] md:rounded-[5rem] mx-2 md:mx-4 relative z-40">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-8">
           <div className="space-y-4">

@@ -12,7 +12,6 @@ import {
   ChevronRight,
   ClipboardCheck,
   Compass,
-  Maximize2,
   ShieldCheck,
   Users,
   X,
@@ -24,6 +23,7 @@ import MarketTicker from '@/components/MarketTicker';
 import Navigation from '@/components/Navigation';
 import ProcessGuide from '@/components/ProcessGuide';
 import Testimonials from '@/components/Testimonials';
+import TeamMosaic from '@/components/TeamMosaic';
 import { useLanguage } from '@/components/LanguageContext';
 import { teamGallery, teamFeatureImage, teamStoryImages, type GalleryImage } from '@/lib/team';
 
@@ -127,7 +127,7 @@ export default function TeamPage() {
       <MarketTicker fixed />
       <Navigation withTicker />
 
-      <section className="relative overflow-hidden px-5 pb-16 pt-36 md:px-8 md:pb-24 md:pt-48">
+      <section className="relative overflow-hidden px-5 pb-12 pt-24 md:px-8 md:pb-16 md:pt-36">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-end">
           <div className="relative z-10">
             <p className="eyebrow">{t('Elite Advisory Practice', 'Práctica Consultiva de Élite')}</p>
@@ -180,7 +180,7 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <section className="relative z-10 px-5 py-20 md:px-8 md:py-28">
+      <section className="relative z-10 px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.52fr_1fr]">
           <div className="lg:sticky lg:top-36 lg:self-start">
             <p className="eyebrow">{t('Operating pillars', 'Pilares operativos')}</p>
@@ -205,18 +205,18 @@ export default function TeamPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.08 }}
-                  className="ro-bg-surface min-h-[310px] rounded-[1.5rem] border border-ro-dark/8 p-7 md:p-8"
+                  className="ro-bg-surface relative overflow-hidden rounded-[1.5rem] border border-ro-dark/8 p-6 md:p-7"
                 >
-                  <div className="mb-8 flex items-center justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ro-accent/10 text-ro-accent">
-                      <Icon size={23} />
-                    </div>
-                    <span className="font-display text-4xl text-ro-dark/12">0{index + 1}</span>
+                  <span className="pointer-events-none absolute -right-2 -top-3 select-none font-display text-7xl leading-none text-ro-accent/12">
+                    0{index + 1}
+                  </span>
+                  <div className="relative mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-ro-accent/10 text-ro-accent">
+                    <Icon size={28} />
                   </div>
-                  <h3 className="font-display text-2xl leading-tight text-ro-dark">
+                  <h3 className="relative font-display text-2xl leading-tight text-ro-dark md:text-3xl">
                     {t(pillar.title.en, pillar.title.es)}
                   </h3>
-                  <p className="mt-4 text-sm leading-6 text-ro-dark/66">{t(pillar.desc.en, pillar.desc.es)}</p>
+                  <p className="relative mt-3 text-base leading-7 text-ro-dark/75">{t(pillar.desc.en, pillar.desc.es)}</p>
                 </motion.article>
               );
             })}
@@ -224,7 +224,7 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <section className="relative z-10 overflow-hidden bg-[var(--ro-ink)] px-5 py-20 text-white md:px-8 md:py-28">
+      <section className="relative z-10 overflow-hidden bg-[var(--ro-ink)] px-5 py-16 text-white md:px-8 md:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
             <div>
@@ -246,7 +246,7 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <section className="ro-bg-section relative z-10 mx-2 mb-20 overflow-hidden rounded-[2rem] px-5 py-20 shadow-xl md:mx-4 md:rounded-[4rem] md:px-8 md:py-28">
+      <section className="ro-bg-section relative z-10 mx-2 mb-12 overflow-hidden rounded-[2rem] px-5 py-16 shadow-xl md:mx-4 md:mb-16 md:rounded-[4rem] md:px-8 md:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 grid gap-8 lg:grid-cols-[0.84fr_1fr] lg:items-end">
             <div>
@@ -273,44 +273,10 @@ export default function TeamPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-12 lg:auto-rows-[190px]">
-            {teamStoryImages.map((image, index) => {
-              const layoutClass =
-                index === 0
-                  ? 'lg:col-span-6 lg:row-span-2'
-                  : index === 1
-                    ? 'lg:col-span-6'
-                    : 'lg:col-span-3';
-
-              return (
-                <motion.button
-                  key={image.src}
-                  type="button"
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.06 }}
-                  onClick={() => setLightbox({ items: teamStoryImages, index })}
-                  className={`group relative min-h-[260px] overflow-hidden rounded-[1.5rem] border border-ro-dark/8 bg-ro-dark text-left shadow-[0_24px_74px_rgba(39,31,26,0.13)] ${layoutClass}`}
-                >
-                  <Image
-                    src={image.src}
-                    alt={t(image.alt.en, image.alt.es)}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/68 via-black/12 to-transparent opacity-80 transition-opacity group-hover:opacity-92" />
-                  <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-white">
-                    <p className="max-w-sm text-sm font-medium leading-5 text-white/86">{t(image.alt.en, image.alt.es)}</p>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/24 bg-white/12 backdrop-blur">
-                      <Maximize2 size={15} />
-                    </span>
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
+          <TeamMosaic
+            images={teamStoryImages}
+            onOpen={(index) => setLightbox({ items: teamStoryImages, index })}
+          />
         </div>
       </section>
 
@@ -318,7 +284,7 @@ export default function TeamPage() {
       <Testimonials />
       <FAQ />
 
-      <section className="relative z-10 mx-2 mb-20 overflow-hidden rounded-[2rem] px-5 py-24 text-ro-light shadow-xl md:mx-4 md:rounded-[5rem] md:px-8 md:py-32">
+      <section className="relative z-10 mx-2 mb-12 overflow-hidden rounded-[2rem] px-5 py-20 text-ro-light shadow-xl md:mx-4 md:mb-16 md:rounded-[5rem] md:px-8 md:py-24">
         <div className="absolute inset-0 -z-10">
           <AnimatedBackground
             src="/rog/scrolly_5_terrace.mp4"

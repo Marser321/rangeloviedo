@@ -11,7 +11,7 @@ export default function CulturalIdentity() {
   const { t } = useLanguage();
 
   return (
-    <section id="insights" className="ro-bg-section py-20 md:py-32 px-5 md:px-8 overflow-hidden rounded-[2rem] md:rounded-[4rem] mx-2 md:mx-4 mb-20 md:mb-32 shadow-xl">
+    <section id="insights" className="ro-bg-section py-16 md:py-24 px-5 md:px-8 overflow-hidden rounded-[2rem] md:rounded-[4rem] mx-2 md:mx-4 mb-12 md:mb-16 shadow-xl">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           
@@ -101,7 +101,7 @@ export default function CulturalIdentity() {
           </div>
         </div>
 
-        <div className="mt-16 md:mt-32 pt-10 md:pt-20 border-t border-ro-dark/5 flex flex-wrap justify-between items-center gap-6 md:gap-10 opacity-50 grayscale hover:grayscale-0 transition-all">
+        <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-ro-dark/5 flex flex-wrap justify-between items-center gap-6 md:gap-10 opacity-50 grayscale hover:grayscale-0 transition-all">
            <span className="text-xs font-black uppercase tracking-[0.5em] w-full text-center mb-4 md:mb-8">
              {t('Third Party Validation', 'Validación de Terceros')}
            </span>

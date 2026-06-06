@@ -36,7 +36,7 @@ export default function PropertiesPage() {
       <Navigation withTicker />
 
       {/* Header section */}
-      <section className="relative pt-36 pb-12 md:pt-48 md:pb-20 overflow-hidden">
+      <section className="relative pt-24 pb-8 md:pt-36 md:pb-12 overflow-hidden">
         <div className="mx-auto max-w-7xl px-5 md:px-8 text-center relative z-10">
           <span className="eyebrow justify-center">{t('Private Inventory', 'Inventario Privado')}</span>
           <h1 className="mt-6 font-display text-5xl md:text-8xl leading-none text-ro-dark font-extrabold tracking-tight max-w-4xl mx-auto">
@@ -111,7 +111,7 @@ export default function PropertiesPage() {
       </LazyMount>
 
       {/* Call to Action */}
-      <section className="ro-bg-section relative px-5 py-20 md:px-8 md:py-28 z-10 overflow-hidden mx-2 md:mx-4 rounded-[2rem] md:rounded-[4rem] shadow-lg mb-20">
+      <section className="ro-bg-section relative px-5 py-16 md:px-8 md:py-20 z-10 overflow-hidden mx-2 md:mx-4 rounded-[2rem] md:rounded-[4rem] shadow-lg mb-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(169,105,55,0.08),transparent_32%)]" />
         <div className="relative mx-auto max-w-4xl text-center">
           <p className="eyebrow justify-center">{t('Advisory Access', 'Acceso a Asesoría')}</p>

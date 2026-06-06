@@ -33,9 +33,9 @@ export default function IdxSection({
   const Title = titleAs;
 
   return (
-    <section id={id} className="mx-2 my-10 md:mx-4 md:my-14">
+    <section id={id} className="mx-2 my-8 md:mx-4 md:my-12">
       <div
-        className="relative overflow-hidden rounded-[2rem] px-5 pt-14 pb-10 md:rounded-[3.5rem] md:px-14 md:pt-24 md:pb-16"
+        className="relative overflow-hidden rounded-[2rem] px-5 pt-12 pb-8 md:rounded-[3.5rem] md:px-14 md:pt-16 md:pb-12"
         style={{
           backgroundImage:
             'linear-gradient(180deg, #1b1510 0%, #2a201a 16%, #5e4830 38%, #b89a6e 56%, var(--ro-paper) 78%, #fffdf9 100%)',

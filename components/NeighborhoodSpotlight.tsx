@@ -37,7 +37,7 @@ export default function NeighborhoodSpotlight() {
   ];
 
   return (
-    <section className="ro-bg-section py-24 md:py-32 px-5 md:px-8">
+    <section className="ro-bg-section py-20 md:py-24 px-5 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 space-y-4 md:space-y-6">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">

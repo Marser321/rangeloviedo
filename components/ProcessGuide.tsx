@@ -37,7 +37,7 @@ export default function ProcessGuide() {
   ];
 
   return (
-    <section className="ro-bg-section-soft py-20 md:py-32 px-5 md:px-8">
+    <section className="ro-bg-section-soft py-16 md:py-20 px-5 md:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16 md:mb-24 space-y-4">
           <h6 className="text-ro-accent font-black uppercase tracking-[0.4em] text-[10px]">

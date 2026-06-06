@@ -40,7 +40,7 @@ export default function CEOPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-20 md:pt-48 md:pb-28 overflow-hidden">
+      <section className="relative pt-24 pb-12 md:pt-36 md:pb-16 overflow-hidden">
         <div className="mx-auto max-w-7xl px-5 md:px-8 relative z-10">
           <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
             
@@ -119,7 +119,7 @@ export default function CEOPage() {
       </LazyMount>
 
       {/* Core Values Section */}
-      <section className="py-20 md:py-28 px-5 md:px-8 bg-[var(--ro-dark)] text-white relative z-10 overflow-hidden">
+      <section className="py-16 md:py-20 px-5 md:px-8 bg-[var(--ro-dark)] text-white relative z-10 overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_20%_20%,#c9a864_0%,transparent_50%)]" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="mb-16 max-w-3xl">
@@ -166,7 +166,7 @@ export default function CEOPage() {
       </section>
 
       {/* Direct Scheduling Page Section */}
-      <section id="contacto-ceo" className="relative px-5 py-20 md:px-8 md:py-28 z-10 overflow-hidden">
+      <section id="contacto-ceo" className="relative px-5 py-16 md:px-8 md:py-20 z-10 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(169,105,55,0.14),transparent_40%)]" />
         <div className="mx-auto max-w-5xl relative">
           
