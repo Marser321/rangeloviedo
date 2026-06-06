@@ -7,7 +7,7 @@ import Navigation from '@/components/Navigation';
 import MarketTicker from '@/components/MarketTicker';
 import PropertiesGrid from '@/components/PropertiesGrid';
 import TrackRecordBand from '@/components/TrackRecordBand';
-import HarIdxWidget from '@/components/HarIdxWidget';
+import IdxSection from '@/components/IdxSection';
 import ROICalculator from '@/components/ROICalculator';
 import NeighborhoodSpotlight from '@/components/NeighborhoodSpotlight';
 import Footer from '@/components/Footer';
@@ -59,54 +59,38 @@ export default function PropertiesPage() {
       <PropertiesGrid />
 
       {/* Catálogo completo auto-actualizado desde HAR ("View My Listings") */}
-      <section className="mx-auto max-w-7xl px-5 pt-20 md:px-8 md:pt-32">
-        <span className="eyebrow">{t('Always up to date', 'Siempre actualizado')}</span>
-        <h2 className="mt-5 font-display text-4xl leading-tight md:text-6xl">
-          {t('Every active listing, live from HAR', 'Todos los listados activos, en vivo desde HAR')}
-        </h2>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--ro-muted)] font-light">
-          {t(
-            "Rangel Oviedo's complete, always-current inventory — served directly from the Houston MLS, updated automatically.",
-            'El inventario completo y siempre actualizado de Rangel Oviedo, servido directamente desde el MLS de Houston y al día de forma automática.'
-          )}
-        </p>
-        <div className="mt-10">
-          <HarIdxWidget
-            src={siteConfig.har.myListingsUrl}
-            eyebrow={t('My listings', 'Mis propiedades')}
-            title={t('My HAR listings connect here', 'Aquí se conectan mis propiedades de HAR')}
-            description={t(
-              'Generate the "View My Listings" widget from the HAR Platinum panel and paste its URL into NEXT_PUBLIC_HAR_MY_LISTINGS_URL.',
-              'Genera el widget "View My Listings" desde el panel Platinum de HAR y pega su URL en NEXT_PUBLIC_HAR_MY_LISTINGS_URL.'
-            )}
-          />
-        </div>
-      </section>
+      <IdxSection
+        eyebrow={t('Always up to date', 'Siempre actualizado')}
+        title={t('Every active listing, live from HAR', 'Todos los listados activos, en vivo desde HAR')}
+        description={t(
+          "Rangel Oviedo's complete, always-current inventory — served directly from the Houston MLS, updated automatically.",
+          'El inventario completo y siempre actualizado de Rangel Oviedo, servido directamente desde el MLS de Houston y al día de forma automática.',
+        )}
+        src={siteConfig.har.myListingsUrl}
+        placeholderEyebrow={t('My listings', 'Mis propiedades')}
+        placeholderTitle={t('My HAR listings connect here', 'Aquí se conectan mis propiedades de HAR')}
+        placeholderDescription={t(
+          'Generate the "View My Listings" widget from the HAR Platinum panel and paste its URL into NEXT_PUBLIC_HAR_MY_LISTINGS_URL.',
+          'Genera el widget "View My Listings" desde el panel Platinum de HAR y pega su URL en NEXT_PUBLIC_HAR_MY_LISTINGS_URL.',
+        )}
+      />
 
       {/* Showcase de vendidas (View My Sold Listings) — trayectoria */}
-      <section className="mx-auto max-w-7xl px-5 pt-20 md:px-8 md:pt-28">
-        <span className="eyebrow">{t('Track record', 'Trayectoria')}</span>
-        <h2 className="mt-5 font-display text-4xl leading-tight md:text-6xl">
-          {t('Properties Rangel has sold', 'Propiedades que Rangel ha vendido')}
-        </h2>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--ro-muted)] font-light">
-          {t(
-            'A portfolio of closed transactions — real proof of results in the Houston market.',
-            'Un portafolio de transacciones cerradas: prueba real de resultados en el mercado de Houston.'
-          )}
-        </p>
-        <div className="mt-10">
-          <HarIdxWidget
-            src={siteConfig.har.soldListingsUrl}
-            eyebrow={t('Sold listings', 'Vendidas')}
-            title={t('The sold-listings showcase connects here', 'Aquí se conecta el portafolio de vendidas')}
-            description={t(
-              'Generate the "View My Sold Listings" widget from the HAR Platinum panel and paste its URL into NEXT_PUBLIC_HAR_SOLD_LISTINGS_URL.',
-              'Genera el widget "View My Sold Listings" desde el panel Platinum de HAR y pega su URL en NEXT_PUBLIC_HAR_SOLD_LISTINGS_URL.'
-            )}
-          />
-        </div>
-      </section>
+      <IdxSection
+        eyebrow={t('Track record', 'Trayectoria')}
+        title={t('Properties Rangel has sold', 'Propiedades que Rangel ha vendido')}
+        description={t(
+          'A portfolio of closed transactions — real proof of results in the Houston market.',
+          'Un portafolio de transacciones cerradas: prueba real de resultados en el mercado de Houston.',
+        )}
+        src={siteConfig.har.soldListingsUrl}
+        placeholderEyebrow={t('Sold listings', 'Vendidas')}
+        placeholderTitle={t('The sold-listings showcase connects here', 'Aquí se conecta el portafolio de vendidas')}
+        placeholderDescription={t(
+          'Generate the "View My Sold Listings" widget from the HAR Platinum panel and paste its URL into NEXT_PUBLIC_HAR_SOLD_LISTINGS_URL.',
+          'Genera el widget "View My Sold Listings" desde el panel Platinum de HAR y pega su URL en NEXT_PUBLIC_HAR_SOLD_LISTINGS_URL.',
+        )}
+      />
 
       {/* Editorial: cómo leemos una casa (lazy, monta al acercarse) */}
       <LazyMount placeholder={<ScrollyPlaceholder />}>

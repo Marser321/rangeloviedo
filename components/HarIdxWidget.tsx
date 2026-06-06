@@ -62,14 +62,27 @@ export default function HarIdxWidget({
   }
 
   return (
-    <div className="ro-bg-surface overflow-hidden rounded-[2rem] border border-[var(--ro-ink)]/10">
-      <iframe
-        src={url}
-        title={frameTitle}
-        className="w-full"
-        style={{ minHeight }}
-        loading="lazy"
-      />
+    <div
+      className="rounded-[2.5rem] p-px shadow-[0_60px_150px_-50px_rgba(39,31,26,0.55)]"
+      style={{
+        backgroundImage:
+          'linear-gradient(135deg, rgba(212,177,111,0.55) 0%, rgba(162,96,53,0.26) 38%, rgba(162,96,53,0) 72%)',
+      }}
+    >
+      {/* Luminous near-white stage: matches the iframe's light interior so its
+          edge dissolves instead of reading as an abrupt white box. */}
+      <div
+        className="overflow-hidden rounded-[2.45rem] p-1.5 md:p-2.5"
+        style={{ backgroundColor: '#fffdf9' }}
+      >
+        <iframe
+          src={url}
+          title={frameTitle}
+          className="block w-full rounded-[2rem]"
+          style={{ minHeight, backgroundColor: '#ffffff' }}
+          loading="lazy"
+        />
+      </div>
     </div>
   );
 }
